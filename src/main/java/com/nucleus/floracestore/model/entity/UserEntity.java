@@ -1,0 +1,46 @@
+package com.nucleus.floracestore.model.entity;
+
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import javax.persistence.*;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
+
+@Getter
+@Setter
+@Entity
+@Table(name = "users")
+public class UserEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
+    private Long userId;
+
+    @Column(name = "user_name", nullable = false, unique = true)
+    private String username;
+
+    @Column(name = "email", nullable = false)
+    private String emailAddress;
+
+    @Column(name = "salt_key")
+    private String salt;
+
+    @Column(name = "password", nullable = false)
+    private String password;
+
+    @Column(name = "email_valid")
+    private int emailValidation;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @Column(name = "created", nullable = false)
+    private Date accountCreatedDate;
+
+    @Column(name = "lock_date")
+    private long lockDate; //
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    private Set<RoleEntity> roles = new HashSet<>();
+}

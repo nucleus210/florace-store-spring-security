@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+
+<!-- Header -->
+<head th:replace="fragments/head::head"></head>
+<!-- Close Header -->
+<body>
+
+<!-- NavBar -->
+<div th:replace="fragments/navbar :: navbar">
+    Navbar
+</div>
+<!-- Close NavBar -->
+
+<!-- Start Login Content -->
+<main>
+    <div id="main-container">
+        <div class="row justify-content-center" id="auth_content">
+            <div class="col-lg-5  justify-content-center">
+                <div id="card-content" class="card shadow-lg border-0 rounded-lg mt-5">
+                    <div class="card-header"><h3 class="text-center font-weight-light my-4">Login</h3></div>
+                    <div class="card-body">
+                        <form method="post" th:action="@{/users/login}" th:object="${bad_credentials}">
+
+                            <div class="row mb-3">
+                                <div class="form-group">
+                                    <label for="inputUserName" class="form-label
+                                               fw-bold">Username</label>
+                                    <input class="form-control" id="inputUserName" type="text" min="2" max="20" name="username" placeholder="Username" required autofocus>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="form-group">
+                                    <label for="inputPassword" class="form-label
+                                               fw-bold">Password</label>
+                                    <input class="form-control" id="inputPassword" type="password" min="4" max="20" name="password" placeholder="Password" required>
+                                </div>
+                            </div>
+                            <div class="form-check mb-3">
+                                <input class="form-check-input" id="inputRememberPassword" type="checkbox" value="">
+                                <label class="form-check-label" for="inputRememberPassword">Remember
+                                    Password</label>
+                            </div>
+                            <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
+                                <a class="small" th:href="@{/users/forgot-password}">Forgot Password?</a>
+                            </div>
+
+                            <div class="mt-4 mb-0">
+                                <div class="d-grid">
+                                    <input class="btn btn-primary" type="submit" size="large" value="Login">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="card-footer text-center py-3">
+                        <div class="small"><a th:href="@{/users/register}" href="/users/register">Need an
+                            account? Sign up!</a></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<!-- End Login Content -->
+
+<!-- Start Footer -->
+<footer th:replace="fragments/footer :: footer"></footer>
+<!-- End Footer -->
+<!--<link rel="stylesheet" th:href="@{/css/custom.css}" href="../static/css/custom.css">-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script type="text/javascript" th:src="@{/js/florace.js}" src="../static/js/florace.js"></script>
+<script type="text/javascript" th:src="@{/js/dropdown-menu.js}" src="../static/js/dropdown-menu.js"></script>
+<!--    <script type="text/javascript" th:src="@{/js/custom.js}"  src="../static/js/custom.js"></script>-->
+</body>
+</html>

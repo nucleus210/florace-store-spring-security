@@ -1,0 +1,66 @@
+spring:
+  profiles:
+    active: development
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: "jdbc:mysql://localhost:3306/florancedb?allowPublicKeyRetrieval=true&useSSL=false&createDatabaseIfNotExist=true&serverTimezone=UTC"
+    username: root
+    password: Zion123!@#
+
+  servlet:
+    multipart:
+      max-file-size: 15MB
+      max-request-size: 15MB
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: true
+  sql:
+    init:
+      mode: always
+      # ===============================
+      # = MAIL configurations
+      # ===============================
+
+  jpa:
+    # Choose either MySQL 8 or MySQL 5 below
+    # For MySQL 8
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    #For MySQL 5
+    #database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    hibernate:
+      ddl-auto: update
+    open-in-view: true
+    properties:
+      hibernate:
+        format_sql: true
+    defer-datasource-initialization: true
+    show-sql: true
+  mail:
+    default-encoding: UTF-8
+    host: smtp.gmail.com
+    username: ''
+    password: ''
+    port: 587
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+    protocol: smtp
+    test-connection: false
+
+  remember-me:
+    _data-source-ref: persistentTokenRepository
+  #Cloudinary Properties
+  #cloudinary:
+  #api-key: 
+  #api-secret: 
+  #cloud-name:
+
+
+app:
+  file:
+    upload-dir=:
+      /src/main/resources/static/images/uploads:

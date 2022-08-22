@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<!-- Header -->
+<head th:replace="fragments/head::head"></head>
+<!-- Close Header -->
+<body>
+
+<!-- NavBar -->
+<div th:replace="fragments/navbar :: navbar">
+    Navbar
+</div>
+<!-- Close NavBar -->
+
+<!-- Start Register Content -->
+<body>
+<main>
+    <div id="main-container">
+        <div class="row justify-content-center" id="auth_content">
+            <div class="col-lg-5  justify-content-center">
+                <div class="card shadow-lg border-0 rounded-lg mt-5">
+                    <div class="card-header">
+                        <h3 class="text-center font-weight-light my-4">Create Account</h3>
+                    </div>
+                    <div class="card-body">
+                        <form th:action="@{/users/register}" th:method="post" th:object="${userModel}" method="post">
+
+                            <div class="row mb-3">
+                                <div class="form-group">
+                                    <label for="inputUserName" class="form-label
+                                                   fw-bold">Username</label>
+                                    <input class="form-control" id="inputUserName" type="text" min="2" max="20" placeholder="Enter your user name" th:field="*{username}" th:errorclass="is-invalid">
+                                    <p class="invalid-feedback errors alert alert-danger" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">
+                                        Username is required.
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="form-group">
+                                    <label for="inputEmail" class="form-label
+                                                   fw-bold">Email address</label>
+                                    <input class="form-control" id="inputEmail" type="email" placeholder="name@example.com" th:field="*{emailAddress}" th:errorclass="is-invalid">
+                                    <p class="invalid-feedback errors alert alert-danger">
+                                        Valid email is required.
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="form-group">
+                                    <label for="inputPassword" class="form-label
+                                                   fw-bold">Password</label>
+                                    <input class="form-control" id="inputPassword" type="password" min="4" max="20" placeholder="Create password" th:field="*{password}" th:errorclass="is-invalid">
+                                    <p class="invalid-feedback errors alert alert-danger">
+                                        Password is required.
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="form-group">
+                                    <label for="inputPasswordConfirm" class="form-label
+                                                   fw-bold">Confirm password</label>
+                                    <input class="form-control" id="inputPasswordConfirm" type="password" min="4" max="20" placeholder="Confirm password" th:field="*{confirmPassword}">
+                                    <p class="invalid-feedback errors alert alert-danger">
+                                        Confirmation password is required.
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="mt-4 mb-0">
+                                <div class="d-grid">
+                                    <input class="btn btn-primary" type="submit" value="Create Account">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="card-footer text-center py-3">
+                        <div class="small"><a th:href="@{/users/login}">Have an account? Go
+                            to login</a></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+</body>
+<!-- End Register Content -->
+
+<!-- Start Footer -->
+<footer th:replace="fragments/footer :: footer"></footer>
+<!-- End Footer -->
+<!--<link rel="stylesheet" th:href="@{/css/custom.css}" href="../static/css/custom.css">-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script type="text/javascript" th:src="@{/js/florace.js}" src="../static/js/florace.js"></script>
+<script type="text/javascript" th:src="@{/js/dropdown-menu.js}" src="../static/js/dropdown-menu.js"></script>
+<!--    <script type="text/javascript" th:src="@{/js/custom.js}"  src="../static/js/custom.js"></script>-->
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+
+<!-- Header -->
+<head th:replace="fragments/head::head">
+</head>
+<!-- Close Header -->
+<body>
+
+<!-- NavBar -->
+<div th:replace="fragments/navbar :: navbar">
+    Navbar
+</div>
+<!-- Close NavBar -->
+
+<!-- Start Content Page -->
+<div class="container-fluid bg-light py-5">
+    <div class="col-md-6 m-auto text-center">
+        <h1 class="h1">Contact Us</h1>
+        <p>
+            Proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+            Lorem ipsum dolor sit amet.
+        </p>
+    </div>
+</div>
+
+<!--The div element for the map -->
+<div id="map"></div>
+
+<!-- Start Contact -->
+<div class="container py-5">
+    <div class="row py-5">
+        <form class="col-md-9 m-auto" method="post" role="form">
+            <div class="row">
+                <div class="form-group col-md-6 mb-3">
+                    <label for="inputName">Name</label>
+                    <input type="text" class="form-control mt-1" id="inputName" name="name" placeholder="Name">
+                </div>
+                <div class="form-group col-md-6 mb-3">
+                    <label for="inputEmail">Email</label>
+                    <input type="email" class="form-control mt-1" id="inputEmail" name="email" placeholder="Email">
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="inputSubject">Subject</label>
+                <input type="text" class="form-control mt-1" id="inputSubject" name="subject" placeholder="Subject">
+            </div>
+            <div class="mb-3">
+                <label for="inputMessage">Message</label>
+                <textarea class="form-control mt-1" id="inputMessage" name="message" placeholder="Message" rows="8"></textarea>
+            </div>
+            <div class="row">
+                <div class="col text-end mt-2">
+                    <button type="submit" class="btn btn-success btn-lg px-3">Let’s Talk</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<!-- End Contact -->
+
+
+<!-- Start Footer -->
+<footer th:replace="fragments/footer :: footer"></footer>
+<!-- End Footer -->
+<script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+<script type="module" th:src="@{/js/index.js}" src="../static/js/index.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg&amp;callback=initMap&amp;v=weekly"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script type="text/javascript" th:src="@{/js/florace.js}" src="../static/js/florace.js"></script>
+<script type="text/javascript" th:src="@{/js/dropdown-menu.js}" src="../static/js/dropdown-menu.js"></script>
+</body>
+
+</html>

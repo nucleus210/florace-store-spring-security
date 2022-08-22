@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head></head>
+<body>
+
+<div th:fragment="navbar">
+    <!-- Modal -->
+    <div class="modal fade bg-white" id="florace_search" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="w-100 pt-1 mb-5 text-right">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="" method="get" class="modal-content modal-body border-0 p-0">
+                <div class="input-group mb-2">
+                    <input type="text" class="form-control" id="inputModalSearch" name="q" placeholder="Search ...">
+                    <button type="submit" class="input-group-text bg-success text-light">
+                        <i class="fa fa-fw fa-search text-white"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" th:href="@{/home}">
+                <img th:src="@{/images/logo.png}" src="../static/images/logo.png" alt="" width="100" class="d-inline-block align-text-top">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#florace_main_nav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="align-self-center collapse navbar-collapse" id="florace_main_nav">
+                <div class="flex-fill">
+                    <ul class="nav navbar-nav d-flex justify-content-between mx-lg-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/home}">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/about}">About</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" th:href="@{/products/add}">
+                                Products
+                            </a>
+
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown" sec:authorize="hasRole('ADMIN')">
+                                <a class="dropdown-item" th:href="@{/products/add}">Create product</a>
+                                <a class="dropdown-item" th:href="@{/storage/upload}">Upload resource</a>
+                                <a class="dropdown-item" th:href="@{/products/all}">All products</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" th:href="@{/product/delete}">Delete product</a>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" th:href="@{/shop}" href="/shop" id="navbarShop" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Shop</a>
+                            <div class="dropdown-menu dropdown-large" aria-labelledby="navbarShop">
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="list-clothing">
+                                            <div class="title">
+                                                <h5>
+                                                    <a href="/" title="Shop Filter" class="delay03 relative ">Shop
+                                                        Filter</a>
+                                                </h5>
+                                            </div>
+                                            <ul class="mb-0 list-unstyled">
+                                                <li>
+                                                    <a href="https://floril-store-demo.myshopify.com/collections/all/?preview_theme_id=82533253260" title="Filter Push Left" class="delay03 relative nav-link menu_lv1 ">Filter Push
+                                                        Left</a>
+                                                </li>
+                                                <li>
+                                                    <a href="https://floril-store-demo.myshopify.com/collections/all/?preview_theme_id=81412030604" title="Filter Collapse" class="delay03 relative nav-link menu_lv1 ">Filter
+                                                        Collapse</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="list-clothing">
+                                            <div class="title">
+                                                <h5>
+                                                    <a href="/" title="Shop Layout" class="delay03 relative ">Shop
+                                                        Layout</a>
+                                                </h5>
+                                            </div>
+                                            <ul class="mb-0 list-unstyled">
+                                                <li>
+                                                    <a href="https://floril-store-demo.myshopify.com/collections/all/?preview_theme_id=81412030604" title="Full width" class="relative delay03 nav-link  menu_lv1 ">Full width
+                                                        <span class="absolute label_menu label_menu-full-widthnew-ef3e3e-1" style="background-color: #ef3e3e;"><span>NEW</span></span>
+                                                        <style>
+                                                            .label_menu-full-widthnew-ef3e3e-1:before {
+                                                                border-top: 4px solid #ef3e3e;
+                                                            }
+                                                        </style>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="https://floril-store-demo.myshopify.com/collections/all/?preview_theme_id=82533122188" title="Sidebar Left" class="delay03 relative nav-link menu_lv1 ">Sidebar
+                                                        Left</a>
+                                                </li>
+                                                <li>
+                                                    <a href="https://floril-store-demo.myshopify.com/collections/all?preview_theme_id=82533187724" title="Sidebar Right" class="delay03 relative nav-link menu_lv1 ">Sidebar
+                                                        Right</a>
+                                                </li>
+                                                <li>
+                                                    <a href="https://floril-store-demo.myshopify.com/collections/all/?preview_theme_id=82533253260" title="Infinity Scroll" class="relative delay03 nav-link  menu_lv1 ">Infinity
+                                                        Scroll
+                                                        <span class="absolute label_menu label_menu-infinity-scrollnew-ef3e3e-4" style="background-color: #ef3e3e;"><span>NEW</span></span>
+                                                        <style>
+                                                            .label_menu-infinity-scrollnew-ef3e3e-4:before {
+                                                                border-top: 4px solid #ef3e3e;
+                                                            }
+                                                        </style>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="https://floril-store-demo.myshopify.com/collections/all/?preview_theme_id=82533286028" title="Product List" class="delay03 relative nav-link menu_lv1 ">Product
+                                                        List</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/contact}">Contact</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="navbar align-self-center d-flex">
+                    <div class="d-lg-none flex-sm-fill mt-3 mb-4 col-7 col-sm-auto pr-3">
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="inputMobileSearch" placeholder="Search ...">
+                            <div class="input-group-text">
+                                <i class="fa fa-fw fa-search"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item active">
+
+                            <a class="nav-icon d-none d-lg-inline" th:href="@{/products/{productName}/search/}" data-bs-toggle="modal" data-bs-target="#florace_search">
+                                <i class="fa fa-fw fa-search text-dark mr-2"></i>
+                            </a>
+                            <a class="nav-icon position-relative text-decoration-none" th:href="@{/shopping-card}">
+                                <i class="fa fa-fw fa-cart-arrow-down text-dark mr-1"></i>
+                                <span class="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark">7</span>
+                            </a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-icon position-relative text-decoration-none" href="#">
+                                <i class="fa fa-fw fa-user text-dark mr-3" href="#" id="navbarAccount" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>
+                                <span class="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark">+99</span>
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarAccount">
+                                <li>
+                                    <a class="dropdown-item" th:href="@{/users/login}" sec:authorize="!isAuthenticated()">Sing in</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" th:href="@{/users/logout}" th:method="post">Sing out</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" th:href="@{/users/register}" sec:authorize="!isAuthenticated()">Register</a>
+                                </li>
+                                <div class="dropdown-divider" sec:authorize="!isAuthenticated()"></div>
+                                <li>
+                                    <a class="dropdown-item" th:href="@{/users/edit}" sec:authorize="isAuthenticated()">Edit user</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" th:href="@{/users/profile}" sec:authorize="isAuthenticated()">Profile</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+</div>
+
+</body>
+</html>

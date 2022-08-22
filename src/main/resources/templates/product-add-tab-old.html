@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Product Page</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="apple-touch-icon" th:href="@{/images/logo.png}" href="../static/images/logo.png">
+    <link rel="shortcut icon" type="image/x-icon" th:href="@{/images/favicon.ico}" href="../static/images/favicon.ico">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" th:href="@{/css/custom.js}" href="../static/css/custom.css">
+
+    <!-- Load fonts style after rendering the layout styles -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;200;300;400;500;700;900&amp;display=swap">
+    <link rel="stylesheet" th:href="@{/css/fontawesome.min.css}" href="../static/css/fontawesome.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+<body class="bg-primary">
+<div id="layoutAuthentication">
+    <div id="layoutAuthentication_content">
+        <main>
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-7">
+                        <div class="card shadow-lg border-0 rounded-lg mt-5">
+                            <div class="card-header">
+                                <h3 class="text-center font-weight-light my-4">Create Account</h3>
+                            </div>
+                            <div class="card-body">
+                                <form th:action="@{/product/add}" th:object="${productModel}" th:method="post">
+
+
+                                    <div class="col-md">
+                                        <div class="form-group">
+                                            <label for="inputProductName" class="form-label
+                                                           fw-bold">Project name</label>
+                                            <input th:field="*{productName}" th:errorclass="is-invalid" type="text" class="form-control" id="inputProductName" placeholder="e.g. Rose">
+                                            <p class="errors alert alert-danger invalid-feedback">
+                                                Please add product name between 4 and 20 letters.
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <hr>
+
+                                    <div class="row g-2">
+                                        <div class="col-md">
+                                            <div class="form-group">
+                                                <label for="inputProductPrice" class="form-label
+                                                               fw-bold">Price</label>
+
+                                                <input th:field="*{productPrice}" th:errorclass="is-invalid" type="text" class="form-control" id="inputProductPrice" placeholder="e.g. 22.99">
+                                                <p class="errors alert alert-danger invalid-feedback">
+                                                    Please add positive product price.
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md">
+                                            <div class="form-group">
+                                                <label for="inputProductColor" class="form-label
+                                                               fw-bold">Color</label>
+
+                                                <input th:field="*{productColor}" th:errorclass="is-invalid" type="text" class="form-control" id="inputProductColor" placeholder="e.g. Mango, Cobalt Blue, Black">
+                                                <p class="errors alert alert-danger invalid-feedback">
+                                                    Please add product color.
+                                                </p>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="col-md">
+                                            <div class="form-group">
+                                                <label for="inputSize" class="form-label
+                                                               fw-bold">Size</label>
+
+                                                <input th:field="*{productSize}" th:errorclass="is-invalid" type="text" class="form-control" id="inputSize" placeholder="e.g. XS, S, M, L, XL">
+                                                <p class="errors alert alert-danger invalid-feedback">
+                                                    Please add product size.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <hr>
+                                    <div class="row g-2">
+                                        <div class="col-md">
+                                            <div class="form-group col-md-6 mb-3">
+                                                <label class="text-center text-white font-weight-bold" for="productStatus">Category</label>
+                                                <select th:errorc<!doctype html>
+                                                <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+
+                                                <!-- Header -->
+                                                <head th:replace="fragments/head::head"></head>
+                                                <!-- Close Header -->
+                                                <body>
+
+                                                <!-- NavBar -->
+                                                <div th:replace="fragments/navbar :: navbar">
+                                                    Navbar
+                                                </div>
+                                                <!-- Close NavBar -->
+
+                                                <!-- Start Project Content -->
+                                                <div id="layoutAuthentication">
+                                                    <div id="layoutAuthentication_content">
+                                                        <main>
+                                                            <div class="container">
+                                                                <div class="row justify-content-center">
+                                                                    <div class="col-lg-7">
+
+                                                                        <div class="card shadow-lg border-0 rounded-lg mt-5">
+                                                                            <div class="card-header">
+                                                                                <h2 class="text-center font-weight-light my-4">Create product</h2>
+                                                                            </div>
+                                                                            <div class="card-body">
+                                                                                <!-- Tabs navs -->
+                                                                                <ul class="nav nav-tabs nav-justified mb-3" id="rootTabElement" role="tablist">
+                                                                                    <li class="nav-item" role="presentation">
+                                                                                        <a class="nav-link active" id="ex3-tab-1" data-mdb-toggle="tab" href="#productInfo" role="tab" aria-controls="ex3-tabs-1" aria-selected="true">Product information</a>
+                                                                                    </li>
+                                                                                    <li class="nav-item" role="presentation">
+                                                                                        <a class="nav-link" id="ex3-tab-2" data-mdb-toggle="tab" href="#productResources" role="tab" aria-controls="ex3-tabs-2" aria-selected="false">Product uploads</a>
+                                                                                    </li>
+                                                                                    <li class="nav-item" role="presentation">
+                                                                                        <a class="nav-link" id="ex3-tab-3" data-mdb-toggle="tab" href="#productSupplier" role="tab" aria-controls="ex3-tabs-3" aria-selected="false">Product supplier</a>
+                                                                                    </li>
+                                                                                </ul>
+                                                                                <!-- Tabs navs -->
+
+                                                                                <!-- Tabs content -->
+                                                                                <div class="tab-content" id="ex2-content">
+                                                                                    <div class="tab-pane fade show active" id="productInfo" role="tabpanel" aria-labelledby="ex3-tab-1">
+
+                                                                                        <form th:action="@{/product/add}" th:object="${productModel}" th:method="post">
+
+
+                                                                                            <div class="col-md">
+                                                                                                <div class="form-group">
+                                                                                                    <label for="inputProductName" class="form-label
+                                                           fw-bold">Project name</label>
+                                                                                                    <input th:field="*{productName}" th:errorclass="is-invalid" type="text" class="form-control" id="inputProductName" placeholder="e.g. Rose">
+                                                                                                    <p class="errors alert alert-danger invalid-feedback">
+                                                                                                        Please add product name between 4 and 20 letters.
+                                                                                                    </p>
+                                                                                                </div>
+                                                                                            </div>
+
+                                                                                            <hr>
+
+                                                                                            <div class="row g-2">
+                                                                                                <div class="col-md">
+                                                                                                    <div class="form-group">
+                                                                                                        <label for="inputProductPrice" class="form-label
+                                                               fw-bold">Price</label>
+
+                                                                                                        <input th:field="*{productPrice}" th:errorclass="is-invalid" type="text" class="form-control" id="inputProductPrice" placeholder="e.g. 22.99">
+                                                                                                        <p class="errors alert alert-danger invalid-feedback">
+                                                                                                            Please add positive product price.
+                                                                                                        </p>
+                                                                                                    </div>
+                                                                                                </div>
+
+                                                                                                <div class="col-md">
+                                                                                                    <div class="form-group">
+                                                                                                        <label for="inputProductColor" class="form-label
+                                                               fw-bold">Color</label>
+
+                                                                                                        <input th:field="*{productColor}" th:errorclass="is-invalid" type="text" class="form-control" id="inputProductColor" placeholder="e.g. Mango, Cobalt Blue, Black">
+                                                                                                        <p class="errors alert alert-danger invalid-feedback">
+                                                                                                            Please add product color.
+                                                                                                        </p>
+                                                                                                    </div>
+                                                                                                </div>
+
+
+                                                                                                <div class="col-md">
+                                                                                                    <div class="form-group">
+                                                                                                        <label for="inputSize" class="form-label
+                                                               fw-bold">Size</label>
+
+                                                                                                        <input th:field="*{productSize}" th:errorclass="is-invalid" type="text" class="form-control" id="inputSize" placeholder="e.g. XS, S, M, L, XL">
+                                                                                                        <p class="errors alert alert-danger invalid-feedback">
+                                                                                                            Please add product size.
+                                                                                                        </p>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+
+                                                                                            <hr>
+
+                                                                                            <div class="row mb-3">
+                                                                                                <div class="col-md">
+                                                                                                    <div class="form-group">
+                                                                                                        <label for="inputProjectDescription" class="form-label
+                                                               fw-bold">Description</label>
+                                                                                                        <textarea th:field="*{productDescription}" th:errorclass="is-invalid" rows="5" type="text" class="form-control" id="inputProjectDescription" placeholder="Enter productEntity description..."></textarea>
+                                                                                                        <p class="errors alert alert-danger invalid-feedback">
+                                                                                                            Please add product description between 20 and 100 letters.
+                                                                                                        </p>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div class="row mb-3">
+                                                                                                <div class="col-md">
+                                                                                                    <div class="form-group">
+                                                                                                        <label for="inputProjectDetails" class="form-label
+                                                               fw-bold">Details</label>
+                                                                                                        <textarea th:field="*{otherProductDetails}" th:errorclass="is-invalid" rows="5" type="text" class="form-control" id="inputProjectDetails" placeholder="Enter productEntity details..."></textarea>
+                                                                                                        <p class="errors alert alert-danger invalid-feedback">
+                                                                                                            Please add product details between 20 and 100 letters.
+                                                                                                        </p>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div class="row mb-3">
+                                                                                                <div class="col-md">
+                                                                                                    <div class="form-group col-md-6 mb-3">
+                                                                                                        <label class="text-center text-white font-weight-bold" for="productStatus">Category</label>
+                                                                                                        <select th:errorclass="is-invalid" id="productStatus" name="productStatus" class="form-control">
+                                                                                                            <option value="">- Select a category -</option>
+
+                                                                                                            <option th:each="status : ${T(com.nucleus.floracestore.model.enums.ProductStatusEnum).values()}" th:text="${status}" th:value="${status.name()}" th:selected="${status.name()} == *{productStatus}">
+                                                                                                            </option>
+                                                                                                        </select>
+                                                                                                        <p class="errors alert alert-danger invalid-feedback">
+                                                                                                            Select category.
+                                                                                                        </p>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                                <div class="col-md">
+                                                                                                    <div class="form-group col-md-6 mb-3">
+                                                                                                        <label class="text-center text-white font-weight-bold" for="categoryName">- Select a category -</label>
+                                                                                                        <select th:errorclass="is-invalid" id="categoryName" name="categoryName" class="form-control" th:field="*{categoryName}">
+                                                                                                            <option value="05" th:each="productCategory : ${productCategories}" th:text="${productCategory.productCategoryName}" th:value="${productCategory.productCategoryName}" th:selected="${productCategory.productCategoryName} == *{categoryName}">
+                                                                                                        </option></select>
+                                                                                                        <p class="errors alert alert-danger invalid-feedback">
+                                                                                                            Select category.
+                                                                                                        </p>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div class="mt-4 mb-0">
+                                                                                                <div class="d-grid">
+                                                                                                    <input class="btn btn-primary" type="submit" value="Add productEntity">
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </form>
+                                                                                    </div>
+                                                                                    <div class="tab-pane fade" id="productResources" role="tabpanel" aria-labelledby="ex3-tab-2">
+
+                                                                                        <div class="row mb-3">
+                                                                                            <form method="post" th:fragment="projectsResources" th:method="post" th:action="@{/storage/upload}" enctype="multipart/form-data" class="form-horizontal">
+                                                                                                <div class="col-md">
+                                                                                                    <div class="form-group">
+                                                                                                        <label for="inputProjectImage" class="form-label fw-bold">Image</label>
+
+                                                                                                        <div class="input-group mb-3">
+                                                                                                            <input type="file" name="file" class="form-control" id="inputProjectImage">
+                                                                                                            <div class="d-grid">
+                                                                                                                <input id="uploadFileSubmitBtn" class="btn btn-primary" type="submit" value="Upload">
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </form>
+                                                                                            <form method="post" th:fragment="projectsResources" th:method="post" th:action="@{/storage/uploads}" enctype="multipart/form-data" class="form-horizontal">
+                                                                                                <div class="row form-group">
+                                                                                                    <div class="col-12 col-md-12">
+                                                                                                        <div class="control-group" id="fields">
+                                                                                                            <label class="control-label" for="fields">
+                                                                                                                Requests
+                                                                                                            </label>
+                                                                                                            <div class="controls">
+                                                                                                                <div class="entry input-group upload-input-group">
+
+                                                                                                                    <input type="file" name="files" webkitdirectory multiple>
+
+                                                                                                                    <button id="uploadFilesSubmitBtn" class="btn btn-upload btn-success btn-add" type="button">
+                                                                                                                        <i class="fa fa-plus"></i>
+                                                                                                                    </button>
+                                                                                                                    <div id="uploads-content">
+
+                                                                                                                    </div>
+                                                                                                                </div>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                                <div class="mt-4 mb-0">
+                                                                                                    <div class="d-grid">
+                                                                                                        <input id="project-resources-submit" class="btn btn-primary" type="submit" value="Upload Directory">
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </form>
+                                                                                            <div>
+                                                                                            </div>
+                                                                                            <tr th:each="file: ${allFiles}">
+                                                                                                <td th:text="${file.fileName}"></td>
+                                                                                                <td th:text="${file.fileType}"></td>
+                                                                                            </tr>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="tab-pane fade" id="productSupplier" role="tabpanel" aria-labelledby="ex3-tab-3">
+                                                                                        Tab 3 content
+                                                                                    </div>
+                                                                                </div>
+                                                                                <!-- Tabs content -->
+
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </main>
+                                                    </div>
+                                                </div>
+                                                <!-- End Project Content -->
+
+                                                <!-- Start Footer -->
+                                                <footer th:replace="fragments/footer :: footer"></footer>
+                                                <!-- End Footer -->
+
+                                                <!--<link rel="stylesheet" th:href="@{/css/custom.css}" href="../static/css/custom.css">-->
+                                                <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+                                                <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+                                                <script type="text/javascript" th:src="@{/js/florace.js}" src="../static/js/florace.js"></script>
+                                                <script type="text/javascript" th:src="@{/js/dropdown-menu.js}" src="../static/js/dropdown-menu.js"></script>
+                                                <script type="text/javascript" th:src="@{/js/file_upload.js}" src="../static/js/file_upload.js"></script>
+                                                <script type="module" th:src="@{/js/product_form_tab_list.js}" src="../static/js/product_form_tab_list.js"></script>
+                                                <!--    <script type="text/javascript" th:src="@{/js/custom.js}"  src="../static/js/custom.js"></script>-->
+                                                </body>
+                                                </html>lass="is-invalid"
+                                                        id="productStatus"
+                                                        name="productStatus"
+                                                        class="form-control"&gt;
+                                                    <option value="">- Select a category -</option>
+
+                                                    <option th:each="status : ${T(com.nucleus.floracestore.model.enums.ProductStatusEnum).values()}" th:text="${status}" th:value="${status.name()}" th:selected="${status.name()} == *{productStatus}">
+                                                    </option>
+                                                </select>
+                                                <p class="errors alert alert-danger invalid-feedback">
+                                                    Select category.
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="col-md">
+                                            <div class="form-group col-md-6 mb-3">
+                                                <label class="text-center text-white font-weight-bold" for="categoryId">Category</label>
+                                                <select th:errorclass="is-invalid" id="categoryId" name="categoryId" class="form-control">
+                                                    <option value="0">- Select a category -</option>
+
+                                                    <option th:each="category : ${productCategories}" th:text="${category.productCategoryName}" th:value="${category.productCategoryId}" th:selected="${category.productCategoryId} == *{categoryId}">
+                                                        Category
+                                                    </option>
+                                                </select>
+                                                <p class="errors alert alert-danger invalid-feedback">
+                                                    Select category.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <div class="col-md">
+                                            <div class="form-group">
+                                                <label for="inputProjectDescription" class="form-label
+                                                               fw-bold">Description</label>
+                                                <textarea th:field="*{productDescription}" th:errorclass="is-invalid" rows="5" type="text" class="form-control" id="inputProjectDescription" placeholder="Enter productEntity description..."></textarea>
+                                                <p class="errors alert alert-danger invalid-feedback">
+                                                    Please add product description between 20 and 100 letters.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <div class="col-md">
+                                            <div class="form-group">
+                                                <label for="inputProjectDetails" class="form-label
+                                                               fw-bold">Details</label>
+                                                <textarea th:field="*{otherProductDetails}" th:errorclass="is-invalid" rows="5" type="text" class="form-control" id="inputProjectDetails" placeholder="Enter productEntity details..."></textarea>
+                                                <p class="errors alert alert-danger invalid-feedback">
+                                                    Please add product details between 20 and 100 letters.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="mt-4 mb-0">
+                                        <div class="d-grid">
+                                            <input class="btn btn-primary" type="submit" value="Add productEntity">
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+</body>
+
+</html>

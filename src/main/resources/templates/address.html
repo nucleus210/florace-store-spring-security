@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Address Page</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="apple-touch-icon" th:href="@{/images/logo.png}" href="../static/images/logo.png">
+    <link rel="shortcut icon" type="image/x-icon" th:href="@{/images/favicon.ico}" href="../static/images/favicon.ico">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" th:href="@{/css/custom.css}" href="../static/css/custom.css">
+
+    <!-- Load fonts style after rendering the layout styles -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;200;300;400;500;700;900&amp;display=swap">
+    <link rel="stylesheet" th:href="@{/css/fontawesome.min.css}" href="../static/css/fontawesome.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+<body>
+<main>
+    <div id="main-container">
+        <div class="row justify-content-center" id="auth_content">
+            <div class="col-lg-7">
+                <div class="card shadow-lg border-0 rounded-lg mt-5">
+                    <div class="card-header">
+                        <h3 class="text-center font-weight-light my-4">Create Account</h3>
+                    </div>
+                    <div class="card-body">
+                        <form th:action="@{/address/add}" th:object="${addressModel}" th:method="post">
+                            <div class="row mb-3">
+                                <div class="col-md">
+                                    <div class="form-group">
+                                        <label for="inputAddress" class="form-label
+                                                       fw-bold">Address</label>
+                                        <textarea th:field="*{streetAddress}" th:errorclass="is-invalid" type="text" rows="5" class="form-control" id="inputAddress" placeholder="1234 Main St"></textarea>
+                                        <p class="errors alert alert-danger invalid-feedback">
+                                            Add street address between 10 and 200 letters.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md">
+                                    <div class="form-group">
+                                        <label for="inputAddressSec" class="form-label
+                                                       fw-bold">Address secondary</label>
+                                        <textarea th:field="*{streetAddressSec}" th:errorclass="is-invalid" type="text" rows="5" class="form-control" id="inputAddressSec" placeholder="1234 Main St"></textarea>
+                                        <p class="errors alert alert-danger invalid-feedback">
+                                            Add street address between 10 and 200 letters.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md">
+                                    <div class="form-group">
+                                        <label for="inputCity" class="form-label
+                                                       fw-bold">City</label>
+                                        <input th:field="*{city}" th:errorclass="is-invalid" type="text" class="form-control" id="inputCity" placeholder="City">
+                                        <p class="errors alert alert-danger invalid-feedback">
+                                            City must not empty and between 4 and 30 letters.
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-md">
+                                    <div class="form-group">
+                                        <label for="inputStateProvinceCounty" class="form-label
+                                                       fw-bold">State</label>
+                                        <input th:field="*{stateProvinceCounty}" th:errorclass="is-invalid" type="text" class="form-control" id="inputStateProvinceCounty" placeholder="State">
+                                        <p class="errors alert alert-danger invalid-feedback">
+                                            State must not empty and between 4 and 30 letters.
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="col-md">
+                                    <div class="form-group">
+                                        <label for="inputZipPostCode" class="form-label
+                                                       fw-bold">Zip</label>
+                                        <input th:field="*{zipPostCode}" th:errorclass="is-invalid" type="text" class="form-control" id="inputZipPostCode" placeholder="Zip">
+                                        <p class="errors alert alert-danger invalid-feedback">
+                                            Zip code must not empty and between 4 and 30 letters.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-md">
+                                    <div class="form-group">
+                                        <label for="inputCountry" class="form-label
+                                                        fw-bold">Country...</label>
+                                        <select class="form-control" th:errorclass="is-invalid" name="country" id="inputCountry">
+                                            <option th:each="countryOpt : ${T(com.nucleus.floracestore.model.enums.CountryEnum).values()}" th:value="${countryOpt.getDisplayValue()}" th:text="${countryOpt.getDisplayValue()}"></option>
+                                        </select>
+                                        <p class="errors alert alert-danger invalid-feedback">
+                                            Select country name.
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-md">
+                                    <div class="form-group">
+                                        <label for="inputAddressType" class="form-label
+                                                        fw-bold">Address type...</label>
+                                        <select class="form-control" th:errorclass="is-invalid" name="addressTypeEnum" id="inputAddressType">
+                                            <option th:each="addressOpt : ${T(com.nucleus.floracestore.model.enums.AddressTypeEnum).values()}" th:value="${addressOpt.name()}" th:text="${addressOpt.name()}"></option>
+                                        </select>
+                                        <p class="errors alert alert-danger invalid-feedback">
+                                            Select address type.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md">
+                                    <div class="form-group">
+                                        <label for="inputOtherAddressDetails" class="form-label
+                                                       fw-bold">Other address details</label>
+                                        <textarea th:field="*{otherAddressDetails}" th:errorclass="is-invalid" type="text" rows="5" class="form-control" id="inputOtherAddressDetails" placeholder=""></textarea>
+                                        <p class="errors alert alert-danger invalid-feedback">
+                                            Address details must be between 10 and 200 letters.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-4 mb-0">
+                                <div class="d-grid">
+                                    <input class="btn btn-primary" type="submit" value="Add address">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="card-footer text-center py-3">
+                        <div class="small"><a href="/users/login">Have an account? Go
+                            to login</a></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+</body>
+
+</html>
+
+
+
+
+
+
