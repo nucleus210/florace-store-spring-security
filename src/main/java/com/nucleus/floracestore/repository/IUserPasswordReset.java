@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-@Repository("passwordResetRepository")
+@Repository("password-reset-repository")
 public interface IUserPasswordReset extends JpaRepository<UserEntity, Long> {
-    Optional<UserEntity> findByemailAddress(String emailAddress);
+    Optional<UserEntity> findByEmail(String emailAddress);
 }

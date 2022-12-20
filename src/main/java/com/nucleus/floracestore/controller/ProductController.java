@@ -1,37 +1,35 @@
 package com.nucleus.floracestore.controller;
 
+import com.nucleus.floracestore.hateoas.ProductAssembler;
 import com.nucleus.floracestore.model.dto.ProductDto;
-import com.nucleus.floracestore.model.dto.ProductStorageDto;
-import com.nucleus.floracestore.model.entity.ProductCategoryEntity;
-import com.nucleus.floracestore.model.entity.ProductEntity;
-import com.nucleus.floracestore.model.entity.StorageEntity;
-import com.nucleus.floracestore.model.enums.ProductStatusEnum;
 import com.nucleus.floracestore.model.service.ProductServiceModel;
+import com.nucleus.floracestore.model.service.ProductStatusServiceModel;
 import com.nucleus.floracestore.model.view.ProductViewModel;
 import com.nucleus.floracestore.service.ProductCategoryService;
 import com.nucleus.floracestore.service.ProductService;
 import com.nucleus.floracestore.service.StorageService;
 import com.nucleus.floracestore.service.UserService;
-import com.nucleus.floracestore.service.impl.MyUserPrincipal;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
-@Controller
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+@Slf4j
+@RestController
 public class ProductController {
 
     private final ProductService productService;
@@ -39,88 +37,54 @@ public class ProductController {
     private final ModelMapper modelMapper;
     private final UserService userService;
     private final StorageService storageService;
+    private final ProductAssembler assembler;
 
     @Autowired
     public ProductController(ProductService productService,
                              ProductCategoryService productCategoryService,
-                             ModelMapper modelMapper, UserService userService, StorageService storageService) {
+                             ModelMapper modelMapper,
+                             UserService userService,
+                             StorageService storageService,
+                             ProductAssembler assembler) {
         this.productService = productService;
         this.productCategoryService = productCategoryService;
         this.modelMapper = modelMapper;
         this.userService = userService;
         this.storageService = storageService;
+        this.assembler = assembler;
     }
 
-    @ModelAttribute("productModel")
-    public ProductDto productModel() {
-        return new ProductDto();
-    }
 
-    @ModelAttribute("productStorageModel")
-    public ProductStorageDto productStorageModel() {
-        return new ProductStorageDto();
-    }
-
-    @GetMapping("/products/add")
-    public String productCreate(Model model) {
-        if (!model.containsAttribute("productModel")) {
-            model.addAttribute("productModel", productModel());
-        }
-        model.addAttribute("storages", productStorageModel());
-        model.addAttribute("productStatusEnum", ProductStatusEnum.values());
-        model.addAttribute("productCategories", productCategoryService.getAll());
-        return "product-add-tab";
-    }
 
     @PostMapping("/products/add")
-    public String productAdd(@Valid ProductDto productModel,
-                             BindingResult bindingResult,
-                             ProductStorageDto productStorageModel,
-                             RedirectAttributes redirectAttributes,
-                             @AuthenticationPrincipal MyUserPrincipal principal) {
+    public ResponseEntity<EntityModel<ProductViewModel>> productCreate(@RequestBody ProductDto model) {
 
-        if (bindingResult.hasErrors()) {
-            redirectAttributes
-                    .addFlashAttribute("productModel", productStorageModel)
-                    .addFlashAttribute("productStorageModel", productStorageModel())
-                    .addFlashAttribute("productStatusEnum", ProductStatusEnum.values())
-                    .addFlashAttribute("productCategories", productCategoryService.getAll())
-                    .addFlashAttribute("org.springframework.validation.BindingResult.productModel", bindingResult);
-            return "redirect:/products/add";
-        }
-        List<StorageEntity> storages = new ArrayList<>();
-        String[] storageIds = productStorageModel.getId().split(",");
-        for (String id : storageIds) {
-            storages.add(storageService.getById(Long.parseLong(id)));
-        }
+        ProductServiceModel productServiceModel = new ProductServiceModel();
+        productServiceModel.setProductName(model.getProductName());
+        productServiceModel.setUnitQuantity(model.getUnitQuantity());
+        productServiceModel.setUnitSellPrice(model.getUnitSellPrice());
+        productServiceModel.setUnitOrderPrice(model.getUnitOrderPrice());
+        productServiceModel.setUnitDiscount(model.getUnitDiscount());
+        productServiceModel.setProductColor(model.getProductColor());
+        productServiceModel.setProductSize(model.getProductSize());
+        productServiceModel.setProductWeight(model.getProductWeight());
+        productServiceModel.setProductDescription(model.getProductDescription());
+        productServiceModel.setOtherProductDetails(model.getOtherProductDetails());
+        productServiceModel.setProductStatus(modelMapper.map(model.getProductStatus(), ProductStatusServiceModel.class));
+        productServiceModel.setProductCategory(model.getProductCategory());
+        productServiceModel.setProductSubCategory(model.getProductSubCategory());
+        productServiceModel.setStorages(model.getStorages());
 
-        ProductCategoryEntity productCategory = productCategoryService.getByProductCategoryName(productModel.getCategoryName()).get();
+        productService.saveProduct(productServiceModel, getCurrentLoggedUsername());
 
-        modelMapper.typeMap(ProductDto.class, ProductServiceModel.class).addMappings(mapper -> {
-            mapper.skip(ProductServiceModel::setProductCategory);
-        });
-        ProductServiceModel serviceModel = modelMapper.map(productModel, ProductServiceModel.class);
-        serviceModel.setProductCategory(productCategory);
-        serviceModel.setStorageEntity(storages);
-        productService.saveProduct(serviceModel, principal.getUserIdentifier());
-        return "redirect:/home";
+        ProductServiceModel product = productService.getByProductName(model.getProductName());
+        return ResponseEntity
+                .created(linkTo(methodOn(ProductController.class).productCreate(model)).toUri())
+                .body(assembler.toModel(mapToView(product)));
     }
 
-    //    @ResponseBody
-    @GetMapping("/products/{id}/edit")
-    public String productEdit(@PathVariable Long id,
-                              Model model,
-                              @AuthenticationPrincipal MyUserPrincipal currentUser) {
 
-
-        ProductViewModel productViewModel = productService.getByIdAndCurrentUser(id, currentUser.getUsername());
-        ProductDto productModel = modelMapper.map(productViewModel, ProductDto.class);
-        model.addAttribute("productModel", productModel);
-        model.addAttribute("productCategories", productCategoryService.getAll());
-        return "product-add-tab";
-    }
-
-    @PatchMapping("/products/{id}/edit")
+    @PatchMapping("/products/{id}")
     public String productEdit(@PathVariable Long id,
                               @Valid ProductDto productModel,
                               BindingResult bindingResult,
@@ -137,44 +101,46 @@ public class ProductController {
         return "redirect:/details/{id}";
     }
 
-    @GetMapping("/products/{id}/details")
-    public String getProductById(@PathVariable Long id, Model model,
-                                 @AuthenticationPrincipal MyUserPrincipal myUserPrincipal) {
-        model.addAttribute("productDetails", this.productService.getById(id));
-        model.addAttribute("relatedProducts", this.productService.getById(id));
-
-        return "shop-details";
+    @GetMapping("/products/search/{productName}")
+    public ResponseEntity<EntityModel<ProductViewModel>> getProductByName(@PathVariable String productName) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(assembler.toModel(mapToView(productService.getByProductName(productName))));
     }
 
-    @ResponseBody
-    @GetMapping("/products/{productName}/search/")
-    public ResponseEntity getProductByName(@PathVariable String productName) {
-        Optional<ProductEntity> productOptional = productService.getByProductName(productName);
-
-        if (productOptional.isPresent()) {
-            return ResponseEntity.status(HttpStatus.OK).body(productOptional.get());
-        } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-
-        }
+    @GetMapping("/products/{id}")
+    public ResponseEntity<EntityModel<ProductViewModel>> getProductById(@PathVariable Long id) {
+          return ResponseEntity.status(HttpStatus.OK)
+                  .body(assembler.toModel(mapToView(productService.getProductById(id))));
     }
 
-    @ResponseBody
-    @GetMapping(value = "/products/all")
-    public ResponseEntity<Object> getAllProducts() {
-        List<Object> products = Collections.singletonList(productService.getAllProducts());
-        if (!products.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.OK).body(products);
-        } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-        }
+    @GetMapping(value = "/products")
+    public ResponseEntity<CollectionModel<EntityModel<ProductViewModel>>> getAllProducts() {
+        List<EntityModel<ProductViewModel>> products = productService.getAllProducts().stream()
+                .map(entity -> assembler.toModel(mapToView(entity))).toList();
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(CollectionModel.of(products, linkTo(methodOn(ProductController.class).getAllProducts()).withSelfRel()));
+    }
+
+    @GetMapping(value = "/products/category/{categoryName}")
+    public ResponseEntity<CollectionModel<EntityModel<ProductViewModel>>> getAllProductsByCategoryName(@PathVariable String categoryName) {
+        List<EntityModel<ProductViewModel>> products = productService.getAllByProductCategory(categoryName).stream()
+                .map(entity -> assembler.toModel(mapToView(entity))).toList();
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(CollectionModel.of(products, linkTo(methodOn(ProductController.class).getAllProducts()).withSelfRel()));
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @DeleteMapping("/products/{id}/delete")
-    public String deleteProduct(@PathVariable Long id) {
+    @DeleteMapping("/products/{id}")
+    public void deleteProduct(@PathVariable Long id) {
         productService.deleteProduct(id);
-        return "redirect:/home";
     }
 
+    private ProductViewModel mapToView(ProductServiceModel product) {
+        return modelMapper.map(product, ProductViewModel.class);
+    }
+    private String getCurrentLoggedUsername() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        log.info("Principal: " + authentication.getName());
+        return authentication.getName();
+    }
 }

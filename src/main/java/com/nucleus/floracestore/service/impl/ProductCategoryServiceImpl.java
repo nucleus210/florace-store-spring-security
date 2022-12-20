@@ -1,93 +1,104 @@
 package com.nucleus.floracestore.service.impl;
 
+import com.nucleus.floracestore.error.QueryRuntimeException;
 import com.nucleus.floracestore.model.entity.ProductCategoryEntity;
-import com.nucleus.floracestore.model.view.ProductCategoryViewModel;
-import com.nucleus.floracestore.repository.ProductCategoriesRepository;
+import com.nucleus.floracestore.model.enums.UserRoleEnum;
+import com.nucleus.floracestore.model.service.ProductCategoryServiceModel;
+import com.nucleus.floracestore.repository.ProductCategoryRepository;
+import com.nucleus.floracestore.repository.ProductSubCategoryRepository;
 import com.nucleus.floracestore.service.ProductCategoryService;
+import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class ProductCategoryServiceImpl implements ProductCategoryService {
-    private final ProductCategoriesRepository productCategoriesRepository;
+    private final ProductCategoryRepository productCategoryRepository;
+    private final ProductSubCategoryRepository productSubCategoryRepository;
+    private final ModelMapper modelMapper;
 
     @Autowired
-    public ProductCategoryServiceImpl(ProductCategoriesRepository productCategoriesRepository) {
-        this.productCategoriesRepository = productCategoriesRepository;
+    public ProductCategoryServiceImpl(ProductCategoryRepository productCategoryRepository,
+                                      ProductSubCategoryRepository productSubCategoryRepository,
+                                      ModelMapper modelMapper) {
+        this.productCategoryRepository = productCategoryRepository;
+        this.productSubCategoryRepository = productSubCategoryRepository;
+        this.modelMapper = modelMapper;
     }
 
     @Override
-    public Optional<ProductCategoryEntity> getByProductCategoryName(String productCategoryName) {
-        return productCategoriesRepository.findByProductCategoryName(productCategoryName);
+    public ProductCategoryServiceModel getProductCategoryById(Long productCategoryId) {
+        ProductCategoryEntity productCategoryEntity = productCategoryRepository.findById(productCategoryId)
+                .orElseThrow(() -> new QueryRuntimeException("Could not find product category " + productCategoryId));
+        return modelMapper.map(productCategoryEntity, ProductCategoryServiceModel.class);
     }
 
     @Override
-    public List<ProductCategoryViewModel> getAll() {
-        return productCategoriesRepository.findAll().stream()
-                .map(productCategory -> {
-                    ProductCategoryViewModel productCategoryViewModel =
-                            new ProductCategoryViewModel();
-                    productCategoryViewModel.setProductCategoryName(productCategory.getProductCategoryName());
-                    productCategoryViewModel.setProductCategoryDescription(productCategory.getProductCategoryDescription());
-                    return productCategoryViewModel;
-                })
+    public ProductCategoryServiceModel getProductCategoryByCategoryName(String productCategoryName) {
+        return productCategoryRepository.findByProductCategoryName(productCategoryName)
+                .map(this::mapToService)
+                .orElseThrow(() -> new QueryRuntimeException("Could not find product category " + productCategoryName));
+    }
+
+    @Override
+    public List<ProductCategoryServiceModel> getAllProductCategories() {
+        return productCategoryRepository
+                .findAll()
+                .stream()
+                .map(this::mapToService)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<ProductCategoryEntity> getAllEntity() {
-        return productCategoriesRepository.findAll();
+    public ProductCategoryServiceModel createProductCategory(ProductCategoryServiceModel category, String username) {
+        productCategoryRepository.findByProductCategoryName(category.getProductCategoryName())
+                .ifPresentOrElse((value)
+                                -> {throw new QueryRuntimeException(String.format("Product category %s already exists",
+                                value.getProductCategoryName()));},
+                        () -> {productCategoryRepository.save(modelMapper.map(category, ProductCategoryEntity.class));});
+        return productCategoryRepository.findByProductCategoryName(category.getProductCategoryName())
+                .map(this::mapToService).orElseThrow(
+                        () -> new QueryRuntimeException("Could not find product category " + category.getProductCategoryName()));
+    }
+
+
+    @Override
+    public ProductCategoryServiceModel updateProductCategoryById(Long productCategoryId,
+                                                                 ProductCategoryServiceModel productCategoryServiceModel,
+                                                                 String username) {
+        ProductCategoryEntity productCategoryEntity = productCategoryRepository.findById(productCategoryId)
+                .orElseThrow(() -> new QueryRuntimeException("Could not find product category with id " + productCategoryId));
+        productCategoryEntity.setProductCategoryName(productCategoryServiceModel.getProductCategoryName());
+        productCategoryEntity.setProductCategoryDescription(productCategoryServiceModel.getProductCategoryDescription());
+
+        return mapToService(productCategoryRepository.save(productCategoryEntity));    }
+
+    @Override
+    public ProductCategoryServiceModel deleteProductCategoryById(Long productCategoryId, String username) {
+        ProductCategoryEntity productCategoryEntity = productCategoryRepository.findById(productCategoryId)
+                .orElseThrow(() -> new QueryRuntimeException("Could not find product category with id " + productCategoryId));
+        productCategoryRepository.delete(productCategoryEntity);
+        return mapToService(productCategoryEntity);
     }
 
     @Override
-    public ProductCategoryEntity getById(Long id) {
-        Optional<ProductCategoryEntity> entity = productCategoriesRepository.findById(id);
-        return entity.orElse(null);
+    public void saveAllCategories(Set<ProductCategoryEntity> categories) {
+        productCategoryRepository.saveAll(categories);
     }
 
-    @Override
-    public List<String> getAllCategories() {
-        List<String> categories = new ArrayList<>();
-        productCategoriesRepository.findAll().forEach(e -> categories.add(e.getProductCategoryName()));
-        return categories;
+    private ProductCategoryServiceModel mapToService(ProductCategoryEntity category) {
+        return modelMapper.map(category, ProductCategoryServiceModel.class);
     }
 
-    @Override
-    public void saveAll(Set<ProductCategoryEntity> categories) {
-        productCategoriesRepository.saveAll(categories);
-    }
-
-    @Override
-    public void initializeCategories() {
-        if (productCategoriesRepository.findAll().isEmpty()) {
-            ProductCategoryEntity flowers = new ProductCategoryEntity();
-            flowers.setProductCategoryName("Flowers");
-            flowers.setProductCategoryDescription("Different types of flowers arranged as bouquets, in a box, in pots.");
-            ProductCategoryEntity plants = new ProductCategoryEntity();
-            plants.setProductCategoryName("Plants");
-            plants.setProductCategoryDescription("Different types of plants for the home and garden.");
-            ProductCategoryEntity gifts = new ProductCategoryEntity();
-            gifts.setProductCategoryName("Gifts");
-            gifts.setProductCategoryDescription("Creative gift solutions made by hand according to customer specific requirements.");
-            ProductCategoryEntity special = new ProductCategoryEntity();
-            special.setProductCategoryName("Special");
-            special.setProductCategoryDescription("Boutique products suitable for special occasions.");
-            ProductCategoryEntity cards = new ProductCategoryEntity();
-            cards.setProductCategoryName("Cards");
-            cards.setProductCategoryDescription("Different types of greeting cards written with special inks and font.");
-            ProductCategoryEntity prints = new ProductCategoryEntity();
-            prints.setProductCategoryName("Prints");
-            prints.setProductCategoryDescription("Printing on various surfaces.");
-            ProductCategoryEntity promotions = new ProductCategoryEntity();
-            promotions.setProductCategoryName("Promotions");
-            promotions.setProductCategoryDescription("Special offers at a super price.");
-            productCategoriesRepository.saveAll(Set.of(flowers, plants, gifts, special, cards, prints, promotions));
-        }
+    private boolean isAdmin(MyUserPrincipal user) {
+        return user.getAuthorities().stream().map(GrantedAuthority::getAuthority).
+                anyMatch(r -> r.equals("ROLE_" + UserRoleEnum.ADMIN));
     }
 }

@@ -18,7 +18,7 @@ public class UserLoginDto {
     private String username;
     @IValidEmail
     @NotNull
-    private String emailAddress;
+    private String email;
     @NotNull
     @NotBlank
     @Size(min = 4, max = 20)

@@ -1,6 +1,8 @@
 package com.nucleus.floracestore.service.impl;
 
+import com.nucleus.floracestore.error.QueryRuntimeException;
 import com.nucleus.floracestore.model.entity.StorageEntity;
+import com.nucleus.floracestore.model.service.StorageServiceModel;
 import com.nucleus.floracestore.repository.StorageRepository;
 import com.nucleus.floracestore.service.StorageService;
 import org.modelmapper.ModelMapper;
@@ -22,6 +24,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -56,13 +59,15 @@ public class StorageServiceImpl implements StorageService {
     }
 
     @Override
-    public void save(StorageEntity storageEntity) {
-        storageRepository.save(storageEntity);
+    public void save(StorageServiceModel storageServiceModel) {
+        storageRepository.save(modelMapper.map(storageServiceModel, StorageEntity.class));
     }
 
     @Override
-    public StorageEntity getByName(String name) {
-        return storageRepository.findByFileName(name);
+    public StorageServiceModel getByName(String fileName) {
+        StorageEntity storageEntity = storageRepository.findByFileName(fileName)
+                .orElseThrow(() -> new QueryRuntimeException("Could not find storage with filename " + fileName));
+        return mapToService(storageEntity);
     }
 
     private String getFileExtension(String fileName) {
@@ -75,7 +80,7 @@ public class StorageServiceImpl implements StorageService {
     }
 
     @Override
-    public StorageEntity storeFile(MultipartFile file) {
+    public StorageServiceModel storeFile(MultipartFile file) {
         // Normalize file name
         String fileName =
                 new SimpleDateFormat("yyyy-MM-dd'_'hh-mm-ss-SSS").format(new Date()) + "-file." + getFileExtension(file.getOriginalFilename());
@@ -88,28 +93,38 @@ public class StorageServiceImpl implements StorageService {
             }
 
             Path targetLocation = this.fileStorageLocation.resolve(fileName);
+            String filePath = this.fileStorageLocation.resolve(fileName).toString();
+            filePath = filePath.replace("\\", "/");
+            String[] arrOfStr = filePath.split("static", 0);
+            System.out.println("File path: " + arrOfStr[1]);
+
             Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
             StorageEntity entity = new StorageEntity();
             entity.setFileName(fileName);
-            entity.setFileUrl(this.fileStorageLocation.resolve(fileName).toString());
+            entity.setFileUrl("http://localhost:8080" + arrOfStr[1]);
             entity.setSize(Files.size(targetLocation));
             storageRepository.save(entity);
-
-            return storageRepository.findByFileName(entity.getFileName());
+            StorageEntity storageEntity = storageRepository.findByFileName(fileName)
+                    .orElseThrow(() -> new QueryRuntimeException("Could not find storage with filename " + fileName));
+            return mapToService(storageEntity);
         } catch (IOException ex) {
             throw new RuntimeException("Could not store file " + fileName + ". Please try again!", ex);
         }
+
     }
 
     @Override
-    public void storeMultipleResources(MultipartFile[] files) {
+    public List<StorageServiceModel> storeMultipleResources(MultipartFile[] files) {
+        List<StorageServiceModel> storages = new ArrayList<>();
         try {
             for (MultipartFile file : files) {
-                storeFile(file);
+                StorageServiceModel storageServiceModel = storeFile(file);
+                storages.add(storageServiceModel);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return storages;
     }
 
     @Override
@@ -136,9 +151,15 @@ public class StorageServiceImpl implements StorageService {
     }
 
     @Override
-    public List<StorageEntity> getAllStorageEntities() {
+    public List<StorageServiceModel> getAllStorageEntities() {
+        return storageRepository.findAll()
+                .stream()
+                .map(this::mapToService)
+                .collect(Collectors.toList());
+    }
 
-        return storageRepository.findAll();
+    private StorageServiceModel mapToService(StorageEntity storage) {
+        return this.modelMapper.map(storage, StorageServiceModel.class);
     }
 
     @Override
@@ -161,8 +182,10 @@ public class StorageServiceImpl implements StorageService {
     public void storeResourceBySource(MultipartFile file, String sourceType, String sourceName) {
     }
 
-    public StorageEntity getById(Long id) {
-        return storageRepository.findById(id).get();
+    public StorageServiceModel getById(Long id) {
+        StorageEntity storageEntity = storageRepository.findById(id)
+                .orElseThrow(() -> new QueryRuntimeException("Could not find storage with id " + id));
+        return mapToService(storageEntity);
     }
 
     public Resource[] loadResources(String pattern) throws IOException {
@@ -180,20 +203,4 @@ public class StorageServiceImpl implements StorageService {
         }
     }
 
-    @Override
-    public void initializeStorage() throws IOException {
-        Resource[] resources = loadResources("classpath*:/static/images/uploads/*.jpg");
-        for (Resource r : resources
-        ) {
-            String[] arrOfStr = r.getURL().toString().split("static", 0);
-            System.out.println(arrOfStr[1]);
-            String resourceType = r.getFilename().split("\\.", 0)[1];
-            System.out.println(resourceType);
-            StorageEntity storageEntity = new StorageEntity();
-            storageEntity.setFileName(r.getFilename());
-            storageEntity.setFileUrl(arrOfStr[1]);
-            storageEntity.setSize(Files.size(Path.of(r.getURI().getPath())));
-            storageRepository.save(storageEntity);
-        }
-    }
 }

@@ -11,8 +11,9 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Data
-@NoArgsConstructor
 @IPasswordMatches
+@NoArgsConstructor
+
 public class UserRegistrationDto {
     @NotBlank
     @Size(min = 4, max = 20)
@@ -21,7 +22,7 @@ public class UserRegistrationDto {
     @NotNull
     @IValidEmail
     @NotNull
-    private String emailAddress;
+    private String email;
     @NotNull
     @NotBlank
     @Size(min = 4, max = 20)
@@ -29,4 +30,5 @@ public class UserRegistrationDto {
     @NotNull
     @Size(min = 4, max = 20)
     private String confirmPassword;
+    private boolean setActive;
 }

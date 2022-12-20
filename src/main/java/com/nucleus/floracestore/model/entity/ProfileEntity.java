@@ -1,7 +1,6 @@
 package com.nucleus.floracestore.model.entity;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -10,6 +9,9 @@ import java.util.Date;
 @Getter
 @Setter
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "profiles")
 public class ProfileEntity {
 
@@ -18,8 +20,14 @@ public class ProfileEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Float profileId;
 
+    @Column(name = "company_name")
+    private String companyName;
+
     @Column(name = "first_name", nullable = false)
     private String firstName;
+
+    @Column(name = "middle_name")
+    private String middleName;
 
     @Column(name = "last_name", nullable = false)
     private String lastName;
@@ -37,17 +45,24 @@ public class ProfileEntity {
     @Column(name = "phone_number", nullable = false)
     private String phoneNumber;
 
-    @OneToOne
+    @Column(name = "work_phone_number")
+    private String workPhoneNumber;
+
+    @OneToOne(optional = false)
+    @JoinColumn(name = "profile_photo_id",
+            referencedColumnName = "resources_id")
     private StorageEntity profilePhotoUrl;
 
-    @OneToOne
-    @JoinColumn(name = "user_id")
+    @OneToOne(optional = false)
+    @JoinColumn(referencedColumnName = "user_id", name = "user__id")
     private UserEntity user;
 
-    @OneToOne
+    @OneToOne(optional = false)
+    @JoinColumn(name = "profile_address_id",
+            referencedColumnName = "address_id")
     private AddressEntity address;
 
-    @OneToOne
-    private StorageEntity profilePhoto;
+    @Column(name = "web_site")
+    private String webSite;
 }
 

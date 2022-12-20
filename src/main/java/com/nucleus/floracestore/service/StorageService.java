@@ -1,7 +1,7 @@
 package com.nucleus.floracestore.service;
 
 
-import com.nucleus.floracestore.model.entity.StorageEntity;
+import com.nucleus.floracestore.model.service.StorageServiceModel;
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -12,27 +12,25 @@ import java.util.List;
 public interface StorageService {
     void init();
 
-    void initializeStorage() throws IOException;
+    void save(StorageServiceModel storageEntity);
 
-    void save(StorageEntity storageEntity);
+    StorageServiceModel getByName(String name);
 
-    StorageEntity getByName(String name);
-
-    StorageEntity storeFile(MultipartFile file);
+    StorageServiceModel storeFile(MultipartFile file);
+    List<StorageServiceModel> storeMultipleResources(MultipartFile[] files);
 
     Resource load(String filename);
 
     void deleteAll();
 
-    List<StorageEntity> getAllStorageEntities();
+    List<StorageServiceModel> getAllStorageEntities();
 
     List<Path> loadAllFilesPaths();
 
     void storeResourceBySource(MultipartFile file, String sourceType, String sourceName);
 
-    void storeMultipleResources(MultipartFile[] files);
 
     Resource[] loadResources(String s) throws IOException;
 
-    StorageEntity getById(Long storageId);
+    StorageServiceModel getById(Long storageId);
 }

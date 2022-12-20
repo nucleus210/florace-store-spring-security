@@ -13,16 +13,17 @@ import java.util.Date;
 @Table(name = "orders")
 public class OrderEntity {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "order_id")
     private Long orderId;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @ManyToOne(fetch=FetchType.EAGER)
+    @JoinColumn(referencedColumnName = "user_id", name = "user__id")
     private UserEntity user;
 
-    @ManyToOne
-    @JoinColumn(name = "user_name", nullable = false)
-    private OrderStatusCodeEntity orderStatusCodeEntity;
+    @ManyToOne(fetch=FetchType.EAGER)
+    @JoinColumn(referencedColumnName = "order_status_code_id", name = "order_status_code")
+    private OrderStatusCodesEntity orderStatusCode;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "date_order_placed")
@@ -30,4 +31,5 @@ public class OrderEntity {
 
     @Column(name = "order_details")
     private String orderDetails;
+
 }

@@ -1,17 +1,19 @@
 package com.nucleus.floracestore.controller;
 
-import com.google.gson.Gson;
 import com.nucleus.floracestore.error.StorageFileNotFoundException;
-import com.nucleus.floracestore.model.entity.StorageEntity;
+import com.nucleus.floracestore.hateoas.StorageAssembler;
+import com.nucleus.floracestore.model.service.StorageServiceModel;
+import com.nucleus.floracestore.model.view.SingleUploadResponseMessage;
 import com.nucleus.floracestore.model.view.StorageViewModel;
-import com.nucleus.floracestore.model.view.UploadResponseMessage;
 import com.nucleus.floracestore.service.StorageService;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.core.io.Resource;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,44 +26,39 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Controller
-@SessionAttributes("projectModel")
+@Slf4j
+@RestController
 public class StorageController {
     private final StorageService storageService;
     private final ModelMapper modelMapper;
-    private final Gson gson;
+    private final StorageAssembler assembler;
 
-    public StorageController(StorageService storageService, ModelMapper modelMapper, Gson gson) {
+    public StorageController(StorageService storageService,
+                             ModelMapper modelMapper,
+                             StorageAssembler assembler) {
         this.storageService = storageService;
         this.modelMapper = modelMapper;
-        this.gson = gson;
+        this.assembler = assembler;
     }
-
-    @ModelAttribute("uploadModel")
-    public StorageViewModel uploadModel() {
-        return new StorageViewModel();
-    }
-
-    @ResponseBody
-    @CrossOrigin(origins = "http://localhost:8080/storage/upload")
-    @PostMapping("/storage/upload")
-    public ResponseEntity<UploadResponseMessage> uploadFile(@RequestParam("file") MultipartFile file) {
+//    @CrossOrigin(origins = "*")
+//    @RequestMapping(value = "/storages/upload/{file}", headers = "content-type=multipart/*", method = RequestMethod.POST)
+    @PostMapping(value = "/storages/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<EntityModel<SingleUploadResponseMessage>> uploadFileToStorages (@RequestParam("file") MultipartFile file) {
         try {
-            StorageViewModel entity = modelMapper.map(storageService.storeFile(file), StorageViewModel.class);
 
+            StorageViewModel storage = mapToView(storageService.storeFile(file));
             return ResponseEntity.status(HttpStatus.OK)
-                    .body(new UploadResponseMessage("Uploaded the file successfully: "
-                            + file.getOriginalFilename(), entity));
+                    .body(assembler.toModel(new SingleUploadResponseMessage("Uploaded the file successfully: "
+                            + file.getOriginalFilename(), file, storage)));
 
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED)
-                    .body(new UploadResponseMessage("Could not upload the file: "
-                            + file.getOriginalFilename() + "!", null));
+                    .body(assembler.toModel(new SingleUploadResponseMessage("Could not upload the file: "
+                            + file.getOriginalFilename() + "!", file, null)));
         }
     }
 
-    @ResponseBody
-    @GetMapping("/storage/list")
+    @GetMapping("/storages/list")
     public ResponseEntity<List<StorageViewModel>> getListFiles() {
         List<StorageViewModel> fileInfos = storageService.loadAllFilesPaths()
                 .stream()
@@ -72,13 +69,12 @@ public class StorageController {
                 .body(fileInfos);
     }
 
-    @ResponseBody
     @GetMapping("/storage/entities")
     public ResponseEntity<List<StorageViewModel>> getListEntities() {
 
         List<StorageViewModel> fileInfos = new ArrayList<>();
-        for (StorageEntity entity : storageService.getAllStorageEntities()) {
-            fileInfos.add(modelMapper.map(entity, StorageViewModel.class));
+        for (StorageServiceModel storage : storageService.getAllStorageEntities()) {
+            fileInfos.add(modelMapper.map(storage, StorageViewModel.class));
         }
         return ResponseEntity.status(HttpStatus.OK)
                 .body(fileInfos);
@@ -103,7 +99,6 @@ public class StorageController {
     }
 
     @GetMapping("/file/{filename:.+}")
-    @ResponseBody
     public ResponseEntity<Resource> getFile(@PathVariable String filename) {
         Resource file = storageService.load(filename);
         return ResponseEntity.ok()
@@ -112,7 +107,7 @@ public class StorageController {
     }
 
 
-    @GetMapping("/storage/files")
+    @GetMapping("/storages/files")
     public String listUploadedFiles(Model model) throws IOException {
 
         model.addAttribute("allfiles", storageService.loadAllFilesPaths().stream().map(
@@ -131,7 +126,7 @@ public class StorageController {
                 "attachment; filename=\"" + file.getFilename() + "\"").body(file);
     }
 
-    @PostMapping("/storage/upload/profile")
+    @PostMapping("/storages/upload/profile")
     public String uploadProfilePhoto(@RequestParam("file") MultipartFile file, Model model) {
         try {
             // Saving all the list item into database
@@ -143,19 +138,13 @@ public class StorageController {
     }
 
 
-    @PostMapping("/storage/uploads")
-    public String uploadMultipartFile(@RequestParam("files") MultipartFile[] files, Model model) {
-        try {
-            // Saving all the list item into database
-            storageService.storeMultipleResources(files);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return "redirect:/storage/upload";
-    }
 
     @ExceptionHandler(StorageFileNotFoundException.class)
     public ResponseEntity<?> handleStorageFileNotFound(StorageFileNotFoundException exc) {
         return ResponseEntity.notFound().build();
+    }
+
+    private StorageViewModel mapToView(StorageServiceModel model) {
+        return modelMapper.map(model, StorageViewModel.class);
     }
 }

@@ -4,9 +4,14 @@ import com.nucleus.floracestore.model.entity.StorageEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-@Repository("storageRepository")
+import java.util.Optional;
+
+@Repository("storage-repository")
 public interface StorageRepository extends JpaRepository<StorageEntity, Long> {
-    StorageEntity findByFileName(String fileName);
+    @Override
+    Optional<StorageEntity> findById(Long aLong);
+
+    Optional<StorageEntity> findByFileName(String fileName);
 
 
 }

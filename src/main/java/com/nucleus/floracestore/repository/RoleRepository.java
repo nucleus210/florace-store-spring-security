@@ -5,7 +5,9 @@ import com.nucleus.floracestore.model.enums.UserRoleEnum;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-@Repository("roleRepository")
+@Repository("role-repository")
 public interface RoleRepository extends JpaRepository<RoleEntity, Long> {
-    RoleEntity findByRole(UserRoleEnum role);
+//    RoleEntity findByRole(UserRoleEnum role);
+
+    RoleEntity findByRoleName(String name);
 }

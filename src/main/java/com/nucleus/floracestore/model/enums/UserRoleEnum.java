@@ -5,12 +5,10 @@ import java.util.Map;
 
 public enum UserRoleEnum {
     ADMIN("Admin", 1),
-    MANAGER("Manager", 2),
-    DESIGNER("Designer", 3),
-    EDITOR("Editor", 4),
-    AUTHOR("Author", 5),
-    VIEWER("Viewer", 6),
-    DENY("Deny", 7);
+    STAFF("Staff", 2),
+    USER("User", 3),
+    GUEST("Guest", 4),
+    FACEBOOK_USER("FacebookUser", 5);
 
     private final String levelName;
     private final int levelCode;

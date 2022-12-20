@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -19,7 +19,10 @@ public class ProductCategoryEntity {
     private String productCategoryName;
     @Column(name = "product_category_description", columnDefinition = "TEXT", nullable = false)
     private String productCategoryDescription;
-    @OneToMany
-    private List<ProductSubCategories> productSubCategories;
+    @OneToMany(targetEntity = ProductSubCategoryEntity.class,
+            cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY,
+            mappedBy = "productCategory")
+    private Set<ProductSubCategoryEntity> productSubCategories;
 
 }

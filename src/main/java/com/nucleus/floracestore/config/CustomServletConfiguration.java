@@ -17,6 +17,7 @@ public class CustomServletConfiguration implements WebServerFactoryCustomizer<Co
         mappings.remove("json");
         mappings.add("json", "application/json;charset=utf-8");
         mappings.add("mjs", "application/octet-stream;charset=utf-8");
+//        mappings.add("","application/x-www-form-urlencoded");
 
         factory.setMimeMappings(mappings);
         factory.setPort(8080);

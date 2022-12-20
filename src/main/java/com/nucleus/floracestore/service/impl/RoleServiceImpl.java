@@ -17,7 +17,12 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public RoleEntity getRoleByRole(UserRoleEnum role) {
-        return roleRepository.findByRole(role);
+    public RoleEntity getByRoleName(String roleName) {
+        return roleRepository.findByRoleName(roleName);
     }
+
+//    @Override
+//    public RoleEntity getRoleByRole(UserRoleEnum role) {
+//        return roleRepository.findByRole(role);
+//    }
 }

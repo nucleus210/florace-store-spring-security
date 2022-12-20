@@ -1,10 +1,16 @@
 package com.nucleus.floracestore.model.entity;
 
-import com.nucleus.floracestore.model.enums.UserRoleEnum;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -13,10 +19,25 @@ import javax.persistence.*;
 public class RoleEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "role_id")
+    private Long roleId;
+    @Column(name = "role_name")
+    private String roleName;
 
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private UserRoleEnum role;
+    @JsonBackReference(value = "users_roles")
+    @ManyToMany(mappedBy = "roles")
+    private Set<UserEntity> users = new HashSet<>();
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "roles_privileges",
+            joinColumns = @JoinColumn(
+                    name = "role__id", referencedColumnName = "role_id"),
+            inverseJoinColumns = @JoinColumn(
+                    name = "privilege_id", referencedColumnName = "id") )
+    private Set<PrivilegeEntity> privileges = new HashSet<>();
+
 }
+
+

@@ -5,5 +5,5 @@ import lombok.Data;
 @Data
 public class UserEditViewModel {
     private String name;
-    private String emailAddress;
+    private String email;
 }

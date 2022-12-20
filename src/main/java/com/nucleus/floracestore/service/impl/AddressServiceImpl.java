@@ -5,11 +5,13 @@ import com.nucleus.floracestore.model.service.AddressServiceModel;
 import com.nucleus.floracestore.repository.AddressRepository;
 import com.nucleus.floracestore.repository.ProfileRepository;
 import com.nucleus.floracestore.service.AddressService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+@Slf4j
 @Service
 public class AddressServiceImpl implements AddressService {
 

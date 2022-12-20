@@ -9,23 +9,14 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ProductService {
-
-    List<ProductEntity> getAllProducts();
-
+    ProductServiceModel getProductById(Long projectId);
+    ProductServiceModel getByProductName(String projectName);
+    List<ProductServiceModel> getAllProducts();
+    ProductServiceModel saveProduct(ProductServiceModel productServiceModel, String owner);
+    void updateProduct(ProductServiceModel productServiceModel);
+    void deleteProduct(Long id);
     ProductViewModel getByIdAndCurrentUser(Long id, String owner);
     ProductViewModel getById(Long id);
+    List<ProductServiceModel> getAllByProductCategory(String productCategory);
 
-    Optional<ProductEntity> getProductById(Long projectId);
-
-    Optional<ProductEntity> getByProductName(String projectName);
-
-    ProductServiceModel saveProduct(ProductServiceModel productServiceModel, String owner);
-
-    List<ProductViewModel> findAllByProductCategory(ProductCategoryEntity productCategory);
-
-    void updateProduct(ProductServiceModel productServiceModel);
-
-    void deleteProduct(Long id);
-
-    void initializeProducts();
 }

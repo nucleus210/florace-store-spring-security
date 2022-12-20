@@ -22,7 +22,7 @@ public enum AddressTypeEnum {
     RECRUIT("A recruit address."),
     SMS("The SMS address."),
     LANDING_W("The lading address for RU,LT,LV."),
-    UNLANDING_W("The unlading address for RU,LT,LV."),
+    UN_LANDING_W("The unlading address for RU,LT,LV."),
     CONSIGNMENT_IN("The consignment address for IN.");
 
     private final String displayValue;

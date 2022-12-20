@@ -1,12 +1,12 @@
 package com.nucleus.floracestore.model.service;
 
-import lombok.Getter;
-import lombok.Setter;
-import org.springframework.web.multipart.MultipartFile;
+import lombok.Data;
 
-@Getter
-@Setter
+@Data
 public class StorageServiceModel {
     private Long resourceId;
-    MultipartFile[] files;
+    private String fileName;
+    private String fileUrl;
+    private Long size;
+//    MultipartFile[] files;
 }

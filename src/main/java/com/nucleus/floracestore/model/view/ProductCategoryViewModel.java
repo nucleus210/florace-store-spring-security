@@ -8,4 +8,5 @@ public class ProductCategoryViewModel {
     private Long productCategoryId;
     private String productCategoryName;
     private String productCategoryDescription;
+//    private Set<ProductSubCategoryEntity> subCategories;
 }

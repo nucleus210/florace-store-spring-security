@@ -1,6 +1,23 @@
+application:
+  jwt:
+    uri: /auth/**
+    header: Authorization
+    secretKey: dDO6zbc):(@A*RjPwNXYZ_Jj4s)G=~UYzjjs(u2yF).!TW`u={IyyCBBJlAYt)D
+    tokenExpirationAfterDays: 14
+    tokenPrefix: Bearer
+
 spring:
+
+  main:
+    allow-bean-definition-overriding: true
+
+  security:
+    basic:
+      enable: false
+
   profiles:
     active: development
+
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
     url: "jdbc:mysql://localhost:3306/florancedb?allowPublicKeyRetrieval=true&useSSL=false&createDatabaseIfNotExist=true&serverTimezone=UTC"
@@ -9,12 +26,15 @@ spring:
 
   servlet:
     multipart:
+      enabled: true
       max-file-size: 15MB
       max-request-size: 15MB
+
   mvc:
     hiddenmethod:
       filter:
         enabled: true
+
   sql:
     init:
       mode: always
@@ -36,20 +56,20 @@ spring:
         format_sql: true
     defer-datasource-initialization: true
     show-sql: true
-  mail:
-    default-encoding: UTF-8
-    host: smtp.gmail.com
-    username: ''
-    password: ''
-    port: 587
-    properties:
-      mail:
-        smtp:
-          auth: true
-          starttls:
-            enable: true
-    protocol: smtp
-    test-connection: false
+#  mail:
+#    default-encoding: UTF-8
+#    host: smtp.gmail.com
+#    username: ''
+#    password: ''
+#    port: 587
+#    properties:
+#      mail:
+#        smtp:
+#          auth: true
+#          starttls:
+#            enable: true
+#    protocol: smtp
+#    test-connection: false
 
   remember-me:
     _data-source-ref: persistentTokenRepository
@@ -64,3 +84,16 @@ app:
   file:
     upload-dir=:
       /src/main/resources/static/images/uploads:
+server:
+  port=${PORT:8080}
+
+java:
+  runtime:
+    version=18
+
+stripe:
+  api:
+    key: sk_test_48kbUX1oHSgAO6DBa2lfplsT
+  public:
+    key: pk_test_
+

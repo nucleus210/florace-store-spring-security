@@ -6,5 +6,5 @@ import lombok.Data;
 public class UserEditServiceModel {
     private Long userId;
     private String username;
-    private String emailAddress;
+    private String email;
 }

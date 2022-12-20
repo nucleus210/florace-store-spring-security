@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-@Repository("addressRepository")
+@Repository("address-repository")
 public interface AddressRepository extends JpaRepository<AddressEntity, Long> {
     Optional<AddressEntity> findByAddressId(Long addressId);
 }

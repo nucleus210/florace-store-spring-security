@@ -14,7 +14,9 @@
     <name>florace-store</name>
     <description>florace-store</description>
     <properties>
-        <java.version>11</java.version>
+        <java.version>18</java.version>
+        <maven.compiler.source>18</maven.compiler.source>
+        <jjwt.version>0.11.0</jjwt.version>
     </properties>
     <dependencies>
         <dependency>
@@ -84,54 +86,167 @@
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
-            <version>2.9.0</version>
+            <version>2.10</version>
         </dependency>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
             <scope>test</scope>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-tomcat -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-tomcat</artifactId>
-            <version>2.7.3</version>
+            <artifactId>spring-boot-starter-hateoas</artifactId>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.apache.tomcat.embed/tomcat-embed-jasper -->
         <dependency>
-            <groupId>org.apache.tomcat.embed</groupId>
-            <artifactId>tomcat-embed-jasper</artifactId>
-            <version>10.1.0-M17</version>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-rest-hal-explorer</artifactId>
         </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-api</artifactId>
+            <version>0.11.5</version>
+        </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-impl</artifactId>
+            <version>0.11.5</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-jackson</artifactId> <!-- or jjwt-gson if Gson is preferred -->
+            <version>0.11.5</version>
+            <scope>runtime</scope>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.auth0/java-jwt -->
+        <dependency>
+            <groupId>com.auth0</groupId>
+            <artifactId>java-jwt</artifactId>
+            <version>4.2.1</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>23.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.glassfish.jaxb</groupId>
+            <artifactId>jaxb-runtime</artifactId>
+            <version>4.0.0</version>
+        </dependency>
+
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>
         </dependency>
-
+        <dependency>
+            <groupId>com.stripe</groupId>
+            <artifactId>stripe-java</artifactId>
+            <version>22.1.0</version></dependency>
     </dependencies>
 
     <build>
         <plugins>
             <plugin>
-                <groupId>com.heroku.sdk</groupId>
-                <artifactId>heroku-maven-plugin</artifactId>
-                <version>2.0.16</version>
-            </plugin>
-
-            <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${parent.version}</version>
                 <configuration>
-                    <excludes>
-                        <exclude>
-                            <groupId>org.projectlombok</groupId>
-                            <artifactId>lombok</artifactId>
-                        </exclude>
-                    </excludes>
+                    <addResources>true</addResources>
                 </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
+
+    <distributionManagement>
+        <repository>
+            <id>internal.repo</id>
+            <name>Internal repo</name>
+            <url>file:///home/nucleus/</url>
+        </repository>
+    </distributionManagement>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!--    <properties>-->
+    <!--        <full-artifact-name>target/${project.artifactId}-${project.version}.jar</full-artifact-name>-->
+    <!--    </properties>-->
+
+<!--    <build>-->
+<!--        <plugins>-->
+<!--            <plugin>-->
+<!--                <groupId>com.heroku.sdk</groupId>-->
+<!--                <artifactId>heroku-maven-plugin</artifactId>-->
+<!--                <version>2.0.16</version>-->
+<!--                <configuration>-->
+<!--                    <appName>florace-store</appName>-->
+<!--                    <includeTarget>false</includeTarget>-->
+<!--                    <archive>-->
+<!--                        <manifest>-->
+
+<!--                            &lt;!&ndash; give full qualified name of your main class&ndash;&gt;-->
+<!--                            <mainClass>com.nucleus.floracestore.FloraceStoreApplication</mainClass>-->
+
+<!--                        </manifest>-->
+<!--                    </archive>-->
+
+<!--                    &lt;!&ndash;                    <includes>&ndash;&gt;-->
+<!--                    &lt;!&ndash;                        <include>${target}/${florace-store-0.0.1-SNAPSHOT.jar}</include>&ndash;&gt;-->
+<!--                    &lt;!&ndash;                    </includes>&ndash;&gt;-->
+<!--                    <jdkVersion>18</jdkVersion>-->
+<!--                    <processTypes>-->
+<!--                        <web>java $JAVA_OPTS -jar ${florace-store-0.0.1-SNAPSHOT.jar}</web>-->
+<!--                    </processTypes>-->
+<!--                </configuration>-->
+<!--            </plugin>-->
+<!--        </plugins>-->
+<!--    </build>-->
+    <!--    <build>-->
+    <!--        <plugins>-->
+    <!--            <plugin>-->
+    <!--                <groupId>com.heroku.sdk</groupId>-->
+    <!--                <artifactId>heroku-maven-plugin</artifactId>-->
+    <!--                <version>2.0.16</version>-->
+    <!--                <configuration>-->
+    <!--                    <processTypes>-->
+    <!--                        <web>java $JAVA_OPTS -cp target/classes:target/dependency/* package com.nucleus.floracestore.FloraceStoreApplication</web>-->
+    <!--                    </processTypes>-->
+    <!--                </configuration>-->
+
+    <!--            </plugin>-->
+
+    <!--        </plugins>-->
+    <!--    </build>-->
 
 </project>

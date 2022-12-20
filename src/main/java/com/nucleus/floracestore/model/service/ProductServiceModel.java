@@ -1,28 +1,32 @@
 package com.nucleus.floracestore.model.service;
 
 
-import com.nucleus.floracestore.model.entity.ProductCategoryEntity;
-import com.nucleus.floracestore.model.entity.StorageEntity;
-import com.nucleus.floracestore.model.entity.UserEntity;
-import com.nucleus.floracestore.model.enums.ProductStatusEnum;
-import lombok.Getter;
-import lombok.Setter;
+import com.nucleus.floracestore.model.entity.ProductReviewEntity;
+import com.nucleus.floracestore.model.entity.Supplier;
+import lombok.Data;
 
 import java.math.BigDecimal;
-import java.util.List;
+import java.util.Set;
 
-@Getter
-@Setter
+@Data
 public class ProductServiceModel {
     private Long productId;
     private String productName;
-    private BigDecimal productPrice;
+    private BigDecimal unitQuantity;
+    private BigDecimal unitSellPrice;
+    private BigDecimal unitOrderPrice;
+    private BigDecimal unitDiscount;
     private String productColor;
     private String productSize;
+    private Float productWeight;
     private String productDescription;
     private String otherProductDetails;
-    private ProductStatusEnum productStatus;
-    private ProductCategoryEntity productCategory;
-    private List<StorageEntity> storageEntity;
-    private UserEntity owner;
+    private ProductStatusServiceModel productStatus;
+    private ProductCategoryServiceModel productCategory;
+    private ProductSubCategoryServiceModel productSubCategory;
+    private Set<StorageServiceModel> storages;
+    private Supplier supplier;
+    private UserServiceModel user;
+    private Set<ProductReviewEntity> productReviews;
+
 }
