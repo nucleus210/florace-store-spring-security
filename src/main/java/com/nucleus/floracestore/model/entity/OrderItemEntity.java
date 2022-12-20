@@ -1,11 +1,9 @@
 package com.nucleus.floracestore.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -20,17 +18,18 @@ public class OrderItemEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "order_item_id")
     private Long orderItemId;
-    @JsonManagedReference(value = "order_id")
-    @ManyToOne(optional = false, fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
-    @JoinColumn(name = "_order_id", referencedColumnName = "order_id")
+    @JsonBackReference(value = "order-items")
+    @ManyToOne(targetEntity=OrderEntity.class, fetch = FetchType.LAZY)
+    @JoinColumn(name="order_id")
     private OrderEntity order;
-    @JsonManagedReference(value = "product_id")
-    @ManyToOne(optional = false, fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
-    @JoinColumn(name = "_product_id", referencedColumnName = "product_id")
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @JoinColumn(name="product_id", referencedColumnName = "product_id")
     private ProductEntity product;
-    @JsonManagedReference(value = "order_item_status_code_id")
-    @ManyToOne(optional = false, fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
-    @JoinColumn(name = "_order_item_status_code_id", referencedColumnName = "order_item_status_code_id")
+
+    @JsonBackReference(value = "order-codes")
+    @ManyToOne(targetEntity=OrderItemsStatusCodesEntity.class, fetch = FetchType.LAZY)
+    @JoinColumn(name = "order_item_status_code_id")
     private OrderItemsStatusCodesEntity orderItemStatusCode;
 
     @Column(name = "order_item_quantity", nullable = false)

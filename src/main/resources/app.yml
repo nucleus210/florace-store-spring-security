@@ -1,5 +1,0 @@
-stripe:
-    api:
-        key: sk_test_
-    public:
-        key: pk_test_

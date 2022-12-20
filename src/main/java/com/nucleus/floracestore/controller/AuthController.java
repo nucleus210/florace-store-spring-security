@@ -31,7 +31,7 @@ public class AuthController {
 
     @Autowired private ModelMapper modelMapper;
 
-    @RequestMapping(value ="/signin", method = RequestMethod.POST)
+    @RequestMapping(value ="/login", method = RequestMethod.POST)
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody AuthenticationRequest loginRequest) {
         String token = userService.loginUser(loginRequest.getUsername(), loginRequest.getPassword());
         log.info("facebook login {}", loginRequest);

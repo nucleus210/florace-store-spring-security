@@ -12,6 +12,7 @@ spring:
     allow-bean-definition-overriding: true
 
   security:
+
     basic:
       enable: false
 
@@ -21,8 +22,8 @@ spring:
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
     url: "jdbc:mysql://localhost:3306/florancedb?allowPublicKeyRetrieval=true&useSSL=false&createDatabaseIfNotExist=true&serverTimezone=UTC"
-    username: root
-    password: Zion123!@#
+    username: {username}
+    password: {password}
 
   servlet:
     multipart:
@@ -91,9 +92,5 @@ java:
   runtime:
     version=18
 
-stripe:
-  api:
-    key: sk_test_48kbUX1oHSgAO6DBa2lfplsT
-  public:
-    key: pk_test_
+
 

@@ -39,7 +39,7 @@ public class OrderItemsStatusCodesServiceImpl implements OrderItemsStatusCodesSe
 
     @Override
     public OrderItemsStatusCodesServiceModel getByProductStatus(String productStatus) {
-        ProductStatusEnum productStatusEnum = ProductStatusEnum.valueOf(productStatus);
+//        ProductStatusEnum productStatusEnum = ProductStatusEnum.valueOf(productStatus);
         return mapToService(orderItemsStatusCodesRepository
                 .findByProductStatus(productStatus)
                 .orElseThrow(()->new QueryRuntimeException("Couldn't find ProductStatus " + productStatus)));

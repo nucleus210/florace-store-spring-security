@@ -53,7 +53,7 @@ public class OrderStatusCodesController {
                 .created(linkTo(methodOn(OrderStatusCodesController.class).getOrderStatusCodeById(orderStatusCodeId)).toUri())
                 .body(assembler.toModel(mapToView(orderStatusCodesServiceModel)));
     }
-    @GetMapping("/order-status-codes/{codeName}/names")
+    @GetMapping("/order-status-codes/status-code/{codeName}")
     public ResponseEntity<EntityModel<OrderStatusCodesViewModel>> getOrderStatusCodeByCodeName(@PathVariable String codeName) {
         OrderStatusCodesServiceModel orderStatusCodesServiceModel =
                 orderStatusCodesService.getOrderStatusCodeByCodeName(codeName);

@@ -1,11 +1,12 @@
 package com.nucleus.floracestore.model.entity;
 
 
-import com.nucleus.floracestore.model.enums.ProductStatusEnum;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -23,4 +24,15 @@ public class OrderItemsStatusCodesEntity {
 
     @Column(name = "order_item_status_code_description", columnDefinition = "TEXT", nullable = false)
     private String productStatusDescription;
+
+    @JsonManagedReference(value="order-codes")
+    @OneToMany(targetEntity = OrderItemEntity.class,
+            cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY,
+            mappedBy = "orderItemStatusCode")
+    private Set<OrderItemEntity> orderItems;
+
+
+
+
 }

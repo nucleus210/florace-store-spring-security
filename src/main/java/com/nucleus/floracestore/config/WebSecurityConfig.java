@@ -94,7 +94,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         JwtUsernameAndPasswordAuthenticationFilter jwtUsernameAndPasswordAuthenticationFilter =
                 new JwtUsernameAndPasswordAuthenticationFilter(authenticationManagerBean(), jwtConfiguration, secretKey);
-        jwtUsernameAndPasswordAuthenticationFilter.setFilterProcessesUrl("/signin");
+        jwtUsernameAndPasswordAuthenticationFilter.setFilterProcessesUrl("/login");
         http
 
                 .csrf().disable()
@@ -108,7 +108,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
 //                .antMatchers(HttpMethod.GET,"/products/all").permitAll()
                 .antMatchers(HttpMethod.GET,"/category/all").permitAll()
-                .antMatchers(HttpMethod.POST, "/signin").permitAll()
+
+
+                .antMatchers(HttpMethod.POST, "/login").permitAll()
                 .antMatchers(HttpMethod.POST, "/register").permitAll()
                 .antMatchers(HttpMethod.POST, "/facebook/signin").permitAll()
                 .antMatchers( "/products/**").hasRole(UserRoleEnum.ADMIN.name())

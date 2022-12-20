@@ -34,7 +34,7 @@ public class UserLoginController {
 
     @ResponseBody
     @CrossOrigin(origins = "http://localhost:3000", allowedHeaders = "*")
-    @PostMapping("/signin")
+    @PostMapping("/login")
     public ResponseEntity<String> authenticateUser(@RequestBody UserLoginDto loginDto){
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                 loginDto.getUsername(), loginDto.getPassword()));

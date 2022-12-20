@@ -44,6 +44,13 @@ public class OrderItemController {
                                           @PathVariable Long productId) {
         return orderItemService.createOrderItem(modelMapper.map(model, OrderItemServiceModel.class), orderId, productId);
     }
+    @PostMapping("/order-items")
+    public ResponseEntity<EntityModel<OrderItemViewModel>> addOrderItem(@RequestBody OrderItemsDto model) {
+        OrderItemServiceModel orderItemModel = orderItemService.addOrderItem(modelMapper.map(model, OrderItemServiceModel.class));
+        return ResponseEntity
+                .created(linkTo(methodOn(OrderItemController.class).addOrderItem(model)).toUri())
+                .body(assembler.toModel(converter(orderItemModel)));
+    }
 
     @GetMapping("/orders/{orderId}/items")
     public ResponseEntity<CollectionModel<EntityModel<OrderItemViewModel>>> getOrderItemsByOrderId(@PathVariable Long orderId) {
@@ -53,7 +60,7 @@ public class OrderItemController {
                 .body(CollectionModel.of(orderItems, linkTo(methodOn(OrderItemController.class).getOrderItemsByOrderId(orderId)).withSelfRel()));
     }
 
-    @GetMapping(value = "/orders/items")
+    @GetMapping(value = "/order-items")
     public ResponseEntity<CollectionModel<EntityModel<OrderItemViewModel>>> getAllOrderItems() {
         List<EntityModel<OrderItemViewModel>> order = orderItemService.getAllOrderItems().stream() //
                 .map(entity -> assembler.toModel(converter(entity))).toList();
@@ -67,11 +74,11 @@ public class OrderItemController {
                 .body(count);
     }
 
-    @GetMapping("/orders/{orderId}/products/{productId}/items")
-    public ResponseEntity<EntityModel<OrderItemViewModel>> getOrderItemByOrderIdAndProductId(@PathVariable Long orderId, @PathVariable Long productId) {
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(assembler.toModel(converter(orderItemService.getOrderItemByProductId(orderId, productId))));
-    }
+//    @GetMapping("/orders/{orderId}/products/{productId}/items")
+//    public ResponseEntity<EntityModel<OrderItemViewModel>> getOrderItemByOrderIdAndProductId(@PathVariable Long orderId, @PathVariable Long productId) {
+//        return ResponseEntity.status(HttpStatus.OK)
+//                .body(assembler.toModel(converter(orderItemService.getOrderItemByProductId(orderId, productId))));
+//    }
 
     @PutMapping("/orders/{orderId}/items/{itemId}")
     public OrderItemServiceModel updateOrderItem(@RequestBody OrderItemsDto model, @PathVariable Long itemId) {

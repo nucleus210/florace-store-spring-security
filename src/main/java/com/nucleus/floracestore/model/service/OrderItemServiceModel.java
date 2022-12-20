@@ -1,6 +1,5 @@
 package com.nucleus.floracestore.model.service;
 
-import com.nucleus.floracestore.model.entity.OrderItemsStatusCodesEntity;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -11,7 +10,7 @@ public class OrderItemServiceModel {
     private Long orderItemId;
     private OrderServiceModel order;
     private ProductServiceModel product;
-    private OrderItemsStatusCodesEntity orderItemStatusCode;
+    private OrderItemsStatusCodesServiceModel orderItemStatusCode;
     private Integer orderItemQuantity;
     private BigDecimal orderItemPrice;
     private String rmaNumber;

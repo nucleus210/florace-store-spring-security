@@ -18,7 +18,7 @@ public class OrderModelAssembler implements RepresentationModelAssembler<OrderVi
         return EntityModel.of(orderModel,
                 linkTo(methodOn(OrderController.class).createOrder(orderModel)).withSelfRel(),
                 linkTo(methodOn(OrderController.class).getOrderById(orderModel.getOrderId())).withSelfRel(),
-                linkTo(methodOn(OrderController.class).getOrderByUsername(orderModel.getUsername())).withSelfRel(),
+                linkTo(methodOn(OrderController.class).getActiveOrderByUsername(orderModel.getUsername())).withSelfRel(),
                 linkTo(methodOn(OrderController.class).getAllOrdersByUsername(orderModel.getUsername())).withRel("ordersByUsername"),
                 linkTo(methodOn(OrderController.class).getAllOrders()).withRel("orders"));
     }

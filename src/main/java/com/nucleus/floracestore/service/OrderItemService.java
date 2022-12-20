@@ -8,11 +8,13 @@ public interface OrderItemService {
     OrderItemServiceModel getOrderItemById(Long id);
     OrderItemServiceModel getOrderItemByUserId(Long id);
 
-    OrderItemServiceModel getOrderItemByProductId(Long orderId,Long productId);
+//    OrderItemServiceModel getOrderItemByProductId(Long orderId,Long productId);
     List<OrderItemServiceModel> getAllOrderItems();
     List<OrderItemServiceModel> getAllOrderItemsByOrderId(Long orderId);
 
     int getOrderItemsCount(String username);
+    OrderItemServiceModel addOrderItem(OrderItemServiceModel orderItemServiceModel);
+
     OrderItemServiceModel createOrderItem(OrderItemServiceModel orderItemServiceModel, Long orderId, Long productId);
     OrderItemServiceModel updateOrderItemQuantity(OrderItemServiceModel orderItemServiceModel, Long productId);
     OrderItemServiceModel deleteOrderItem(Long itemId);

@@ -82,18 +82,18 @@ public class OrderController {
                 .body(assembler.toModel(mapToView(orderServiceModel)));
     }
 
-    @GetMapping("/orders/active/{username}/users")
-    public ResponseEntity<EntityModel<OrderViewModel>> getOrderByUsername(@PathVariable String username) {
+    @GetMapping("/orders/active/users/{username}")
+    public ResponseEntity<EntityModel<OrderViewModel>> getActiveOrderByUsername(@PathVariable String username) {
 
         OrderServiceModel orderServiceModel = orderService.getActiveOrderByUsername(username)
                 .orElseThrow(() -> new QueryRuntimeException("Could not find order for user " + username));
         log.info("OrderController: get order by username: " + username);
         return ResponseEntity
-                .created(linkTo(methodOn(OrderController.class).getOrderByUsername(username)).toUri())
+                .created(linkTo(methodOn(OrderController.class).getActiveOrderByUsername(username)).toUri())
                 .body(assembler.toModel(mapToView(orderServiceModel)));
      }
 
-    @GetMapping("/orders/{username}/users")
+    @GetMapping("/orders/search/users/{username}")
     public ResponseEntity<CollectionModel<EntityModel<OrderViewModel>>> getAllOrdersByUsername(@PathVariable String username) {
 
         List<EntityModel<OrderViewModel>> order = orderService.getAllOrderByUsername(username).stream() //
