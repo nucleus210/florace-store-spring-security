@@ -66,7 +66,7 @@ public class ProductReviewsController {
                 .body(assembler.toModel(mapView(model)));
     }
 
-    @GetMapping(value = "/reviews/products/search/{productId}")
+    @GetMapping(value = "/reviews/search/products/{productId}")
     public ResponseEntity<CollectionModel<EntityModel<ProductReviewsViewModel>>> getAllProductReviewsByProductId(@PathVariable Long productId) {
         List<EntityModel<ProductReviewsViewModel>> productReviews = productReviewsService.getAllProductReviewsByProductId(productId).stream()
                 .map(entity -> assembler.toModel(mapView(entity))).toList();

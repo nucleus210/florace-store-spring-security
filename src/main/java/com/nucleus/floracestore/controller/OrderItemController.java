@@ -28,7 +28,9 @@ public class OrderItemController {
     private final OrderItemModelAssembler assembler;
 
     @Autowired
-    public OrderItemController(OrderItemService orderItemService, ModelMapper modelMapper, OrderItemModelAssembler assembler) {
+    public OrderItemController(OrderItemService orderItemService,
+                               ModelMapper modelMapper,
+                               OrderItemModelAssembler assembler) {
         this.orderItemService = orderItemService;
         this.modelMapper = modelMapper;
         this.assembler = assembler;
@@ -80,13 +82,13 @@ public class OrderItemController {
 //                .body(assembler.toModel(converter(orderItemService.getOrderItemByProductId(orderId, productId))));
 //    }
 
-    @PutMapping("/orders/{orderId}/items/{itemId}")
+    @PutMapping("/order-items/{itemId}")
     public OrderItemServiceModel updateOrderItem(@RequestBody OrderItemsDto model, @PathVariable Long itemId) {
         return orderItemService.updateOrderItemQuantity(modelMapper.map(model, OrderItemServiceModel.class), itemId);
     }
 
     //    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @DeleteMapping("/orders/items/{itemId}")
+    @DeleteMapping("/order-items/{itemId}")
     public ResponseEntity<EntityModel<OrderItemViewModel>> deleteOrderItem(@PathVariable Long itemId) {
         EntityModel<OrderItemViewModel> orderItemViewModel = assembler.toModel(mapToView(orderItemService.deleteOrderItem(itemId)));
         return ResponseEntity.status(HttpStatus.OK).body(orderItemViewModel);
