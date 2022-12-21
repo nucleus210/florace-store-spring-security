@@ -129,7 +129,7 @@
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>23.0</version>
+            <version>31.1-jre</version>
         </dependency>
 
         <dependency>
@@ -146,7 +146,7 @@
         <dependency>
             <groupId>com.stripe</groupId>
             <artifactId>stripe-java</artifactId>
-            <version>22.1.0</version>
+            <version>22.3.0</version>
         </dependency>
     </dependencies>
 

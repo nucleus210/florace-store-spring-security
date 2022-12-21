@@ -36,4 +36,5 @@ public class ApplicationBeansConfig implements WebMvcConfigurer {
     public JwtConfiguration jwtConfiguration() {
         return new JwtConfiguration();
     }
+
 }

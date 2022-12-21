@@ -37,8 +37,15 @@ public class ProductRatesController {
         this.productRatesService = productRatesService;
         this.assembler = assembler;
     }
-
-    @PostMapping("/products/{productId}/rates")
+    @PostMapping("/rates")
+    public ResponseEntity<EntityModel<ProductRatesViewModel>> rateProduct(@RequestBody ProductRatesDto model) {
+        ProductRatesServiceModel productRatesServiceModel =
+                productRatesService.addProductRate(modelMapper.map(model, ProductRatesServiceModel.class),
+                        getCurrentLoggedUsername());
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(assembler.toModel(mapView(productRatesServiceModel)));
+    }
+    @PostMapping("/rates/products/{productId}")
     public ResponseEntity<EntityModel<ProductRatesViewModel>> rateProduct(@RequestBody ProductRatesDto model,
                                                                           @PathVariable Long productId) {
         ProductRatesServiceModel productRatesServiceModel =
@@ -49,20 +56,20 @@ public class ProductRatesController {
                 .body(assembler.toModel(mapView(productRatesServiceModel)));
     }
 
-    @GetMapping("/products/{productId}/users/{username}/rates")
+    @GetMapping("/rates/products/{productId}/users/{username}")
     public ResponseEntity<EntityModel<ProductRatesViewModel>> getProductRateByProductIdAndUsername(@PathVariable Long productId, @PathVariable String username) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(assembler.toModel(mapView(productRatesService.getProductRateByProductIdAndUsername(productId, username))));
 
     }
 
-    @GetMapping("/products/rates/{productRateId}")
+    @GetMapping("/rates/{productRateId}")
     public ResponseEntity<EntityModel<ProductRatesViewModel>> getProductRatesById(@PathVariable Long productRateId) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(assembler.toModel(mapView(productRatesService.getProductRateById(productRateId))));
     }
 
-    @GetMapping(value = "/products/{productId}/rates")
+    @GetMapping(value = "/rates/products/{productId}")
     public ResponseEntity<CollectionModel<EntityModel<ProductRatesViewModel>>> getAllProductRatesByProductId(@PathVariable Long productId) {
         List<EntityModel<ProductRatesViewModel>> productRates = productRatesService.getAllProductRatesByProductId(productId).stream()
                 .map(entity -> assembler.toModel(mapView(entity))).toList();

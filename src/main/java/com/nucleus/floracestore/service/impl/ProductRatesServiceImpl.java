@@ -36,6 +36,20 @@ public class ProductRatesServiceImpl implements ProductRatesService {
     }
 
     @Override
+    public ProductRatesServiceModel addProductRate(ProductRatesServiceModel model, String username) {
+        Optional<ProductRateEntity> productRatesEntity =
+                productRatesRepository.findProductRateByProductIdAndUsername(model.getProduct().getProductId(), username);
+        if (productRatesEntity.isPresent()) {
+            throw new QueryRuntimeException("Already rate this product");
+        }
+        UserServiceModel userServiceModel = userService.findByUsername(username)
+                .orElseThrow(() -> new QueryRuntimeException("Could not find user " + username));
+        model.setUser(userServiceModel);
+        ProductRateEntity productRates = productRatesRepository.save(modelMapper.map(model, ProductRateEntity.class));
+        return mapToService(productRates);
+    }
+
+    @Override
     public ProductRatesServiceModel getProductRateById(Long productRateId) {
         ProductRateEntity productRatesEntity = productRatesRepository
                 .findById(productRateId)
