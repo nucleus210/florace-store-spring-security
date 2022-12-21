@@ -43,13 +43,17 @@ public class ProductReviewsServiceImpl implements ProductReviewsService {
 
 
     @Override
-    public ProductReviewsServiceModel writeProductReview(ProductReviewsServiceModel model) {
+    public ProductReviewsServiceModel writeProductReview(ProductReviewsServiceModel model, String username) {
+        UserServiceModel userServiceModel = userService.findByUsername(username)
+                .orElseThrow(() -> new QueryRuntimeException("Could not find user " + username));;
+                model.setUser(userServiceModel);
         return mapToService(productReviewsRepository.save(modelMapper.map(model, ProductReviewEntity.class)));
     }
 
     @Override
     public ProductReviewsServiceModel createProductReview(ProductReviewsServiceModel model, Long productId, String username) {
-        UserServiceModel userServiceModel = userService.findByUsername(username).orElseThrow(() -> new QueryRuntimeException("Could not find user " + username));
+        UserServiceModel userServiceModel = userService.findByUsername(username)
+                .orElseThrow(() -> new QueryRuntimeException("Could not find user " + username));
         ProductServiceModel product = productService.getProductById(productId);
         ProductRatesServiceModel ratesServiceModel = ratesService.getProductRateByProductIdAndUsername(productId, username);
         model.setRate(ratesServiceModel);

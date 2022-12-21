@@ -41,7 +41,8 @@ public class ProductReviewsController {
 
     @PostMapping("/reviews")
     public ProductReviewsServiceModel addProductReview(@RequestBody ProductReviewsDto model) {
-        return productReviewsService.writeProductReview(modelMapper.map(model, ProductReviewsServiceModel.class));
+
+        return productReviewsService.writeProductReview(modelMapper.map(model, ProductReviewsServiceModel.class), getCurrentLoggedUsername());
     }
 
     @PostMapping("/reviews/products/{productId}")

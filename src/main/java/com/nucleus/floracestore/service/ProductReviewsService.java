@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ProductReviewsService {
-    ProductReviewsServiceModel writeProductReview(ProductReviewsServiceModel model);
+    ProductReviewsServiceModel writeProductReview(ProductReviewsServiceModel model, String username);
 
     ProductReviewsServiceModel createProductReview(ProductReviewsServiceModel model, Long productId, String username);
 
