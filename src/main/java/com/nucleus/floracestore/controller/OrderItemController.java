@@ -51,7 +51,7 @@ public class OrderItemController {
                 .body(assembler.toModel(mapToView(orderItemModel)));
     }
 
-    @GetMapping("/orders/{orderId}/items")
+    @GetMapping("/order-items/search/orders/{orderId}")
     public ResponseEntity<CollectionModel<EntityModel<OrderItemViewModel>>> getOrderItemsByOrderId(@PathVariable Long orderId) {
         List<EntityModel<OrderItemViewModel>> orderItems = orderItemService.getAllOrderItemsByOrderId(orderId).stream()
                 .map(entity -> assembler.toModel(mapToView(entity))).toList();

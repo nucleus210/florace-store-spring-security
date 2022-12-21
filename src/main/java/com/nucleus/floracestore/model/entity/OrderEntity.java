@@ -7,7 +7,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -33,10 +32,5 @@ public class OrderEntity {
 
     @Column(name = "order_details")
     private String orderDetails;
-    @OneToMany(targetEntity = OrderItemEntity.class,
-            cascade = CascadeType.MERGE,
-            fetch = FetchType.EAGER,
-            mappedBy = "order")
-    private Set<OrderItemEntity> orderItems;
 
 }
