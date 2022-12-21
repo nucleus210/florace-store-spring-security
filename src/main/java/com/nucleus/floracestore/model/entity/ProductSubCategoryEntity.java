@@ -19,7 +19,7 @@ public class ProductSubCategoryEntity {
     private String productSubCategoryName;
     @Column(name = "product_sub_category_description", columnDefinition = "TEXT", nullable = false)
     private String productSubCategoryDescription;
-    @ManyToOne(targetEntity=ProductCategoryEntity.class, fetch = FetchType.LAZY)
-    @JoinColumn(name="product_category_id")
+    @ManyToOne(targetEntity = ProductCategoryEntity.class, fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_category_id")
     private ProductCategoryEntity productCategory;
 }

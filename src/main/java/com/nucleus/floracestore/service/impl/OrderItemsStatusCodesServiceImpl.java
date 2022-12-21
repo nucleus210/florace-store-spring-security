@@ -6,14 +6,14 @@ import com.nucleus.floracestore.model.enums.ProductStatusEnum;
 import com.nucleus.floracestore.model.service.OrderItemsStatusCodesServiceModel;
 import com.nucleus.floracestore.repository.OrderItemsStatusCodesRepository;
 import com.nucleus.floracestore.service.OrderItemsStatusCodesService;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 public class OrderItemsStatusCodesServiceImpl implements OrderItemsStatusCodesService {
-
     private final OrderItemsStatusCodesRepository orderItemsStatusCodesRepository;
-
     private final ModelMapper modelMapper;
 
     public OrderItemsStatusCodesServiceImpl(OrderItemsStatusCodesRepository orderItemsStatusCodesRepository, ModelMapper modelMapper) {
@@ -34,7 +34,7 @@ public class OrderItemsStatusCodesServiceImpl implements OrderItemsStatusCodesSe
     public OrderItemsStatusCodesServiceModel getById(Long id) {
         return mapToService(orderItemsStatusCodesRepository
                 .findById(id)
-                .orElseThrow(()->new QueryRuntimeException("Couldn't find ProductStatus'")));
+                .orElseThrow(() -> new QueryRuntimeException("Couldn't find ProductStatus'")));
     }
 
     @Override
@@ -42,7 +42,7 @@ public class OrderItemsStatusCodesServiceImpl implements OrderItemsStatusCodesSe
 //        ProductStatusEnum productStatusEnum = ProductStatusEnum.valueOf(productStatus);
         return mapToService(orderItemsStatusCodesRepository
                 .findByProductStatus(productStatus)
-                .orElseThrow(()->new QueryRuntimeException("Couldn't find ProductStatus " + productStatus)));
+                .orElseThrow(() -> new QueryRuntimeException("Couldn't find ProductStatus " + productStatus)));
     }
 
     private OrderItemsStatusCodesServiceModel mapToService(OrderItemsStatusCodesEntity orderItemsStatusCodes) {

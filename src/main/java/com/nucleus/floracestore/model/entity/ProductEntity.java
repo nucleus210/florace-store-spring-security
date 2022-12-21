@@ -54,9 +54,9 @@ public class ProductEntity {
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     private Set<StorageEntity> storages;
     @OneToMany(targetEntity = ProductReviewEntity.class,
-               cascade = CascadeType.ALL,
-               fetch = FetchType.LAZY,
-               mappedBy = "product")
+            cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY,
+            mappedBy = "product")
     private Set<ProductReviewEntity> productReviews;
     @OneToMany(targetEntity = ProductRateEntity.class,
             cascade = CascadeType.ALL,

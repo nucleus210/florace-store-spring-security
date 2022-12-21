@@ -4,7 +4,6 @@ import com.nucleus.floracestore.model.validators.IPasswordMatches;
 import com.nucleus.floracestore.model.validators.IUniqueUserName;
 import com.nucleus.floracestore.model.validators.IValidEmail;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -12,8 +11,6 @@ import javax.validation.constraints.Size;
 
 @Data
 @IPasswordMatches
-@NoArgsConstructor
-
 public class UserRegistrationDto {
     @NotBlank
     @Size(min = 4, max = 20)

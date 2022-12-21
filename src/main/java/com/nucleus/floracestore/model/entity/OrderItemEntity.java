@@ -18,17 +18,16 @@ public class OrderItemEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "order_item_id")
     private Long orderItemId;
-    @JsonBackReference(value = "order-items")
-    @ManyToOne(targetEntity=OrderEntity.class, fetch = FetchType.LAZY)
-    @JoinColumn(name="order_id")
+    @ManyToOne
+    @JoinColumn(name = "order_id", nullable = false)
     private OrderEntity order;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
-    @JoinColumn(name="product_id", referencedColumnName = "product_id")
+    @JoinColumn(name = "product_id", referencedColumnName = "product_id")
     private ProductEntity product;
 
     @JsonBackReference(value = "order-codes")
-    @ManyToOne(targetEntity=OrderItemsStatusCodesEntity.class, fetch = FetchType.LAZY)
+    @ManyToOne(targetEntity = OrderItemsStatusCodesEntity.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "order_item_status_code_id")
     private OrderItemsStatusCodesEntity orderItemStatusCode;
 

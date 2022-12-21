@@ -32,34 +32,39 @@ public class ProductReviewsController {
 
     @Autowired
     public ProductReviewsController(ModelMapper modelMapper,
-                                  ProductReviewsService productReviewsService,
-                                  ProductReviewsAssembler assembler) {
+                                    ProductReviewsService productReviewsService,
+                                    ProductReviewsAssembler assembler) {
         this.modelMapper = modelMapper;
         this.productReviewsService = productReviewsService;
         this.assembler = assembler;
     }
+
     @PostMapping("/reviews")
     public ProductReviewsServiceModel addProductReview(@RequestBody ProductReviewsDto model) {
         return productReviewsService.writeProductReview(modelMapper.map(model, ProductReviewsServiceModel.class));
     }
+
     @PostMapping("/reviews/products/{productId}")
     public ProductReviewsServiceModel writePreview(@RequestBody ProductReviewsDto model, @PathVariable Long productId) {
         return productReviewsService.createProductReview(modelMapper.map(model, ProductReviewsServiceModel.class), productId, getCurrentLoggedUsername());
     }
+
     @GetMapping("/reviews/{id}")
     public ResponseEntity<EntityModel<ProductReviewsViewModel>> getProductReviewById(@PathVariable Long id) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(assembler.toModel(mapView(productReviewsService.getProductReviewById(id))));
     }
+
     @GetMapping("/reviews/products/{productId}/users/{username}")
-    public ResponseEntity<EntityModel<ProductReviewsViewModel>> getProductReviewByProductIdAndUsername(@PathVariable Long productId,@PathVariable String username) {
+    public ResponseEntity<EntityModel<ProductReviewsViewModel>> getProductReviewByProductIdAndUsername(@PathVariable Long productId, @PathVariable String username) {
         ProductReviewsServiceModel model = productReviewsService.getProductReviewByProductIdAndUsername(productId, username)
                 .orElseThrow(() -> new QueryRuntimeException(
-                String.format("Could not find productReview for productId %s and username %s", productId, username)));;
+                        String.format("Could not find productReview for productId %s and username %s", productId, username)));
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(assembler.toModel(mapView(model)));
     }
+
     @GetMapping(value = "/reviews/products/search/{productId}")
     public ResponseEntity<CollectionModel<EntityModel<ProductReviewsViewModel>>> getAllProductReviewsByProductId(@PathVariable Long productId) {
         List<EntityModel<ProductReviewsViewModel>> productReviews = productReviewsService.getAllProductReviewsByProductId(productId).stream()
@@ -67,11 +72,13 @@ public class ProductReviewsController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(CollectionModel.of(productReviews, linkTo(methodOn(ProductReviewsController.class).getAllProductReviewsByProductId(productId)).withSelfRel()));
     }
+
     private ProductReviewsViewModel mapView(ProductReviewsServiceModel productReviewsServiceModel) {
         modelMapper.typeMap(ProductReviewsServiceModel.class, ProductReviewsViewModel.class)
                 .addMappings(mapper -> mapper.map(src -> src.getUser().getUsername(), ProductReviewsViewModel::setUsername));
         return modelMapper.map(productReviewsServiceModel, ProductReviewsViewModel.class);
     }
+
     private String getCurrentLoggedUsername() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         log.info("Principal: " + authentication.getName());

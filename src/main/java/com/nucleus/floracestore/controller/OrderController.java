@@ -3,7 +3,6 @@ package com.nucleus.floracestore.controller;
 import com.nucleus.floracestore.error.QueryRuntimeException;
 import com.nucleus.floracestore.hateoas.OrderModelAssembler;
 import com.nucleus.floracestore.model.dto.OrderDto;
-import com.nucleus.floracestore.model.dto.OrderItemsDto;
 import com.nucleus.floracestore.model.service.OrderServiceModel;
 import com.nucleus.floracestore.model.service.UserServiceModel;
 import com.nucleus.floracestore.model.view.OrderViewModel;
@@ -31,12 +30,10 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @RestController
 @Slf4j
 public class OrderController {
-
     private final OrderService orderService;
     private final ModelMapper modelMapper;
     private final OrderModelAssembler assembler;
     private final UserService userService;
-
 
     @Autowired
     public OrderController(OrderService orderService,
@@ -48,15 +45,6 @@ public class OrderController {
         this.userService = userService;
     }
 
-    @ModelAttribute("productCategoryModel")
-    public OrderDto orderModel() {
-        return new OrderDto();
-    }
-    @ModelAttribute("productSubCategoryModel")
-    public OrderItemsDto categorySubModel() {
-        return new OrderItemsDto();
-    }
-
     private String getCurrentLoggedUsername() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         log.info("Principal: " + authentication.getName());
@@ -65,8 +53,8 @@ public class OrderController {
 
     @PostMapping("/orders")
     public ResponseEntity<EntityModel<OrderViewModel>> createOrder(@RequestBody OrderViewModel model) {
-       OrderServiceModel orderServiceModel =
-               orderService.createOrder(modelMapper.map(model, OrderServiceModel.class), getCurrentLoggedUsername());
+        OrderServiceModel orderServiceModel =
+                orderService.createOrder(modelMapper.map(model, OrderServiceModel.class), getCurrentLoggedUsername());
         log.info("OrderController: created order with id: " + orderServiceModel.getOrderId());
         return ResponseEntity
                 .created(linkTo(methodOn(OrderController.class).createOrder(model)).toUri())
@@ -85,13 +73,12 @@ public class OrderController {
     @GetMapping("/orders/active/users/{username}")
     public ResponseEntity<EntityModel<OrderViewModel>> getActiveOrderByUsername(@PathVariable String username) {
 
-        OrderServiceModel orderServiceModel = orderService.getActiveOrderByUsername(username)
-                .orElseThrow(() -> new QueryRuntimeException("Could not find order for user " + username));
+        OrderServiceModel orderServiceModel = orderService.getActiveOrderByUsername(username);
         log.info("OrderController: get order by username: " + username);
         return ResponseEntity
                 .created(linkTo(methodOn(OrderController.class).getActiveOrderByUsername(username)).toUri())
                 .body(assembler.toModel(mapToView(orderServiceModel)));
-     }
+    }
 
     @GetMapping("/orders/search/users/{username}")
     public ResponseEntity<CollectionModel<EntityModel<OrderViewModel>>> getAllOrdersByUsername(@PathVariable String username) {
@@ -147,9 +134,9 @@ public class OrderController {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username;
         if (principal instanceof UserDetails) {
-            username = ((UserDetails)principal).getUsername();
+            username = ((UserDetails) principal).getUsername();
         } else {
-            username =  principal.toString();
+            username = principal.toString();
         }
         return userService.findByUsername(username).orElseThrow(() -> new QueryRuntimeException("Couldn't find user " + username));
     }

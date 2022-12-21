@@ -8,7 +8,5 @@ import java.util.Optional;
 
 @Repository("order-items-status-codes-repository")
 public interface OrderItemsStatusCodesRepository extends JpaRepository<OrderItemsStatusCodesEntity, Long> {
-
     Optional<OrderItemsStatusCodesEntity> findByProductStatus(String productStatus);
-
 }

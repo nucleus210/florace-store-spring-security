@@ -10,13 +10,13 @@ import com.nucleus.floracestore.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Slf4j
-@RestController
+@Service
 public class SliderItemServiceImpl implements SliderItemService {
 
     private final ModelMapper modelMapper;
@@ -37,7 +37,7 @@ public class SliderItemServiceImpl implements SliderItemService {
         UserServiceModel userServiceModel = userService.findByUsername(username)
                 .orElseThrow(() -> new QueryRuntimeException("Could not find user " + username));
         sliderItemServiceModel.setUser(userServiceModel);
-       SliderItemEntity sliderItemEntity = sliderItemRepository.save(modelMapper.map(sliderItemServiceModel, SliderItemEntity.class));
+        SliderItemEntity sliderItemEntity = sliderItemRepository.save(modelMapper.map(sliderItemServiceModel, SliderItemEntity.class));
         log.info("SliderItemController: created slide with id: " + sliderItemEntity.getSliderItemId());
         return mapToService(sliderItemEntity);
     }
@@ -76,6 +76,7 @@ public class SliderItemServiceImpl implements SliderItemService {
         log.info("SliderItemController: found slide item with title " + sliderItemTitle);
         return mapToService(sliderItemEntity);
     }
+
     @Override
     public List<SliderItemServiceModel> getAllSlides() {
         log.info("SliderItemController: get all slider items");
@@ -85,6 +86,7 @@ public class SliderItemServiceImpl implements SliderItemService {
                 .map(this::mapToService)
                 .collect(Collectors.toList());
     }
+
     private SliderItemServiceModel mapToService(SliderItemEntity sliderItemEntity) {
         return modelMapper.map(sliderItemEntity, SliderItemServiceModel.class);
     }

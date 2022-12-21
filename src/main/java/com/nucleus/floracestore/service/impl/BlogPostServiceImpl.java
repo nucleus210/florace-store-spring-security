@@ -22,6 +22,7 @@ public class BlogPostServiceImpl implements BlogPostService {
     private final ModelMapper modelMapper;
     private final BlogPostRepository blogPostRepository;
     private final UserService userService;
+
     @Autowired
     public BlogPostServiceImpl(ModelMapper modelMapper,
                                BlogPostRepository blogPostRepository,
@@ -46,7 +47,7 @@ public class BlogPostServiceImpl implements BlogPostService {
                 .orElseThrow(() -> new QueryRuntimeException("Could not find blog post with id " + blogPostServiceModel.getBlogPostId()));
         UserServiceModel userServiceModel = userService.findByUsername(username)
                 .orElseThrow(() -> new QueryRuntimeException("Could not find user with username " + username));
-        if(blogPostEntity.getUser().getUsername().equals(username)) {
+        if (blogPostEntity.getUser().getUsername().equals(username)) {
             blogPostEntity.setTitle(blogPostServiceModel.getTitle());
             blogPostEntity.setMetaTitle(blogPostServiceModel.getMetaTitle());
             blogPostEntity.setSlug(blogPostServiceModel.getSlug());
@@ -66,6 +67,7 @@ public class BlogPostServiceImpl implements BlogPostService {
             throw new QueryRuntimeException("Username have no permissions");
         }
     }
+
     @Override
     public BlogPostServiceModel deleteBlogPostById(Long blogPostId, String username) {
         BlogPostEntity blogPostEntity = blogPostRepository
@@ -74,6 +76,7 @@ public class BlogPostServiceImpl implements BlogPostService {
         blogPostRepository.delete(blogPostEntity);
         return mapToService(blogPostEntity);
     }
+
     @Override
     public BlogPostServiceModel getBlogPostById(Long blogPostId) {
         BlogPostEntity blogPostEntity = blogPostRepository.findById(blogPostId)

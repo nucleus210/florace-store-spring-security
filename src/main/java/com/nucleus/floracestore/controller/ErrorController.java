@@ -11,7 +11,7 @@ import java.util.Map;
 @Controller
 public class ErrorController {
 
-    @RequestMapping(value="/error", produces="application/json")
+    @RequestMapping(value = "/error", produces = "application/json")
     @ResponseBody
     public Map<String, Object> handle(HttpServletRequest request) {
 

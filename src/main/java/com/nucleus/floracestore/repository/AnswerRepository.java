@@ -9,9 +9,9 @@ import java.util.List;
 
 @Repository("answer-repository")
 public interface AnswerRepository extends JpaRepository<AnswerEntity, Long> {
-
     @Query("select a from AnswerEntity a JOIN FETCH a.question q where q.questionId = :questionId")
     List<AnswerEntity> findAllByQuestionId(Long questionId);
+
     @Query("select a from AnswerEntity a JOIN FETCH a.user u where u.username = :username")
     List<AnswerEntity> finAllByUsername(String username);
 }

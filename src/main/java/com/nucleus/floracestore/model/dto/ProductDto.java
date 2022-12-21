@@ -6,7 +6,6 @@ import com.nucleus.floracestore.model.service.ProductSubCategoryServiceModel;
 import com.nucleus.floracestore.model.service.StorageServiceModel;
 import com.nucleus.floracestore.model.view.ProductStatusViewModel;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -16,9 +15,7 @@ import java.math.BigDecimal;
 import java.util.Set;
 
 @Data
-@NoArgsConstructor
 public class ProductDto {
-
     private Long productId;
     @NotNull
     @NotBlank

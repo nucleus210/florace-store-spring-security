@@ -6,7 +6,6 @@ import com.nucleus.floracestore.model.enums.UserRoleEnum;
 import com.nucleus.floracestore.model.service.ProductServiceModel;
 import com.nucleus.floracestore.model.service.UserServiceModel;
 import com.nucleus.floracestore.model.view.ProductViewModel;
-import com.nucleus.floracestore.repository.ProductCategoryRepository;
 import com.nucleus.floracestore.repository.ProductRepository;
 import com.nucleus.floracestore.service.ProductService;
 import com.nucleus.floracestore.service.UserService;
@@ -22,32 +21,32 @@ import java.util.stream.Collectors;
 public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
-
-    private final ProductCategoryRepository productCategoryRepository;
     private final UserService userService;
     private final ModelMapper modelMapper;
 
     @Autowired
     public ProductServiceImpl(ProductRepository productRepository,
-                              ProductCategoryRepository productCategoryRepository, UserService userService,
+                              UserService userService,
                               ModelMapper modelMapper) {
         this.productRepository = productRepository;
-        this.productCategoryRepository = productCategoryRepository;
         this.userService = userService;
         this.modelMapper = modelMapper;
     }
+
     @Override
     public ProductServiceModel getProductById(Long projectId) {
         ProductEntity productEntity = productRepository.findByProductId(projectId)
                 .orElseThrow(() -> new QueryRuntimeException("Could not find product " + projectId));
         return mapToService(productEntity);
     }
+
     @Override
     public ProductServiceModel getByProductName(String productName) {
         ProductEntity productEntity = productRepository.findByProductName(productName)
                 .orElseThrow(() -> new QueryRuntimeException("Could not find product " + productName));
         return mapToService(productEntity);
     }
+
     @Override
     public List<ProductServiceModel> getAllProducts() {
         return productRepository.findAll()
@@ -55,14 +54,15 @@ public class ProductServiceImpl implements ProductService {
                 .map(this::mapToService)
                 .collect(Collectors.toList());
     }
+
     @Override
     public ProductServiceModel saveProduct(ProductServiceModel productServiceModel, String owner) {
         UserServiceModel userServiceModel = userService.findByUsername(owner).orElseThrow();
         productServiceModel.setUser(userServiceModel);
-        ProductEntity productEntity = modelMapper.map(productServiceModel, ProductEntity.class);
-        productRepository.save(productEntity);
-        return productServiceModel;
+        ProductEntity productEntity = productRepository.save(modelMapper.map(productServiceModel, ProductEntity.class));
+        return mapToService(productEntity);
     }
+
     @Override
     public void updateProduct(ProductServiceModel productServiceModel) {
         ProductEntity productEntity = new ProductEntity();
@@ -82,18 +82,12 @@ public class ProductServiceImpl implements ProductService {
         productEntity.setProductSubCategory(modelMapper.map(productServiceModel.getProductSubCategory(), ProductSubCategoryEntity.class));
         productRepository.save(productEntity);
     }
+
     @Override
     public void deleteProduct(Long id) {
         productRepository.findByProductId(id).ifPresent(productRepository::delete);
     }
 
-    @Override
-    public List<ProductServiceModel> getAllByProductCategory(String productCategory) {
-        ProductCategoryEntity productCategoryEntity = productCategoryRepository.findByProductCategoryName(productCategory.toLowerCase())
-                .orElseThrow(() -> new QueryRuntimeException("Could not find product category " + productCategory));
-        return this.productRepository.findAllByProductCategory(productCategoryEntity)
-                .stream().map(this::mapToService).collect(Collectors.toList());
-    }
 
     @Override
     public ProductViewModel getByIdAndCurrentUser(Long id, String currentUser) {
@@ -117,9 +111,11 @@ public class ProductServiceImpl implements ProductService {
     private ProductViewModel mapView(ProductEntity product) {
         return this.modelMapper.map(product, ProductViewModel.class);
     }
+
     private ProductServiceModel mapToService(ProductEntity product) {
         return this.modelMapper.map(product, ProductServiceModel.class);
     }
+
     public boolean isOwner(String userName, Long id) {
         Optional<ProductEntity> productEntity = productRepository.
                 findById(id);

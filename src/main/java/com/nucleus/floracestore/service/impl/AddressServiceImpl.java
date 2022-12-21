@@ -24,7 +24,6 @@ public class AddressServiceImpl implements AddressService {
         this.profileRepository = profileRepository;
     }
 
-
     @Override
     public Optional<AddressEntity> getAddressById(Long addressId) {
         return addressRepository.findByAddressId(addressId);

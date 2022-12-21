@@ -9,8 +9,11 @@ public interface ProductReviewsService {
     ProductReviewsServiceModel writeProductReview(ProductReviewsServiceModel model);
 
     ProductReviewsServiceModel createProductReview(ProductReviewsServiceModel model, Long productId, String username);
+
     List<ProductReviewsServiceModel> getAllProductReviewsByProductId(Long productId);
+
     ProductReviewsServiceModel getProductReviewById(Long productReviewId);
+
     Optional<ProductReviewsServiceModel> getProductReviewByProductIdAndUsername(Long productId, String username);
 
 }

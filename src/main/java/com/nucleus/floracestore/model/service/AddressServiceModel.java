@@ -2,11 +2,9 @@ package com.nucleus.floracestore.model.service;
 
 
 import com.nucleus.floracestore.model.enums.AddressTypeEnum;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
+@Data
 public class AddressServiceModel {
     private Long addressId;
     private String streetAddress;

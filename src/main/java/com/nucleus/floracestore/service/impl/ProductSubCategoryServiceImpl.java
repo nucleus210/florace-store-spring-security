@@ -63,6 +63,7 @@ public class ProductSubCategoryServiceImpl implements ProductSubCategoryService 
                 .map(this::mapToService)
                 .collect(Collectors.toList());
     }
+
     @Override
     public ProductSubCategoryServiceModel createProductSubCategory(ProductSubCategoryServiceModel productSubCategoryServiceModel,
                                                                    Long productCategoryId,

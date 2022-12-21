@@ -14,16 +14,22 @@ import java.util.Optional;
 public interface OrderRepository extends JpaRepository<OrderEntity, Long> {
 
     OrderEntity save(OrderEntity orderEntity);
+
     Optional<OrderEntity> findByOrderId(Long orderId);
 
     @Query("select a from OrderEntity a JOIN a.user u JOIN a.orderStatusCode c where u.username = :username and c.statusCode = :statusCode")
-    Optional<OrderEntity> findOrderByUsernameAndOrderStatusCode(String username, String statusCode);
+    List<OrderEntity> findAllOrdersByUsernameAndOrderStatusCode(String username, String statusCode);
+
     @Query("select a from OrderEntity a JOIN FETCH a.user u where u.userId = :userId")
     List<OrderEntity> findAllOrdersByUsername(Long userId);
+
     @Query("select o from OrderEntity o where o.dateOrderPlaced <= :startDate and o.dateOrderPlaced >= :endDate")
     List<OrderEntity> findByDatePeriod(String startDate, String endDate);
 
     @Modifying
     @Query("update UserEntity u set u.password = :password where u.userId = :userId")
     void updatePassword(@Param("password") String password, @Param("userId") Long userId);
+
+    @Query("select a from OrderEntity a JOIN a.user u JOIN a.orderStatusCode c where u.username = :username and c.statusCode = :statusCode")
+    Optional<OrderEntity> findOrderByUsernameAndOrderStatusCode(String username, String statusCode);
 }

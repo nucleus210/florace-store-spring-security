@@ -11,7 +11,9 @@ import java.util.Optional;
 @Repository("BlogPostRepository")
 public interface BlogPostRepository extends JpaRepository<BlogPostEntity, Long> {
     Optional<BlogPostEntity> findById(Long id);
+
     Optional<BlogPostEntity> findByTitle(String title);
+
     @Query("select b from BlogPostEntity b where b.publishedAt <= :startDate and b.publishedAt >= :endDate")
     List<BlogPostEntity> findBlogPostsByDatePeriod(String startDate, String endDate);
 

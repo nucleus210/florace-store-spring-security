@@ -1,6 +1,7 @@
 package com.nucleus.floracestore.model.entity;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -11,10 +12,7 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
-@Builder
 @Table(name = "users")
-@NoArgsConstructor
-@AllArgsConstructor
 public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -40,14 +40,15 @@ public class ProductRatesController {
 
     @PostMapping("/products/{productId}/rates")
     public ResponseEntity<EntityModel<ProductRatesViewModel>> rateProduct(@RequestBody ProductRatesDto model,
-                                                                           @PathVariable Long productId) {
+                                                                          @PathVariable Long productId) {
         ProductRatesServiceModel productRatesServiceModel =
                 productRatesService.rateProduct(modelMapper.map(model, ProductRatesServiceModel.class),
-                                                productId,
-                                                getCurrentLoggedUsername());
+                        productId,
+                        getCurrentLoggedUsername());
         return ResponseEntity.status(HttpStatus.OK)
                 .body(assembler.toModel(mapView(productRatesServiceModel)));
     }
+
     @GetMapping("/products/{productId}/users/{username}/rates")
     public ResponseEntity<EntityModel<ProductRatesViewModel>> getProductRateByProductIdAndUsername(@PathVariable Long productId, @PathVariable String username) {
         return ResponseEntity.status(HttpStatus.OK)

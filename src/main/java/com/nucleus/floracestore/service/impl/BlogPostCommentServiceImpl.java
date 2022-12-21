@@ -44,7 +44,7 @@ public class BlogPostCommentServiceImpl implements BlogPostCommentService {
     public BlogPostCommentServiceModel updateBlogPostComment(BlogPostCommentServiceModel blogPostComment,
                                                              String username) {
         BlogPostCommentEntity blogPostCommentEntity = blogPostCommentRepository.findById(blogPostComment.getBlogPostCommentId())
-                .orElseThrow(() -> new QueryRuntimeException("Could not find blog post comment with id " + blogPostComment.getBlogPostCommentId()));;
+                .orElseThrow(() -> new QueryRuntimeException("Could not find blog post comment with id " + blogPostComment.getBlogPostCommentId()));
         blogPostCommentEntity.setComment(blogPostComment.getComment());
         blogPostCommentEntity.setBlogPost(modelMapper.map(blogPostComment.getBlogPost(), BlogPostEntity.class));
         blogPostCommentEntity.setUser(modelMapper.map(blogPostComment.getUser(), UserEntity.class));
@@ -99,6 +99,7 @@ public class BlogPostCommentServiceImpl implements BlogPostCommentService {
                 .map(this::mapToService)
                 .collect(Collectors.toList());
     }
+
     private BlogPostCommentServiceModel mapToService(BlogPostCommentEntity blogPostCommentEntity) {
         return modelMapper.map(blogPostCommentEntity, BlogPostCommentServiceModel.class);
     }

@@ -1,12 +1,7 @@
 package com.nucleus.floracestore;
 
-import com.nucleus.floracestore.controller.*;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.web.server.LocalServerPort;
-
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @SpringBootTest
 class FloraceStoreApplicationTests {
@@ -22,7 +17,7 @@ class FloraceStoreApplicationTests {
 //    private AddressController addressController;
 //    private ShopController shopController;
 
-//    @LocalServerPort
+    //    @LocalServerPort
 //    private int port;
     @Test
     public void contextLoads() throws Exception {

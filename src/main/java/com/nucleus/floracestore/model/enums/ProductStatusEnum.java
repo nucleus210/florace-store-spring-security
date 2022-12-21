@@ -14,7 +14,7 @@ public enum ProductStatusEnum {
     OUT_OF_STOCK("Out of stock", "Product out of stock.", 7),
     PRE_ORDERED("Pre ordered", " Product that is in pre-order state.", 8),
     PRE_SALE("Pre sale", " Product that is in pre-sale state.", 9),
-    SOLD_OUT("Sold out", "Product that is out of stock.", 10);;
+    SOLD_OUT("Sold out", "Product that is out of stock.", 10);
 
     private final String levelName;
     private final String levelDescription;

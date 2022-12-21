@@ -78,7 +78,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
     @Override
     @Transactional
     public void onApplicationEvent(ContextRefreshedEvent event) {
-        if(userRepository.findAll().isEmpty()) {
+        if (userRepository.findAll().isEmpty()) {
             if (alreadySetup)
                 return;
             try {
@@ -140,7 +140,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
             user.setRoles(Set.of(userRole));
             userRepository.save(user);
 
-            ProductStatusEnum[] productStatusEnumList=ProductStatusEnum.values();
+            ProductStatusEnum[] productStatusEnumList = ProductStatusEnum.values();
             Arrays.stream(productStatusEnumList).forEach(status -> {
                 ProductStatusEntity productStatusEntity = new ProductStatusEntity();
                 productStatusEntity.setProductStatusName(status.getLevelName());
@@ -151,7 +151,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
             ProductCategoryEntity flowers = createProductCategoryIfNotFound("Flowers", "Different types of flowers arranged as bouquets, in a box, in pots.");
             ProductCategoryEntity Plants = createProductCategoryIfNotFound("Plants", "Different types of plants for the home and garden.");
             ProductCategoryEntity gifts = createProductCategoryIfNotFound("Gifts", "Creative gift solutions made by hand according to customer specific requirements.");
-            ProductCategoryEntity special= createProductCategoryIfNotFound("Special", "Boutique products suitable for special occasions.");
+            ProductCategoryEntity special = createProductCategoryIfNotFound("Special", "Boutique products suitable for special occasions.");
             ProductCategoryEntity prints = createProductCategoryIfNotFound("Prints", "Printing on various surfaces.");
             ProductCategoryEntity promotions = createProductCategoryIfNotFound("Promotions", "Special offers at a super price.");
 
@@ -283,6 +283,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
             alreadySetup = true;
         }
     }
+
     @Transactional
     PrivilegeEntity createPrivilegeIfNotFound(String name) {
         PrivilegeEntity privilege = privilegeRepository.findByName(name);
@@ -293,6 +294,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         }
         return privilege;
     }
+
     @Transactional
     void createRoleIfNotFound(String name, Set<PrivilegeEntity> privileges) {
         RoleEntity role = roleRepository.findByRoleName(name);
@@ -303,6 +305,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
             roleRepository.save(role);
         }
     }
+
     @Transactional
     private void createProductIfNotFound(String productName,
                                          double unitQuantity,
@@ -338,6 +341,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
             productRepository.save(product);
         }
     }
+
     @Transactional
     public void initializeStorage() throws IOException, InterruptedException {
         Resource[] resources = loadResources("classpath*:/static/images/uploads/*.jpg");
@@ -351,7 +355,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
             storageEntity.setFileName(r.getFilename());
 //            storageEntity.setFileUrl(arrOfStr[1]);
             storageEntity.setFileUrl("http://localhost:8080" + arrOfStr[1]);
-            if(r.getURI().getPath().contains("/C:")) {
+            if (r.getURI().getPath().contains("/C:")) {
                 String resultPath = r.getURI().getPath().replace("/C:", "");
                 storageEntity.setSize(Files.size(Path.of(resultPath)));
             } else {
@@ -362,12 +366,14 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         Thread.sleep(3000);
 
     }
+
     public Resource[] loadResources(String pattern) throws IOException {
         return ResourcePatternUtils.getResourcePatternResolver(resourceLoader).getResources(pattern);
     }
+
     @Transactional
     private ProductCategoryEntity createProductCategoryIfNotFound(String categoryName,
-                                         String categoryDescription)  {
+                                                                  String categoryDescription) {
         ProductCategoryEntity categoryEntity = productCategoryRepository.findByProductCategoryName(categoryName).orElse(null);
         if (categoryEntity == null) {
             categoryEntity = new ProductCategoryEntity();
@@ -377,10 +383,11 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         }
         return categoryEntity;
     }
+
     @Transactional
     private ProductSubCategoryEntity createProductSubCategoryIfNotFound(String subCategoryName,
-                                                                  String subCategoryDescription,
-                                                                  ProductCategoryEntity productCategoryEntity)  {
+                                                                        String subCategoryDescription,
+                                                                        ProductCategoryEntity productCategoryEntity) {
         ProductSubCategoryEntity subCategoryEntity = productSubCategoryRepository.findByProductSubCategoryName(subCategoryName).orElse(null);
         if (subCategoryEntity == null) {
             subCategoryEntity = new ProductSubCategoryEntity();

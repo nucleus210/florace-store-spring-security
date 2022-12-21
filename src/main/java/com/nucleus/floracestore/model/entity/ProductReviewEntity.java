@@ -16,11 +16,11 @@ public class ProductReviewEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "product_review_id")
     private Long productReviewId;
-    @ManyToOne(targetEntity=ProductEntity.class, fetch = FetchType.LAZY)
-    @JoinColumn(name="product_id")
+    @ManyToOne(targetEntity = ProductEntity.class, fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id")
     private ProductEntity product;
 
-    @ManyToOne(optional = false, fetch=FetchType.LAZY, cascade = CascadeType.MERGE)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name = "user__id", referencedColumnName = "user_id")
     private UserEntity user;
 

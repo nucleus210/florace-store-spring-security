@@ -1,16 +1,14 @@
 package com.nucleus.floracestore.model.entity;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 
 @Getter
 @Setter
 @Entity
-@Builder
 @Table(name = "suppliers")
-@NoArgsConstructor
-@AllArgsConstructor
 public class Supplier {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

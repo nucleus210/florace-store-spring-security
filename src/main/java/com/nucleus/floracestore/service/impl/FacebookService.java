@@ -13,14 +13,15 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
 
-@Service
 @Slf4j
+@Service
 public class FacebookService {
     private final FacebookClient facebookClient;
     private FacebookUser facebookUser;
     private final UserServiceSocialImpl userServiceSocialImpl;
     private final RoleService roleService;
     private final JwtTokenProvider tokenProvider;
+
     @Autowired
     public FacebookService(FacebookClient facebookClient,
                            FacebookUser facebookUser,

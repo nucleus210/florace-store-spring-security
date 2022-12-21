@@ -41,7 +41,7 @@ public class LikeServiceImpl implements LikeService {
     @Override
     public LikeServiceModel createLike(Long questionId, String username) {
         UserServiceModel user = userService.findByUsername(username)
-                .orElseThrow(()->new QueryRuntimeException("Could not find username " + username));
+                .orElseThrow(() -> new QueryRuntimeException("Could not find username " + username));
         QuestionServiceModel questionServiceModel = questionService.getQuestionById(questionId);
         LikeServiceModel likeServiceModel = new LikeServiceModel();
         likeServiceModel.setUser(user);
@@ -51,7 +51,7 @@ public class LikeServiceImpl implements LikeService {
                 .findByUsernameAndQuestionId(username, likeServiceModel.getQuestion().getQuestionId())
                 .orElseThrow(() ->
                         new QueryRuntimeException(String
-                                .format("Could not find like for user %s and question %d" ,
+                                .format("Could not find like for user %s and question %d",
                                         username,
                                         likeServiceModel.getQuestion().getQuestionId()))));
     }
@@ -60,7 +60,7 @@ public class LikeServiceImpl implements LikeService {
     public LikeServiceModel getLikeById(Long likeId) {
         log.info("likeService: " + likeId);
         return likeRepository.findById(likeId).map(this::mapToService)
-                .orElseThrow(()->new QueryRuntimeException("Could not find like with id " + likeId));
+                .orElseThrow(() -> new QueryRuntimeException("Could not find like with id " + likeId));
     }
 
     @Override
@@ -82,7 +82,7 @@ public class LikeServiceImpl implements LikeService {
     @Override
     public LikeServiceModel deleteLikeById(Long likeId) {
         LikeEntity likeEntity = likeRepository.findById(likeId)
-                .orElseThrow(()->new QueryRuntimeException("Could not find like with id " + likeId));
+                .orElseThrow(() -> new QueryRuntimeException("Could not find like with id " + likeId));
         likeRepository.delete(likeEntity);
         return mapToService(likeEntity);
     }

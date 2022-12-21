@@ -8,7 +8,6 @@ import com.nucleus.floracestore.model.enums.UserRoleEnum;
 import com.nucleus.floracestore.model.service.OrderServiceModel;
 import com.nucleus.floracestore.model.service.OrderStatusCodesServiceModel;
 import com.nucleus.floracestore.model.service.UserServiceModel;
-import com.nucleus.floracestore.model.view.OrderViewModel;
 import com.nucleus.floracestore.repository.OrderRepository;
 import com.nucleus.floracestore.service.OrderService;
 import com.nucleus.floracestore.service.OrderStatusCodesService;
@@ -16,10 +15,12 @@ import com.nucleus.floracestore.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
 @Slf4j
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -38,6 +39,8 @@ public class OrderServiceImpl implements OrderService {
         this.userService = userService;
         this.modelMapper = modelMapper;
     }
+
+    @Transactional
 
     @Override
     public OrderServiceModel createOrder(OrderServiceModel orderServiceModel, String username) {
@@ -62,19 +65,25 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Optional<OrderServiceModel> getActiveOrderByUsername(String username) {
-        return orderRepository
+    public OrderServiceModel getActiveOrderByUsername(String username) {
+        OrderEntity orderEntity = orderRepository
                 .findOrderByUsernameAndOrderStatusCode(username, "DRAFT")
-                .map(this::mapToService);
+                .orElseThrow(() -> new QueryRuntimeException("Could not find active order for user " + username));
+        return mapToService(orderEntity);
     }
 
-    private OrderViewModel mapDetailsView(String currentUser, OrderEntity order) {
-        OrderViewModel orderDetailView = this.modelMapper.map(order, OrderViewModel.class);
-        orderDetailView.setCanDelete(isOwner(currentUser, order.getOrderId()));
-        return orderDetailView;
+    @Override
+    public List<OrderServiceModel> getAllOrdersItemsByUsernameAndOrderStatusCode(String username, String statusCode) {
+        return orderRepository.findAllOrdersByUsernameAndOrderStatusCode(username, statusCode)
+                .stream()
+                .map(this::mapToService)
+                .collect(Collectors.toList());
+
+
     }
 
     private OrderServiceModel mapToService(OrderEntity order) {
+        log.info("OrderService: " + order);
         return modelMapper.map(order, OrderServiceModel.class);
     }
 
@@ -87,7 +96,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<OrderServiceModel>  getAllOrderByUsername(String username) {
+    public List<OrderServiceModel> getAllOrderByUsername(String username) {
         UserServiceModel userServiceModel = userService.findByUsername(username)
                 .orElseThrow(() -> new QueryRuntimeException("Could not find user " + username));
 

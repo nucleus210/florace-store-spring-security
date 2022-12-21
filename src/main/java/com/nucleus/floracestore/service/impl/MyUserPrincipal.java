@@ -13,11 +13,14 @@ import java.util.List;
 
 public class MyUserPrincipal implements UserDetails {
     private final UserServiceModel userServiceModel;
+
     public MyUserPrincipal(UserServiceModel userServiceModel) {
         this.userServiceModel = userServiceModel;
     }
 
-    public Long getId() {return userServiceModel.getUserId();}
+    public Long getId() {
+        return userServiceModel.getUserId();
+    }
 
     @Override
     public String getUsername() {
@@ -38,6 +41,7 @@ public class MyUserPrincipal implements UserDetails {
             Collection<RoleEntity> roles) {
         return getGrantedAuthorities(getPrivileges(roles));
     }
+
     private List<String> getPrivileges(Collection<RoleEntity> roles) {
         List<String> privileges = new ArrayList<>();
         List<PrivilegeEntity> collection = new ArrayList<>();
@@ -50,6 +54,7 @@ public class MyUserPrincipal implements UserDetails {
         }
         return privileges;
     }
+
     private List<GrantedAuthority> getGrantedAuthorities(List<String> privileges) {
         List<GrantedAuthority> authorities = new ArrayList<>();
         for (String privilege : privileges) {
@@ -57,6 +62,7 @@ public class MyUserPrincipal implements UserDetails {
         }
         return authorities;
     }
+
     @Override
     public boolean isAccountNonExpired() {
         return true;
@@ -80,6 +86,7 @@ public class MyUserPrincipal implements UserDetails {
     public UserServiceModel getAppUser() {
         return userServiceModel;
     }
+
     public String getUserIdentifier() {
         return getUsername();
     }

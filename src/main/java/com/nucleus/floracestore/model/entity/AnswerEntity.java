@@ -1,16 +1,14 @@
 package com.nucleus.floracestore.model.entity;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 
 @Getter
 @Setter
 @Entity
-@Builder
 @Table(name = "answers")
-@NoArgsConstructor
-@AllArgsConstructor
 public class AnswerEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -23,8 +21,8 @@ public class AnswerEntity {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name = "userId", referencedColumnName = "user_id")
     private UserEntity user;
-    @ManyToOne(targetEntity=QuestionEntity.class, fetch = FetchType.LAZY)
-    @JoinColumn(name="question_Id")
+    @ManyToOne(targetEntity = QuestionEntity.class, fetch = FetchType.LAZY)
+    @JoinColumn(name = "question_Id")
     private QuestionEntity question;
 
 }

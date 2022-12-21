@@ -17,7 +17,7 @@ public class SliderItemEntity {
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "resources__id", referencedColumnName = "resources_id")
     private StorageEntity storage;
-    @ManyToOne(fetch=FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user__id", referencedColumnName = "user_id")
     private UserEntity user;
     @Column(name = "slide_item_title")

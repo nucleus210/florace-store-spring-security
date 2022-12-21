@@ -5,7 +5,6 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -43,7 +42,7 @@ public class JwtTokenVerifier extends OncePerRequestFilter {
 
         String authorizationHeader = request.getHeader("Authorization");
 
-        if(Strings.isNullOrEmpty(authorizationHeader) || !authorizationHeader.startsWith(jwtConfiguration.getTokenPrefix())) {
+        if (Strings.isNullOrEmpty(authorizationHeader) || !authorizationHeader.startsWith(jwtConfiguration.getTokenPrefix())) {
             filterChain.doFilter(request, response);
             return;
         }
@@ -63,16 +62,16 @@ public class JwtTokenVerifier extends OncePerRequestFilter {
             Claims body = jws.getBody();
             String username = body.getSubject();
             var authorities = (List<Map<String, String>>) body.get("authorities");
-           Set<SimpleGrantedAuthority> simpleGrantedAuthorities = authorities
-                   .stream()
-                   .map(auth-> new SimpleGrantedAuthority(auth.get("authority")))
-                   .collect(Collectors.toSet());
+            Set<SimpleGrantedAuthority> simpleGrantedAuthorities = authorities
+                    .stream()
+                    .map(auth -> new SimpleGrantedAuthority(auth.get("authority")))
+                    .collect(Collectors.toSet());
             Authentication authentication = new UsernamePasswordAuthenticationToken(username, null, simpleGrantedAuthorities);
             SecurityContextHolder.getContext().setAuthentication(authentication);
         } catch (JwtException ex) {       // (5)
             throw new IllegalStateException(String.format("Token %s cannot be trusted", token));
-                // we *cannot* use the JWT as intended by its creator
-            }
+            // we *cannot* use the JWT as intended by its creator
+        }
         filterChain.doFilter(request, response);
     }
 }

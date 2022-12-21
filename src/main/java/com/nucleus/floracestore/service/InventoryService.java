@@ -6,6 +6,8 @@ import java.util.List;
 
 public interface InventoryService {
     InventoryServiceModel getInventoryById(Long inventoryId);
+
     InventoryServiceModel getInventoriesByProductId(Long productId);
+
     List<InventoryServiceModel> getAllInvetories();
 }

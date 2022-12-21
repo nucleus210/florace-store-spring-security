@@ -31,6 +31,7 @@ public class LikeController {
         this.likeService = likeService;
         this.assembler = assembler;
     }
+
     @PostMapping("/likes/question/{questionId}")
     public ResponseEntity<EntityModel<LikeViewModel>> likeQuestion(@PathVariable Long questionId) {
         log.info("LikeController: like question with id " + questionId);
@@ -38,6 +39,7 @@ public class LikeController {
                 .created(linkTo(methodOn(LikeController.class).likeQuestion(questionId)).toUri())
                 .body(assembler.toModel(mapView(likeService.createLike(questionId, getCurrentLoggedUsername()))));
     }
+
     @GetMapping("/likes/question/{questionId}")
     public ResponseEntity<CollectionModel<EntityModel<LikeViewModel>>> getAllLikesByQuestionId(@PathVariable Long questionId) {
         log.info("LikeController: get all questions likes");
@@ -46,15 +48,18 @@ public class LikeController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(CollectionModel.of(likesCount, linkTo(methodOn(AnswerController.class).getAllAnswersByQuestionId(questionId)).withSelfRel()));
     }
+
     @DeleteMapping("/likes/{likeId}")
     public ResponseEntity<EntityModel<LikeViewModel>> deleteLikeById(@PathVariable Long likeId) {
         log.info("LikeController: delete like with id " + likeId);
         EntityModel<LikeViewModel> likeViewModel = assembler.toModel(mapView(likeService.deleteLikeById(likeId)));
         return ResponseEntity.status(HttpStatus.OK).body(likeViewModel);
     }
+
     private LikeViewModel mapView(LikeServiceModel model) {
         return modelMapper.map(model, LikeViewModel.class);
     }
+
     private String getCurrentLoggedUsername() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         log.info("Principal: " + authentication.getName());

@@ -1,6 +1,5 @@
 package com.nucleus.floracestore.model.service;
 
-import com.nucleus.floracestore.model.entity.OrderItemEntity;
 import lombok.Data;
 
 import java.util.Date;
@@ -13,5 +12,6 @@ public class OrderServiceModel {
     private OrderStatusCodesServiceModel orderStatusCode;
     private Date dateOrderPlaced;
     private String orderDetails;
-    private Set<OrderItemEntity> orderItems;
+    private Set<OrderItemServiceModel> orderItems;
+
 }

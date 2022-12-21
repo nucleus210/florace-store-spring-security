@@ -4,7 +4,6 @@ import lombok.Data;
 
 @Data
 public class OrderStatusCodesServiceModel {
-
     private Long orderStatusCodeId;
     private String statusCode;
     private String statusDescription;

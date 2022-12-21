@@ -75,7 +75,6 @@ public class StorageServiceImpl implements StorageService {
             return null;
         }
         String[] fileNameParts = fileName.split("\\.");
-
         return fileNameParts[fileNameParts.length - 1];
     }
 
@@ -83,8 +82,8 @@ public class StorageServiceImpl implements StorageService {
     public StorageServiceModel storeFile(MultipartFile file) {
         // Normalize file name
         String fileName =
-                new SimpleDateFormat("yyyy-MM-dd'_'hh-mm-ss-SSS").format(new Date()) + "-file." + getFileExtension(file.getOriginalFilename());
-
+                new SimpleDateFormat("yyyy-MM-dd'_'hh-mm-ss-SSS")
+                        .format(new Date()) + "-file." + getFileExtension(file.getOriginalFilename());
         try {
             // Check if the filename contains invalid characters
             if (fileName.contains("..")) {
@@ -110,7 +109,6 @@ public class StorageServiceImpl implements StorageService {
         } catch (IOException ex) {
             throw new RuntimeException("Could not store file " + fileName + ". Please try again!", ex);
         }
-
     }
 
     @Override

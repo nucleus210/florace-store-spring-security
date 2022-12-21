@@ -42,7 +42,7 @@ public class AnswerServiceImpl implements AnswerService {
     public AnswerServiceModel getAnswerById(Long answerId) {
         log.info("answerService: " + answerId);
         return answerRepository.findById(answerId).map(this::mapToService)
-                .orElseThrow(()->new QueryRuntimeException("Could not find answer with id " + answerId));
+                .orElseThrow(() -> new QueryRuntimeException("Could not find answer with id " + answerId));
     }
 
     @Override
@@ -64,7 +64,7 @@ public class AnswerServiceImpl implements AnswerService {
     @Override
     public AnswerServiceModel createAnswer(AnswerServiceModel answerServiceModel, Long questionId, String username) {
         UserServiceModel userServiceModel = userService.findByUsername(username)
-                .orElseThrow(()->new QueryRuntimeException("Could not find user with name " + username));
+                .orElseThrow(() -> new QueryRuntimeException("Could not find user with name " + username));
         QuestionServiceModel questionServiceModel = questionService.getQuestionById(questionId);
         answerServiceModel.setQuestion(modelMapper.map(questionServiceModel, QuestionEntity.class));
         answerServiceModel.setUser(userServiceModel);
@@ -74,7 +74,7 @@ public class AnswerServiceImpl implements AnswerService {
     @Override
     public AnswerServiceModel updateAnswer(AnswerServiceModel answerServiceModel, Long answerId) {
         AnswerEntity answerEntity = answerRepository.findById(answerId)
-                .orElseThrow(()->new QueryRuntimeException("Could not find answer with Id " + answerId));
+                .orElseThrow(() -> new QueryRuntimeException("Could not find answer with Id " + answerId));
         answerEntity.setAnswer(answerServiceModel.getAnswer());
         return mapToService(answerRepository.save(answerEntity));
     }
@@ -82,7 +82,7 @@ public class AnswerServiceImpl implements AnswerService {
     @Override
     public AnswerServiceModel deleteAnswerById(Long answerId) {
         AnswerEntity answerEntity = answerRepository.findById(answerId)
-                .orElseThrow(()->new QueryRuntimeException("Could not find answer with Id " + answerId));
+                .orElseThrow(() -> new QueryRuntimeException("Could not find answer with Id " + answerId));
         answerRepository.delete(answerEntity);
         return mapToService(answerEntity);
     }

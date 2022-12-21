@@ -5,7 +5,6 @@ import lombok.Data;
 
 @Data
 public class ProductRatesDto {
-
     private Long productRateId;
     private int productRate;
     private ProductEntity product;

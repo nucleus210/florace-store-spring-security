@@ -2,7 +2,6 @@ package com.nucleus.floracestore.service.impl;
 
 import com.nucleus.floracestore.error.QueryRuntimeException;
 import com.nucleus.floracestore.model.entity.QuestionEntity;
-import com.nucleus.floracestore.model.entity.UserEntity;
 import com.nucleus.floracestore.model.service.ProductServiceModel;
 import com.nucleus.floracestore.model.service.QuestionServiceModel;
 import com.nucleus.floracestore.model.service.UserServiceModel;
@@ -37,12 +36,11 @@ public class QuestionServiceImpl implements QuestionService {
         this.questionRepository = questionRepository;
     }
 
-
     @Override
     public QuestionServiceModel getQuestionById(Long questionId) {
         log.info("answerService: " + questionId);
         return questionRepository.findById(questionId).map(this::mapToService)
-                .orElseThrow(()->new QueryRuntimeException("Could not find question with id " + questionId));
+                .orElseThrow(() -> new QueryRuntimeException("Could not find question with id " + questionId));
     }
 
     @Override
@@ -57,7 +55,7 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     public QuestionServiceModel createQuestion(QuestionServiceModel questionServiceModel, Long productId, String username) {
         UserServiceModel userServiceModel = userService.findByUsername(username)
-                .orElseThrow(()->new QueryRuntimeException("Could not find user with username " + username));
+                .orElseThrow(() -> new QueryRuntimeException("Could not find user with username " + username));
         ProductServiceModel product = productService.getProductById(productId);
         questionServiceModel.setProduct(product);
         questionServiceModel.setUser(userServiceModel);
@@ -68,7 +66,7 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     public QuestionServiceModel updateQuestion(QuestionServiceModel questionServiceModel, Long questionId) {
         QuestionEntity questionEntity = questionRepository.findById(questionId)
-                .orElseThrow(()->new QueryRuntimeException("Could not find question with Id " + questionId));
+                .orElseThrow(() -> new QueryRuntimeException("Could not find question with Id " + questionId));
         questionEntity.setQuestion(questionServiceModel.getQuestion());
 //        questionEntity.setLikes(questionServiceModel.getLikes());
         return mapToService(questionRepository.save(questionEntity));
@@ -77,7 +75,7 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     public QuestionServiceModel deleteQuestionById(Long questionId) {
         QuestionEntity questionEntity = questionRepository.findById(questionId)
-                .orElseThrow(()->new QueryRuntimeException("Could not find question with Id " + questionId));;
+                .orElseThrow(() -> new QueryRuntimeException("Could not find question with Id " + questionId));
 
         questionRepository.delete(questionEntity);
         return mapToService(questionEntity);
@@ -90,6 +88,7 @@ public class QuestionServiceImpl implements QuestionService {
                 .map(this::mapToService)
                 .collect(Collectors.toList());
     }
+
     private QuestionServiceModel mapToService(QuestionEntity questionEntity) {
         return this.modelMapper.map(questionEntity, QuestionServiceModel.class);
     }

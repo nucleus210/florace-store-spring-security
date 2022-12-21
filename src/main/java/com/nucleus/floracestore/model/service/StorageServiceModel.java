@@ -8,5 +8,4 @@ public class StorageServiceModel {
     private String fileName;
     private String fileUrl;
     private Long size;
-//    MultipartFile[] files;
 }

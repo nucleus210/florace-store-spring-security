@@ -18,7 +18,7 @@ import java.util.Map;
 @RequestMapping(value = "/api")
 public class StripeController {
     // create a Gson object
-    private static Gson gson = new Gson();
+    private static final Gson gson = new Gson();
 
     @PostMapping("/payment")
     /**

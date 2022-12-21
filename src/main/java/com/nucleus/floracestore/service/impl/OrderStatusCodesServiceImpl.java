@@ -23,6 +23,7 @@ public class OrderStatusCodesServiceImpl implements OrderStatusCodesService {
         this.orderStatusCodesRepository = orderStatusCodesRepository;
         this.modelMapper = modelMapper;
     }
+
     @Override
     public OrderStatusCodesServiceModel initializeOrderStatusCodesFromEnum(OrderStatusCodes orderStatusCodes) {
         OrderStatusCodesEntity orderStatusCodesEntity = new OrderStatusCodesEntity();
@@ -40,12 +41,14 @@ public class OrderStatusCodesServiceImpl implements OrderStatusCodesService {
         orderStatusCodesRepository.save(orderStatusCodesEntity);
         return mapToService(orderStatusCodesEntity);
     }
+
     @Override
     public OrderStatusCodesServiceModel getOrderStatusCodeById(Long orderStatusCodeId) {
-       OrderStatusCodesEntity orderStatusCodesEntity = orderStatusCodesRepository.findById(orderStatusCodeId)
+        OrderStatusCodesEntity orderStatusCodesEntity = orderStatusCodesRepository.findById(orderStatusCodeId)
                 .orElseThrow(() -> new QueryRuntimeException("No such order status code with id " + orderStatusCodeId));
         return mapToService(orderStatusCodesEntity);
     }
+
     @Override
     public OrderStatusCodesServiceModel getOrderStatusCodeByCodeName(String code) {
         OrderStatusCodesEntity orderStatusCodesEntity = orderStatusCodesRepository.findByStatusCode(code)

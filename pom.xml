@@ -146,7 +146,8 @@
         <dependency>
             <groupId>com.stripe</groupId>
             <artifactId>stripe-java</artifactId>
-            <version>22.1.0</version></dependency>
+            <version>22.1.0</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -176,77 +177,4 @@
             <url>file:///home/nucleus/</url>
         </repository>
     </distributionManagement>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <!--    <properties>-->
-    <!--        <full-artifact-name>target/${project.artifactId}-${project.version}.jar</full-artifact-name>-->
-    <!--    </properties>-->
-
-<!--    <build>-->
-<!--        <plugins>-->
-<!--            <plugin>-->
-<!--                <groupId>com.heroku.sdk</groupId>-->
-<!--                <artifactId>heroku-maven-plugin</artifactId>-->
-<!--                <version>2.0.16</version>-->
-<!--                <configuration>-->
-<!--                    <appName>florace-store</appName>-->
-<!--                    <includeTarget>false</includeTarget>-->
-<!--                    <archive>-->
-<!--                        <manifest>-->
-
-<!--                            &lt;!&ndash; give full qualified name of your main class&ndash;&gt;-->
-<!--                            <mainClass>com.nucleus.floracestore.FloraceStoreApplication</mainClass>-->
-
-<!--                        </manifest>-->
-<!--                    </archive>-->
-
-<!--                    &lt;!&ndash;                    <includes>&ndash;&gt;-->
-<!--                    &lt;!&ndash;                        <include>${target}/${florace-store-0.0.1-SNAPSHOT.jar}</include>&ndash;&gt;-->
-<!--                    &lt;!&ndash;                    </includes>&ndash;&gt;-->
-<!--                    <jdkVersion>18</jdkVersion>-->
-<!--                    <processTypes>-->
-<!--                        <web>java $JAVA_OPTS -jar ${florace-store-0.0.1-SNAPSHOT.jar}</web>-->
-<!--                    </processTypes>-->
-<!--                </configuration>-->
-<!--            </plugin>-->
-<!--        </plugins>-->
-<!--    </build>-->
-    <!--    <build>-->
-    <!--        <plugins>-->
-    <!--            <plugin>-->
-    <!--                <groupId>com.heroku.sdk</groupId>-->
-    <!--                <artifactId>heroku-maven-plugin</artifactId>-->
-    <!--                <version>2.0.16</version>-->
-    <!--                <configuration>-->
-    <!--                    <processTypes>-->
-    <!--                        <web>java $JAVA_OPTS -cp target/classes:target/dependency/* package com.nucleus.floracestore.FloraceStoreApplication</web>-->
-    <!--                    </processTypes>-->
-    <!--                </configuration>-->
-
-    <!--            </plugin>-->
-
-    <!--        </plugins>-->
-    <!--    </build>-->
-
 </project>

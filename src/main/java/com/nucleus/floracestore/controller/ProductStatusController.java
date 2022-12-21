@@ -48,6 +48,7 @@ public class ProductStatusController {
                 .body(assembler.toModel(mapToView(productStatusServiceModel)));
 
     }
+
     @PutMapping("/products/statuses/{id}")
     public ResponseEntity<EntityModel<ProductStatusViewModel>> updateProductStatus(@RequestBody ProductStatusDto model) {
         ProductStatusServiceModel productStatusServiceModel = productStatusService.updateProductStatusById(model.getProductStatusId(),
@@ -61,22 +62,25 @@ public class ProductStatusController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/products/statuses/{id}")
-    public ResponseEntity<EntityModel<ProductStatusViewModel>>  deleteProductStatus(@PathVariable Long productStatusId) {
+    public ResponseEntity<EntityModel<ProductStatusViewModel>> deleteProductStatus(@PathVariable Long productStatusId) {
         ProductStatusServiceModel productStatusServiceModel = productStatusService.deleteProductStatusById(productStatusId, getCurrentLoggedUsername());
         return ResponseEntity
                 .created(linkTo(methodOn(ProductStatusController.class).deleteProductStatus(productStatusId)).toUri())
                 .body(assembler.toModel(mapToView(productStatusServiceModel)));
     }
+
     @GetMapping("/products/statuses/{id}")
     public ResponseEntity<EntityModel<ProductStatusViewModel>> getProductStatusById(@PathVariable Long id) {
-       return ResponseEntity.status(HttpStatus.OK)
+        return ResponseEntity.status(HttpStatus.OK)
                 .body(assembler.toModel(mapToView(productStatusService.getProductStatusById(id))));
     }
+
     @GetMapping("/products/statuses/{productStatusName}/name")
     public ResponseEntity<EntityModel<ProductStatusViewModel>> getProductStatusById(@PathVariable String productStatusName) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(assembler.toModel(mapToView(productStatusService.getProductStatusByProductStatusName(productStatusName))));
     }
+
     @GetMapping("/products/statuses")
     public ResponseEntity<CollectionModel<EntityModel<ProductStatusViewModel>>> getAllProductStatuses() {
         List<EntityModel<ProductStatusViewModel>> productStatuses = productStatusService.getAllProductStatuses().stream()
@@ -90,6 +94,7 @@ public class ProductStatusController {
         log.info("Principal: " + authentication.getName());
         return authentication.getName();
     }
+
     private ProductStatusViewModel mapToView(ProductStatusServiceModel model) {
         return modelMapper.map(model, ProductStatusViewModel.class);
     }

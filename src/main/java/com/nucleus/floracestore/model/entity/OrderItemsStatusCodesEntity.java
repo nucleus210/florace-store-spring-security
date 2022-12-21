@@ -25,14 +25,12 @@ public class OrderItemsStatusCodesEntity {
     @Column(name = "order_item_status_code_description", columnDefinition = "TEXT", nullable = false)
     private String productStatusDescription;
 
-    @JsonManagedReference(value="order-codes")
+    @JsonManagedReference(value = "order-codes")
     @OneToMany(targetEntity = OrderItemEntity.class,
             cascade = CascadeType.ALL,
             fetch = FetchType.LAZY,
             mappedBy = "orderItemStatusCode")
     private Set<OrderItemEntity> orderItems;
-
-
 
 
 }

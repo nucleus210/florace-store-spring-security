@@ -11,7 +11,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @ControllerAdvice
 public class DefaultExceptionHandler extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler({ AuthenticationException.class })
+    @ExceptionHandler({AuthenticationException.class})
     @ResponseBody
     public ResponseEntity<RestError> handleAuthenticationException(Exception ex) {
 

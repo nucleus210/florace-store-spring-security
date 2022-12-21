@@ -1,7 +1,6 @@
 package com.nucleus.floracestore.service.impl;
 
 import com.nucleus.floracestore.model.entity.RoleEntity;
-import com.nucleus.floracestore.model.enums.UserRoleEnum;
 import com.nucleus.floracestore.repository.RoleRepository;
 import com.nucleus.floracestore.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +20,4 @@ public class RoleServiceImpl implements RoleService {
         return roleRepository.findByRoleName(roleName);
     }
 
-//    @Override
-//    public RoleEntity getRoleByRole(UserRoleEnum role) {
-//        return roleRepository.findByRole(role);
-//    }
 }

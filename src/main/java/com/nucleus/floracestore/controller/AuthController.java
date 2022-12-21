@@ -24,14 +24,25 @@ import java.util.Set;
 @Slf4j
 @RestController
 public class AuthController {
+
+    private final UserServiceSocialImpl userService;
+    private final FacebookService facebookService;
+    private final RoleService roleService;
+
+    private final ModelMapper modelMapper;
+
     @Autowired
-    private UserServiceSocialImpl userService;
-    @Autowired private FacebookService facebookService;
-    @Autowired private RoleService roleService;
+    public AuthController(UserServiceSocialImpl userService,
+                          FacebookService facebookService,
+                          RoleService roleService,
+                          ModelMapper modelMapper) {
+        this.userService = userService;
+        this.facebookService = facebookService;
+        this.roleService = roleService;
+        this.modelMapper = modelMapper;
+    }
 
-    @Autowired private ModelMapper modelMapper;
-
-    @RequestMapping(value ="/login", method = RequestMethod.POST)
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody AuthenticationRequest loginRequest) {
         String token = userService.loginUser(loginRequest.getUsername(), loginRequest.getPassword());
         log.info("facebook login {}", loginRequest);
@@ -39,7 +50,7 @@ public class AuthController {
     }
 
     @PostMapping("/facebook/signin")
-    public  ResponseEntity<?> facebookAuth(@Valid @RequestBody FacebookLoginRequest facebookLoginRequest) {
+    public ResponseEntity<?> facebookAuth(@Valid @RequestBody FacebookLoginRequest facebookLoginRequest) {
         log.info("facebook login {}", facebookLoginRequest);
         String token = facebookService.loginUser(facebookLoginRequest.getAccessToken());
         return ResponseEntity.ok(new JwtAuthenticationResponse(token));
@@ -57,10 +68,8 @@ public class AuthController {
                 .roles(Set.of(roleService.getByRoleName("FACEBOOK_USER")))
                 .setActive(true)
                 .build();
-        ProfileEntity profile = ProfileEntity
-                .builder()
-                .firstName(payload.getName())
-                .build();
+        ProfileEntity profile = new ProfileEntity();
+        profile.setFirstName(payload.getName());
 
         try {
             userService.registerUser(user);
@@ -74,6 +83,6 @@ public class AuthController {
 
         return ResponseEntity
                 .created(location)
-                .body(new ApiResponse(true,"User registered successfully"));
+                .body(new ApiResponse(true, "User registered successfully"));
     }
 }

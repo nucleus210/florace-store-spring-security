@@ -8,7 +8,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Entity
-@Table(name="product_rates")
+@Table(name = "product_rates")
 public class ProductRateEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -17,11 +17,11 @@ public class ProductRateEntity {
 
     @Column(name = "product_rate")
     private int productRate;
-    @ManyToOne(targetEntity=ProductEntity.class, fetch = FetchType.LAZY)
-    @JoinColumn(name="product_id")
+    @ManyToOne(targetEntity = ProductEntity.class, fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id")
     private ProductEntity product;
 
-    @ManyToOne(optional = false, fetch=FetchType.LAZY, cascade = CascadeType.MERGE)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name = "user__id", referencedColumnName = "user_id")
     private UserEntity user;
 

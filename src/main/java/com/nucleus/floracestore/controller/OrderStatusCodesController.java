@@ -26,6 +26,7 @@ public class OrderStatusCodesController {
     private final ModelMapper modelMapper;
     private final OrderStatusCodesService orderStatusCodesService;
     private final OrderStatusCodesAssembler assembler;
+
     @Autowired
     public OrderStatusCodesController(ModelMapper modelMapper,
                                       OrderStatusCodesService orderStatusCodesService,
@@ -34,8 +35,9 @@ public class OrderStatusCodesController {
         this.orderStatusCodesService = orderStatusCodesService;
         this.assembler = assembler;
     }
+
     @PostMapping("/order-status-codes")
-    public ResponseEntity<EntityModel<OrderStatusCodesViewModel>> createOrderStatusCodes(@RequestBody OrderStatusCodesDto model)  {
+    public ResponseEntity<EntityModel<OrderStatusCodesViewModel>> createOrderStatusCodes(@RequestBody OrderStatusCodesDto model) {
         OrderStatusCodesServiceModel orderStatusCodesServiceModel = modelMapper.map(model, OrderStatusCodesServiceModel.class);
         orderStatusCodesService.save(orderStatusCodesServiceModel);
         log.info("OrderStatusCodeController: saved orderStatusCode with name " + orderStatusCodesServiceModel.getStatusCode());
@@ -53,6 +55,7 @@ public class OrderStatusCodesController {
                 .created(linkTo(methodOn(OrderStatusCodesController.class).getOrderStatusCodeById(orderStatusCodeId)).toUri())
                 .body(assembler.toModel(mapToView(orderStatusCodesServiceModel)));
     }
+
     @GetMapping("/order-status-codes/status-code/{codeName}")
     public ResponseEntity<EntityModel<OrderStatusCodesViewModel>> getOrderStatusCodeByCodeName(@PathVariable String codeName) {
         OrderStatusCodesServiceModel orderStatusCodesServiceModel =
@@ -62,6 +65,7 @@ public class OrderStatusCodesController {
                 .created(linkTo(methodOn(OrderStatusCodesController.class).getOrderStatusCodeByCodeName(codeName)).toUri())
                 .body(assembler.toModel(mapToView(orderStatusCodesServiceModel)));
     }
+
     @GetMapping("/order-status-codes")
     public ResponseEntity<CollectionModel<EntityModel<OrderStatusCodesViewModel>>> getAllOrderStatusCodes() {
         List<EntityModel<OrderStatusCodesViewModel>> orderStatusCodes = orderStatusCodesService.getAllOrderStatusCodes().stream()
@@ -70,6 +74,7 @@ public class OrderStatusCodesController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(CollectionModel.of(orderStatusCodes, linkTo(methodOn(OrderStatusCodesController.class).getAllOrderStatusCodes()).withSelfRel()));
     }
+
     private OrderStatusCodesViewModel mapToView(OrderStatusCodesServiceModel orderStatusCodesServiceModel) {
         return modelMapper.map(orderStatusCodesServiceModel, OrderStatusCodesViewModel.class);
     }

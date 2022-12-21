@@ -1,14 +1,10 @@
 package com.nucleus.floracestore.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -35,7 +31,7 @@ public class RoleEntity {
             joinColumns = @JoinColumn(
                     name = "role__id", referencedColumnName = "role_id"),
             inverseJoinColumns = @JoinColumn(
-                    name = "privilege_id", referencedColumnName = "id") )
+                    name = "privilege_id", referencedColumnName = "id"))
     private Set<PrivilegeEntity> privileges = new HashSet<>();
 
 }

@@ -79,6 +79,7 @@ public class ProductStatusServiceImpl implements ProductStatusService {
                 .map(this::mapToService)
                 .collect(Collectors.toList());
     }
+
     private ProductStatusServiceModel mapToService(ProductStatusEntity productStatusEntity) {
         return modelMapper.map(productStatusEntity, ProductStatusServiceModel.class);
     }

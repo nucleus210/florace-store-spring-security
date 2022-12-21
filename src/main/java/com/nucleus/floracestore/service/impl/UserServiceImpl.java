@@ -55,17 +55,17 @@ public class UserServiceImpl implements UserService {
         RoleEntity userRole = roleRepository.findByRoleName(UserRoleEnum.USER.name());
 
         UserEntity newUser = new UserEntity();
-
         newUser.setUsername(userRegistrationServiceModel.getUsername());
         newUser.setEmail(userRegistrationServiceModel.getEmail());
         newUser.setPassword(passwordEncoder.encode(userRegistrationServiceModel.getPassword()));
         newUser.setAccountCreatedDate(new Date(System.currentTimeMillis()));
         newUser.setRoles(Set.of(userRole));
         userRepository.findByUsername(userRegistrationServiceModel.getUsername())
-                .ifPresent(user1 -> {throw new QueryRuntimeException("User already exist");});
+                .ifPresent(user1 -> {
+                    throw new QueryRuntimeException("User already exist");
+                });
         userRepository.save(newUser);
-
-
+        // Login user
         doAutoLogin(userRegistrationServiceModel);
     }
 
@@ -78,7 +78,7 @@ public class UserServiceImpl implements UserService {
                     principal.getPassword(),
                     principal.getAuthorities()
             );
-             log.debug("Logging in with [{}]", authentication.getPrincipal());
+            log.debug("Logging in with [{}]", authentication.getPrincipal());
             SecurityContextHolder.getContext().setAuthentication(authentication);
         } catch (Exception e) {
             SecurityContextHolder.getContext().setAuthentication(null);

@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
 @Slf4j
+@RestController
 public class UserRestController {
     @Autowired
     private UserServiceSocialImpl userService;
@@ -27,7 +27,7 @@ public class UserRestController {
     public ResponseEntity<?> findUser(@PathVariable("username") String username) {
         log.info("retrieving user {}", username);
 
-        return  userService
+        return userService
                 .findByUsername(username)
                 .map(user -> ResponseEntity.ok(user))
                 .orElseThrow(() -> new ResourceNotFoundException(username));
@@ -56,7 +56,7 @@ public class UserRestController {
     public ResponseEntity<?> getUserSummary(@PathVariable("username") String username) {
         log.info("retrieving user {}", username);
 
-        return  userService
+        return userService
                 .findByUsername(username)
                 .map(user -> ResponseEntity.ok(convertTo(user)))
                 .orElseThrow(() -> new ResourceNotFoundException(username));

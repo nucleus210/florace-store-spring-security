@@ -10,7 +10,6 @@ import java.util.Optional;
 
 @Repository("productReviewsRepository")
 public interface ProductReviewsRepository extends JpaRepository<ProductReviewEntity, Long> {
-
     @Query("select r from ProductReviewEntity r JOIN FETCH r.product p where p.productId = :productId")
     List<ProductReviewEntity> findAllProductReviewsByProductId(Long productId);
 

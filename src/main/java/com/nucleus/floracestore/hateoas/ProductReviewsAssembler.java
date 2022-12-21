@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 @Component
 public class ProductReviewsAssembler implements RepresentationModelAssembler<ProductReviewsViewModel, EntityModel<ProductReviewsViewModel>> {
 
@@ -16,7 +17,7 @@ public class ProductReviewsAssembler implements RepresentationModelAssembler<Pro
 
         return EntityModel.of(productModel, //
                 linkTo(methodOn(ProductReviewsController.class).getProductReviewById(productModel.getProductReviewId())).withSelfRel(),
-                linkTo(methodOn(ProductReviewsController.class).getProductReviewByProductIdAndUsername(productModel.getProduct().getProductId(), productModel.getUsername())).withRel("ReviewByProductIdAndUsername") ,
+                linkTo(methodOn(ProductReviewsController.class).getProductReviewByProductIdAndUsername(productModel.getProduct().getProductId(), productModel.getUsername())).withRel("ReviewByProductIdAndUsername"),
                 linkTo(methodOn(ProductReviewsController.class).getAllProductReviewsByProductId(productModel.getProduct().getProductId())).withRel("Reviews"));
 
     }

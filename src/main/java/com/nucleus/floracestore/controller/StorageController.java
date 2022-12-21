@@ -40,10 +40,9 @@ public class StorageController {
         this.modelMapper = modelMapper;
         this.assembler = assembler;
     }
-//    @CrossOrigin(origins = "*")
-//    @RequestMapping(value = "/storages/upload/{file}", headers = "content-type=multipart/*", method = RequestMethod.POST)
+
     @PostMapping(value = "/storages/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<EntityModel<SingleUploadResponseMessage>> uploadFileToStorages (@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<EntityModel<SingleUploadResponseMessage>> uploadFileToStorages(@RequestParam("file") MultipartFile file) {
         try {
 
             StorageViewModel storage = mapToView(storageService.storeFile(file));
@@ -121,7 +120,7 @@ public class StorageController {
     @GetMapping("/files/{filename:.+}")
     public ResponseEntity<Resource> serveFile(@PathVariable String filename) {
 
-        Resource file = (Resource) storageService.load(filename);
+        Resource file = storageService.load(filename);
         return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
                 "attachment; filename=\"" + file.getFilename() + "\"").body(file);
     }
@@ -136,7 +135,6 @@ public class StorageController {
         }
         return "redirect:/storage/upload";
     }
-
 
 
     @ExceptionHandler(StorageFileNotFoundException.class)

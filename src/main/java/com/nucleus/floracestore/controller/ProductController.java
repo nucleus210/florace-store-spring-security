@@ -28,6 +28,7 @@ import java.util.List;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 @Slf4j
 @RestController
 public class ProductController {
@@ -53,7 +54,6 @@ public class ProductController {
         this.storageService = storageService;
         this.assembler = assembler;
     }
-
 
 
     @PostMapping("/products/add")
@@ -109,21 +109,13 @@ public class ProductController {
 
     @GetMapping("/products/{id}")
     public ResponseEntity<EntityModel<ProductViewModel>> getProductById(@PathVariable Long id) {
-          return ResponseEntity.status(HttpStatus.OK)
-                  .body(assembler.toModel(mapToView(productService.getProductById(id))));
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(assembler.toModel(mapToView(productService.getProductById(id))));
     }
 
     @GetMapping(value = "/products")
     public ResponseEntity<CollectionModel<EntityModel<ProductViewModel>>> getAllProducts() {
         List<EntityModel<ProductViewModel>> products = productService.getAllProducts().stream()
-                .map(entity -> assembler.toModel(mapToView(entity))).toList();
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(CollectionModel.of(products, linkTo(methodOn(ProductController.class).getAllProducts()).withSelfRel()));
-    }
-
-    @GetMapping(value = "/products/category/{categoryName}")
-    public ResponseEntity<CollectionModel<EntityModel<ProductViewModel>>> getAllProductsByCategoryName(@PathVariable String categoryName) {
-        List<EntityModel<ProductViewModel>> products = productService.getAllByProductCategory(categoryName).stream()
                 .map(entity -> assembler.toModel(mapToView(entity))).toList();
         return ResponseEntity.status(HttpStatus.OK)
                 .body(CollectionModel.of(products, linkTo(methodOn(ProductController.class).getAllProducts()).withSelfRel()));
@@ -138,6 +130,7 @@ public class ProductController {
     private ProductViewModel mapToView(ProductServiceModel product) {
         return modelMapper.map(product, ProductViewModel.class);
     }
+
     private String getCurrentLoggedUsername() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         log.info("Principal: " + authentication.getName());

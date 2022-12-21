@@ -121,7 +121,7 @@ public enum CountryEnum {
     KE("Kenya"),
     KI("Kiribati"),
     KR("Korea, Republic of"),
-    KP("Korea, Democratic People\'s Republic of"),
+    KP("Korea, Democratic People's Republic of"),
     KW("Kuwait"),
     KG("Kyrgyzstan"),
     LA("Lao Peoples Democratic Republic"),

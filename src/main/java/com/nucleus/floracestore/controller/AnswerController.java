@@ -20,12 +20,14 @@ import java.util.List;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 @Slf4j
 @RestController
 public class AnswerController {
-    private  final ModelMapper modelMapper;
+    private final ModelMapper modelMapper;
     private final AnswerService answerService;
     private final AnswerAssembler assembler;
+
     @Autowired
     public AnswerController(ModelMapper modelMapper, AnswerService answerService, AnswerAssembler assembler) {
         this.modelMapper = modelMapper;
@@ -41,11 +43,13 @@ public class AnswerController {
                 .created(linkTo(methodOn(AnswerController.class).writeAnswer(model, questionId)).toUri())
                 .body(assembler.toModel(mapView(answerServiceModel)));
     }
+
     @GetMapping("/answers/{answerId}")
     public ResponseEntity<EntityModel<AnswerViewModel>> getAnswerById(@PathVariable Long answerId) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(assembler.toModel(mapView(answerService.getAnswerById(answerId))));
     }
+
     @GetMapping("/answers/users/{username}")
     public ResponseEntity<CollectionModel<EntityModel<AnswerViewModel>>> getAllAnswersByUsername() {
         List<EntityModel<AnswerViewModel>> questions = answerService.getAllAnswersByUsername(getCurrentLoggedUsername()).stream()
@@ -53,6 +57,7 @@ public class AnswerController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(CollectionModel.of(questions, linkTo(methodOn(AnswerController.class).getAllAnswersByUsername()).withSelfRel()));
     }
+
     @PutMapping("/answers/{answerId}")
     public ResponseEntity<EntityModel<AnswerViewModel>> updateAnswer(@RequestBody AnswerDto model, @PathVariable Long answerId) {
 
@@ -61,6 +66,7 @@ public class AnswerController {
                 .created(linkTo(methodOn(AnswerController.class).updateAnswer(model, answerId)).toUri())
                 .body(assembler.toModel(mapView(answerServiceModel)));
     }
+
     @DeleteMapping("/answers/{answerId}")
     public ResponseEntity<EntityModel<AnswerViewModel>> deleteAnswer(@PathVariable Long answerId) {
         EntityModel<AnswerViewModel> answerViewModel = assembler.toModel(mapView(answerService.deleteAnswerById(answerId)));

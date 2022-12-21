@@ -37,6 +37,7 @@ public class QuestionController {
         this.questionService = questionService;
         this.assembler = assembler;
     }
+
     @PostMapping("/questions/products/{productId}")
     public ResponseEntity<EntityModel<QuestionViewModel>> writeQuestion(@RequestBody QuestionDto model, @PathVariable Long productId) {
 
@@ -45,11 +46,13 @@ public class QuestionController {
                 .created(linkTo(methodOn(QuestionController.class).writeQuestion(model, productId)).toUri())
                 .body(assembler.toModel(mapView(questionServiceModel)));
     }
+
     @GetMapping("/questions/{questionId}")
     public ResponseEntity<EntityModel<QuestionViewModel>> getQuestionById(@PathVariable Long questionId) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(assembler.toModel(mapView(questionService.getQuestionById(questionId))));
     }
+
     @GetMapping("/questions/users/{username}")
     public ResponseEntity<CollectionModel<EntityModel<QuestionViewModel>>> getAllQuestionByUsername() {
         List<EntityModel<QuestionViewModel>> questions = questionService.getAllQuestionByUsername(getCurrentLoggedUsername()).stream()
@@ -57,6 +60,7 @@ public class QuestionController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(CollectionModel.of(questions, linkTo(methodOn(QuestionController.class).getAllQuestionByUsername()).withSelfRel()));
     }
+
     @PutMapping("/questions/{questionId}")
     public ResponseEntity<EntityModel<QuestionViewModel>> updateQuestion(@RequestBody QuestionDto model, @PathVariable Long questionId) {
 
@@ -65,6 +69,7 @@ public class QuestionController {
                 .created(linkTo(methodOn(QuestionController.class).updateQuestion(model, questionId)).toUri())
                 .body(assembler.toModel(mapView(questionServiceModel)));
     }
+
     @DeleteMapping("/questions/{questionId}")
     public ResponseEntity<EntityModel<QuestionViewModel>> deleteQuestion(@PathVariable Long questionId) {
         EntityModel<QuestionViewModel> questionViewModel = assembler.toModel(mapView(questionService.deleteQuestionById(questionId)));

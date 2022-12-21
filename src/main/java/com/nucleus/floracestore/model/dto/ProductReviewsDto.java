@@ -8,7 +8,6 @@ import java.util.Date;
 
 @Data
 public class ProductReviewsDto {
-
     private Long productReviewId;
     private ProductEntity product;
     private ProductRateEntity rate;

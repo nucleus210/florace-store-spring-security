@@ -68,6 +68,7 @@ public class BlogPostController {
                 .created(linkTo(methodOn(BlogPostController.class).deleteBlogPost(blogPostId)).toUri())
                 .body(assembler.toModel(mapToView(blogPostServiceModel)));
     }
+
     @GetMapping("/blog-posts")
     public ResponseEntity<CollectionModel<EntityModel<BlogPostViewModel>>> getAllBlogPosts() {
         List<EntityModel<BlogPostViewModel>> blogPosts = blogPostService.getAllBlogPosts().stream()

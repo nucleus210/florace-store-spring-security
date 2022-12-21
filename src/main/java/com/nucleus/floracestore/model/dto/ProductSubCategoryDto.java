@@ -8,5 +8,4 @@ public class ProductSubCategoryDto {
     private String productSubCategoryName;
     private String productSubCategoryDescription;
     private ProductCategoryServiceModel productCategory;
-
 }

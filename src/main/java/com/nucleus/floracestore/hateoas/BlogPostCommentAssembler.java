@@ -22,7 +22,7 @@ public class BlogPostCommentAssembler implements RepresentationModelAssembler<Bl
         return EntityModel.of(blogPostCommentViewModel,
                 linkTo(methodOn(BlogPostCommentController.class)
                         .createBlogPostComment(blogPostCommentViewModel.getBlogPost().getBlogPostId(),
-                        modelMapper.map(blogPostCommentViewModel, BlogPostCommentDto.class)))
+                                modelMapper.map(blogPostCommentViewModel, BlogPostCommentDto.class)))
                         .withRel("createBlogPostComment"),
                 linkTo(methodOn(BlogPostCommentController.class)
                         .updateBlogPostComment(modelMapper.map(blogPostCommentViewModel, BlogPostCommentDto.class)))

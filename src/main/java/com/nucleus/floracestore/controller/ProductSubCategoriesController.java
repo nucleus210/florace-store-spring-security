@@ -30,6 +30,7 @@ public class ProductSubCategoriesController {
     private final ProductCategoryService productCategoryService;
     private final ProductSubCategoryService productSubCategoryService;
     private final ProductSubCategoryAssembler assembler;
+
     @Autowired
     public ProductSubCategoriesController(ModelMapper modelMapper,
                                           ProductCategoryService productCategoryService,
@@ -40,6 +41,7 @@ public class ProductSubCategoriesController {
         this.productSubCategoryService = productSubCategoryService;
         this.assembler = assembler;
     }
+
     @PostMapping("/products/sub-categories/sub")
     public ResponseEntity<EntityModel<ProductSubCategoryViewModel>> createProductSubCategory(@RequestBody ProductSubCategoryDto model,
                                                                                              @PathVariable Long productCategoryId) {
@@ -47,7 +49,7 @@ public class ProductSubCategoriesController {
                 productCategoryService.getProductCategoryById(productCategoryId);
         model.setProductCategory(productCategoryServiceModel);
         ProductSubCategoryServiceModel productSubCategoryServiceModel =
-                productSubCategoryService.createProductSubCategory(modelMapper.map(model,ProductSubCategoryServiceModel.class),
+                productSubCategoryService.createProductSubCategory(modelMapper.map(model, ProductSubCategoryServiceModel.class),
                         productCategoryId,
                         getCurrentLoggedUsername());
         log.info("ProductSubCategoryController: created product sub category with id: "
@@ -57,18 +59,20 @@ public class ProductSubCategoriesController {
                 .created(linkTo(methodOn(ProductSubCategoriesController.class).createProductSubCategory(model, productCategoryId)).toUri())
                 .body(assembler.toModel(mapToView(productSubCategoryServiceModel)));
     }
+
     @GetMapping("/products/sub-categories/{id}")
     public ResponseEntity<EntityModel<ProductSubCategoryViewModel>> getProductSubCategoryById(@PathVariable Long id) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(assembler.toModel(mapToView(productSubCategoryService.getProductSubCategoryById(id))));
 
     }
-    
+
     @GetMapping("/products/sub-categories/{subCategoryName}/names")
     public ResponseEntity<EntityModel<ProductSubCategoryViewModel>> getProductSubCategoryBySubCategoryName(@PathVariable String subCategoryName) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(assembler.toModel(mapToView(productSubCategoryService.getProductSubCategoryBySubCategoryName(subCategoryName))));
     }
+
     @GetMapping(value = "/products/sub-categories")
     public ResponseEntity<CollectionModel<EntityModel<ProductSubCategoryViewModel>>> getAllProductCategories() {
         List<EntityModel<ProductSubCategoryViewModel>> productSubCategories =
@@ -81,6 +85,7 @@ public class ProductSubCategoriesController {
                         .getAllProductCategories())
                         .withSelfRel()));
     }
+
     @GetMapping(value = "/products/categories/{categoryName}/sub-categories")
     public ResponseEntity<CollectionModel<EntityModel<ProductSubCategoryViewModel>>> getAllSubCategoriesByCategoryName(@PathVariable String categoryName) {
         List<EntityModel<ProductSubCategoryViewModel>> productSubCategories =
@@ -93,9 +98,11 @@ public class ProductSubCategoriesController {
                         .getAllSubCategoriesByCategoryName(categoryName))
                         .withSelfRel()));
     }
+
     private ProductSubCategoryViewModel mapToView(ProductSubCategoryServiceModel productSubCategoryServiceModel) {
         return modelMapper.map(productSubCategoryServiceModel, ProductSubCategoryViewModel.class);
     }
+
     private String getCurrentLoggedUsername() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         log.info("Principal: " + authentication.getName());

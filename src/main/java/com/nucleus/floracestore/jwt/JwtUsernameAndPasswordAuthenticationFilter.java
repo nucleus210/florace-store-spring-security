@@ -3,7 +3,6 @@ package com.nucleus.floracestore.jwt;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nucleus.floracestore.model.payloads.AuthenticationRequest;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -25,7 +24,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 /**
  * Class for verifying credentials
- * **/
+ **/
 @Slf4j
 public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private final AuthenticationManager authenticationManager;

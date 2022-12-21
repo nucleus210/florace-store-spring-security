@@ -8,9 +8,10 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
-@Repository ("productSubCategoryRepository")
-public interface ProductSubCategoryRepository extends JpaRepository<ProductSubCategoryEntity,Long> {
+@Repository("productSubCategoryRepository")
+public interface ProductSubCategoryRepository extends JpaRepository<ProductSubCategoryEntity, Long> {
     Optional<ProductSubCategoryEntity> findByProductSubCategoryId(long productSubCategoryId);
+
     Optional<ProductSubCategoryEntity> findByProductSubCategoryName(String productCategoryName);
 
     @Query("select s from ProductSubCategoryEntity s JOIN s.productCategory c where c.productCategoryName = :productCategoryName")

@@ -1,6 +1,7 @@
 package com.nucleus.floracestore.model.entity;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -9,9 +10,6 @@ import java.util.Date;
 @Getter
 @Setter
 @Entity
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 @Table(name = "profiles")
 public class ProfileEntity {
 

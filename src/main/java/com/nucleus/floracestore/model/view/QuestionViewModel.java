@@ -10,7 +10,7 @@ import java.util.Set;
 public class QuestionViewModel {
     private Long questionId;
     private String question;
-//    private UserEntity user;
+    //    private UserEntity user;
     private ProductViewModel product;
     private Set<LikeEntity> likes;
     private Set<AnswerEntity> answers;

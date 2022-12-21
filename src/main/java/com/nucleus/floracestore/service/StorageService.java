@@ -17,6 +17,7 @@ public interface StorageService {
     StorageServiceModel getByName(String name);
 
     StorageServiceModel storeFile(MultipartFile file);
+
     List<StorageServiceModel> storeMultipleResources(MultipartFile[] files);
 
     Resource load(String filename);
@@ -28,7 +29,6 @@ public interface StorageService {
     List<Path> loadAllFilesPaths();
 
     void storeResourceBySource(MultipartFile file, String sourceType, String sourceName);
-
 
     Resource[] loadResources(String s) throws IOException;
 

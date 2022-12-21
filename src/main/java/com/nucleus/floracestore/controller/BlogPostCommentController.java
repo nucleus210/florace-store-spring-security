@@ -28,8 +28,11 @@ public class BlogPostCommentController {
     private final ModelMapper modelMapper;
     private final BlogPostCommentService blogPostCommentService;
     private final BlogPostCommentAssembler assembler;
+
     @Autowired
-    public BlogPostCommentController(ModelMapper modelMapper, BlogPostCommentService blogPostCommentService, BlogPostCommentAssembler assembler) {
+    public BlogPostCommentController(ModelMapper modelMapper,
+                                     BlogPostCommentService blogPostCommentService,
+                                     BlogPostCommentAssembler assembler) {
         this.modelMapper = modelMapper;
         this.blogPostCommentService = blogPostCommentService;
         this.assembler = assembler;
@@ -39,8 +42,11 @@ public class BlogPostCommentController {
     public ResponseEntity<EntityModel<BlogPostCommentViewModel>> createBlogPostComment(@PathVariable Long blogPostId,
                                                                                        @RequestBody BlogPostCommentDto model) {
         BlogPostCommentServiceModel blogPostCommentServiceModel =
-                blogPostCommentService.createBlogPostComment(modelMapper.map(model, BlogPostCommentServiceModel.class), blogPostId, getCurrentLoggedUsername());
-        log.info("BlogPostCommentController: created blog post comment with id: " + blogPostCommentServiceModel.getBlogPostCommentId());
+                blogPostCommentService.createBlogPostComment(modelMapper.map(model, BlogPostCommentServiceModel.class),
+                        blogPostId,
+                        getCurrentLoggedUsername());
+        log.info("BlogPostCommentController: created blog post comment with id: " +
+                blogPostCommentServiceModel.getBlogPostCommentId());
         return ResponseEntity
                 .created(linkTo(methodOn(BlogPostCommentController.class).createBlogPostComment(blogPostId, model)).toUri())
                 .body(assembler.toModel(mapToView(blogPostCommentServiceModel)));
@@ -51,7 +57,8 @@ public class BlogPostCommentController {
         BlogPostCommentServiceModel blogPostCommentServiceModel = blogPostCommentService.updateBlogPostComment(
                 modelMapper.map(model, BlogPostCommentServiceModel.class),
                 getCurrentLoggedUsername());
-        log.info("BlogPostCommentController: update blog post comment with id: " + blogPostCommentServiceModel.getBlogPostCommentId());
+        log.info("BlogPostCommentController: update blog post comment with id: "
+                + blogPostCommentServiceModel.getBlogPostCommentId());
         return ResponseEntity
                 .created(linkTo(methodOn(BlogPostCommentController.class).updateBlogPostComment(model)).toUri())
                 .body(assembler.toModel(mapToView(blogPostCommentServiceModel)));
@@ -60,17 +67,21 @@ public class BlogPostCommentController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/blog-posts/comments/{id}")
     public ResponseEntity<EntityModel<BlogPostCommentViewModel>> deleteBlogPost(@PathVariable Long blogPostId) {
-        BlogPostCommentServiceModel blogPostCommentServiceModel = blogPostCommentService.deleteBlogPostCommentById(blogPostId, getCurrentLoggedUsername());
+        BlogPostCommentServiceModel blogPostCommentServiceModel =
+                blogPostCommentService.deleteBlogPostCommentById(blogPostId, getCurrentLoggedUsername());
         return ResponseEntity
                 .created(linkTo(methodOn(BlogPostCommentController.class).deleteBlogPost(blogPostId)).toUri())
                 .body(assembler.toModel(mapToView(blogPostCommentServiceModel)));
     }
+
     @GetMapping("/blog-posts/comments")
     public ResponseEntity<CollectionModel<EntityModel<BlogPostCommentViewModel>>> getAllBlogPostComments() {
         List<EntityModel<BlogPostCommentViewModel>> sliderItems = blogPostCommentService.getAllBlogPostComments().stream()
                 .map(entity -> assembler.toModel(mapToView(entity))).toList();
         return ResponseEntity.status(HttpStatus.OK)
-                .body(CollectionModel.of(sliderItems, linkTo(methodOn(BlogPostCommentController.class).getAllBlogPostComments()).withSelfRel()));
+                .body(CollectionModel.of(sliderItems, linkTo(methodOn(BlogPostCommentController.class)
+                        .getAllBlogPostComments())
+                        .withSelfRel()));
     }
 
     private String getCurrentLoggedUsername() {

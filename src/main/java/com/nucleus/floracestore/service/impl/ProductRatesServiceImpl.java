@@ -8,6 +8,7 @@ import com.nucleus.floracestore.repository.ProductRatesRepository;
 import com.nucleus.floracestore.service.ProductRatesService;
 import com.nucleus.floracestore.service.ProductService;
 import com.nucleus.floracestore.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Service
 public class ProductRatesServiceImpl implements ProductRatesService {
 
@@ -59,11 +61,11 @@ public class ProductRatesServiceImpl implements ProductRatesService {
         Optional<ProductRateEntity> productRatesEntity =
                 productRatesRepository.findProductRateByProductIdAndUsername(productId, username);
         if (productRatesEntity.isPresent()) {
-             throw new QueryRuntimeException("Already rate this product");
+            throw new QueryRuntimeException("Already rate this product");
         }
 
         UserServiceModel userServiceModel = userService.findByUsername(username)
-                .orElseThrow(() ->  new QueryRuntimeException("Could not find user " + username));
+                .orElseThrow(() -> new QueryRuntimeException("Could not find user " + username));
         model.setUser(userServiceModel);
         ProductRateEntity productRates = productRatesRepository.save(modelMapper.map(model, ProductRateEntity.class));
         return mapToService(productRates);

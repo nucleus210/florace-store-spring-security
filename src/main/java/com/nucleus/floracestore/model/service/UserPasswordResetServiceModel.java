@@ -1,10 +1,8 @@
 package com.nucleus.floracestore.model.service;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
+@Data
 public class UserPasswordResetServiceModel {
     private String email;
 }

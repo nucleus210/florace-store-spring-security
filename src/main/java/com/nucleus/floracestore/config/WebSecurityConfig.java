@@ -42,7 +42,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final UserService userService;
 
 
-
     @Autowired
     public WebSecurityConfig(MyUserDetailsService userDetailsService,
                              PasswordEncoder passwordEncoder,
@@ -75,6 +74,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/api/**",
                         "/error");
     }
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth
@@ -107,14 +107,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //                .addFilterAfter(new CsrfTokenResponseHeaderBindingFilter(), CsrfFilter.class)
                 .authorizeRequests()
 //                .antMatchers(HttpMethod.GET,"/products/all").permitAll()
-                .antMatchers(HttpMethod.GET,"/category/all").permitAll()
+                .antMatchers(HttpMethod.GET, "/category/all").permitAll()
 
 
                 .antMatchers(HttpMethod.POST, "/login").permitAll()
                 .antMatchers(HttpMethod.POST, "/register").permitAll()
                 .antMatchers(HttpMethod.POST, "/facebook/signin").permitAll()
-                .antMatchers( "/products/**").hasRole(UserRoleEnum.ADMIN.name())
-                .antMatchers( "/orders/**").hasRole(UserRoleEnum.ADMIN.name())
+                .antMatchers("/products/**").hasRole(UserRoleEnum.ADMIN.name())
+                .antMatchers("/orders/**").hasRole(UserRoleEnum.ADMIN.name())
 
                 .anyRequest().authenticated();
 //                .and()

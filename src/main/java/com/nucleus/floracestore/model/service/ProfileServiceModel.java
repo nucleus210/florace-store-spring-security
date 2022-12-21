@@ -1,12 +1,10 @@
 package com.nucleus.floracestore.model.service;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import java.util.Date;
 
-@Getter
-@Setter
+@Data
 public class ProfileServiceModel {
     private Long profileId;
     private String firstName;

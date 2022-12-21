@@ -1,23 +1,23 @@
 package com.nucleus.floracestore.service.impl;
 
 import com.nucleus.floracestore.error.QueryRuntimeException;
-import com.nucleus.floracestore.model.entity.OrderEntity;
 import com.nucleus.floracestore.model.entity.OrderItemEntity;
-import com.nucleus.floracestore.model.entity.ProductEntity;
 import com.nucleus.floracestore.model.enums.ProductStatusEnum;
 import com.nucleus.floracestore.model.service.OrderItemServiceModel;
 import com.nucleus.floracestore.model.service.OrderItemsStatusCodesServiceModel;
+import com.nucleus.floracestore.model.service.OrderServiceModel;
+import com.nucleus.floracestore.model.service.ProductServiceModel;
 import com.nucleus.floracestore.repository.OrderItemRepository;
-import com.nucleus.floracestore.repository.OrderRepository;
 import com.nucleus.floracestore.service.OrderItemService;
 import com.nucleus.floracestore.service.OrderItemsStatusCodesService;
+import com.nucleus.floracestore.service.OrderService;
 import com.nucleus.floracestore.service.ProductService;
-import com.nucleus.floracestore.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,22 +26,19 @@ import java.util.stream.Collectors;
 public class OrderItemServiceImpl implements OrderItemService {
 
     private final OrderItemRepository orderItemRepository;
-    private final OrderRepository orderRepository;
-    private final UserService userService;
+    private final OrderService orderService;
     private final ModelMapper modelMapper;
     private final OrderItemsStatusCodesService orderItemsStatusCodesService;
     private final ProductService productService;
 
     @Autowired
     public OrderItemServiceImpl(OrderItemRepository orderItemRepository,
-                                OrderRepository orderRepository,
-                                UserService userService,
+                                OrderService orderService,
                                 ModelMapper modelMapper,
                                 OrderItemsStatusCodesService orderItemsStatusCodesService,
                                 ProductService productService) {
         this.orderItemRepository = orderItemRepository;
-        this.orderRepository = orderRepository;
-        this.userService = userService;
+        this.orderService = orderService;
         this.modelMapper = modelMapper;
         this.orderItemsStatusCodesService = orderItemsStatusCodesService;
         this.productService = productService;
@@ -73,31 +70,32 @@ public class OrderItemServiceImpl implements OrderItemService {
 
     @Override
     public List<OrderItemServiceModel> getAllOrderItemsByOrderId(Long orderId) {
-        return  this.orderItemRepository.findAllOrderItemsByOrderId(orderId)
+        return this.orderItemRepository.findAllOrderItemsByOrderId(orderId)
                 .stream().map(this::mapToService).collect(Collectors.toList());
     }
 
     @Override
-    public int getOrderItemsCount(String username) {
-        OrderEntity order = orderRepository.findOrderByUsernameAndOrderStatusCode(username, "DRAFT")
-                .orElseThrow(()->new QueryRuntimeException("Could not find order with status code Draft"));
-        return orderItemRepository.findOrderItemsCountByOrderId(order.getOrderId());
+    public int getOrderItemsCount(Long orderId) {
+
+        return orderItemRepository.findOrderItemsCountByOrderId(orderId);
     }
 
+
+    @Transactional
     @Override
     public OrderItemServiceModel addOrderItem(OrderItemServiceModel orderItemServiceModel) {
         OrderItemsStatusCodesServiceModel orderItemsStatusCodesServiceModel =
                 orderItemsStatusCodesService.getByProductStatus(ProductStatusEnum.IN_STOCK.getLevelName());
         orderItemServiceModel.setOrderItemStatusCode(orderItemsStatusCodesServiceModel);
-        OrderItemEntity orderItemEntity = modelMapper.map(orderItemServiceModel, OrderItemEntity.class);
-        orderItemRepository.save(orderItemEntity);
-        return orderItemServiceModel;
+        OrderItemEntity orderItemEntity = orderItemRepository.save(modelMapper.map(orderItemServiceModel, OrderItemEntity.class));
+        return modelMapper.map(orderItemEntity, OrderItemServiceModel.class);
     }
 
+    //TODO
     @Override
     public OrderItemServiceModel createOrderItem(OrderItemServiceModel orderItemServiceModel, Long orderId, Long productId) {
-        OrderEntity orderEntity = orderRepository.findByOrderId(orderId).orElseThrow(()->new QueryRuntimeException("Order entity not found"));
-        ProductEntity productEntity = modelMapper.map(productService.getProductById(productId), ProductEntity.class);
+        OrderServiceModel orderServiceModel = orderService.getOrderById(orderId);
+        ProductServiceModel productEntity = productService.getProductById(productId);
         OrderItemsStatusCodesServiceModel orderItemsStatusCodesServiceModel = orderItemsStatusCodesService
                 .getByProductStatus(ProductStatusEnum.IN_STOCK.getLevelName());
 //        orderItemServiceModel.setOrder(orderEntity);
@@ -113,14 +111,14 @@ public class OrderItemServiceImpl implements OrderItemService {
     public OrderItemServiceModel updateOrderItemQuantity(OrderItemServiceModel orderItemServiceModel, Long itemId) {
         OrderItemEntity orderItemEntity = orderItemRepository.findById(itemId).orElseThrow();
         orderItemEntity.setOrderItemQuantity(orderItemServiceModel.getOrderItemQuantity());
-         modelMapper.map(orderItemRepository.save(orderItemEntity), OrderItemServiceModel.class);
+        modelMapper.map(orderItemRepository.save(orderItemEntity), OrderItemServiceModel.class);
         return modelMapper.map(orderItemRepository.findById(itemId), OrderItemServiceModel.class);
     }
 
     @Override
     public OrderItemServiceModel deleteOrderItem(Long itemId) {
         log.info(String.valueOf(itemId));
-        OrderItemEntity entity = orderItemRepository.findByOrderItemId(itemId).orElseThrow(()->new QueryRuntimeException("Order item not found"));
+        OrderItemEntity entity = orderItemRepository.findByOrderItemId(itemId).orElseThrow(() -> new QueryRuntimeException("Order item not found"));
         orderItemRepository.delete(entity);
         return modelMapper.map(entity, OrderItemServiceModel.class);
     }

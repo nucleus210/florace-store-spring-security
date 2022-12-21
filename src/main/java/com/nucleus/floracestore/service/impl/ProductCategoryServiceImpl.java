@@ -60,9 +60,13 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
     public ProductCategoryServiceModel createProductCategory(ProductCategoryServiceModel category, String username) {
         productCategoryRepository.findByProductCategoryName(category.getProductCategoryName())
                 .ifPresentOrElse((value)
-                                -> {throw new QueryRuntimeException(String.format("Product category %s already exists",
-                                value.getProductCategoryName()));},
-                        () -> {productCategoryRepository.save(modelMapper.map(category, ProductCategoryEntity.class));});
+                                -> {
+                            throw new QueryRuntimeException(String.format("Product category %s already exists",
+                                    value.getProductCategoryName()));
+                        },
+                        () -> {
+                            productCategoryRepository.save(modelMapper.map(category, ProductCategoryEntity.class));
+                        });
         return productCategoryRepository.findByProductCategoryName(category.getProductCategoryName())
                 .map(this::mapToService).orElseThrow(
                         () -> new QueryRuntimeException("Could not find product category " + category.getProductCategoryName()));
@@ -78,7 +82,8 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
         productCategoryEntity.setProductCategoryName(productCategoryServiceModel.getProductCategoryName());
         productCategoryEntity.setProductCategoryDescription(productCategoryServiceModel.getProductCategoryDescription());
 
-        return mapToService(productCategoryRepository.save(productCategoryEntity));    }
+        return mapToService(productCategoryRepository.save(productCategoryEntity));
+    }
 
     @Override
     public ProductCategoryServiceModel deleteProductCategoryById(Long productCategoryId, String username) {

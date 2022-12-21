@@ -22,8 +22,8 @@ spring:
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
     url: "jdbc:mysql://localhost:3306/florancedb?allowPublicKeyRetrieval=true&useSSL=false&createDatabaseIfNotExist=true&serverTimezone=UTC"
-    username: {username}
-    password: {password}
+    username: root
+    password: Zion123!@#
 
   servlet:
     multipart:
@@ -57,20 +57,20 @@ spring:
         format_sql: true
     defer-datasource-initialization: true
     show-sql: true
-#  mail:
-#    default-encoding: UTF-8
-#    host: smtp.gmail.com
-#    username: ''
-#    password: ''
-#    port: 587
-#    properties:
-#      mail:
-#        smtp:
-#          auth: true
-#          starttls:
-#            enable: true
-#    protocol: smtp
-#    test-connection: false
+  #  mail:
+  #    default-encoding: UTF-8
+  #    host: smtp.gmail.com
+  #    username: ''
+  #    password: ''
+  #    port: 587
+  #    properties:
+  #      mail:
+  #        smtp:
+  #          auth: true
+  #          starttls:
+  #            enable: true
+  #    protocol: smtp
+  #    test-connection: false
 
   remember-me:
     _data-source-ref: persistentTokenRepository
@@ -92,5 +92,9 @@ java:
   runtime:
     version=18
 
-
+stripe:
+  api:
+    key: sk_test_48kbUX1oHSgAO6DBa2lfplsT
+  public:
+    key: pk_test_
 

@@ -1,10 +1,8 @@
 package com.nucleus.floracestore.model.service;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
+@Data
 public class UserLoginServiceModel {
     private String username;
     private String rawPassword;

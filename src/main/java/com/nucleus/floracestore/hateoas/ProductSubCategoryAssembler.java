@@ -27,7 +27,7 @@ public class ProductSubCategoryAssembler implements RepresentationModelAssembler
         return EntityModel.of(productSubCategoryViewModel,
                 linkTo(methodOn(ProductSubCategoriesController.class)
                         .createProductSubCategory(modelMapper
-                                .map(productSubCategoryViewModel.getProductSubCategoryId(), ProductSubCategoryDto.class),
+                                        .map(productSubCategoryViewModel.getProductSubCategoryId(), ProductSubCategoryDto.class),
                                 productSubCategoryViewModel.getProductSubCategoryId())).withSelfRel(),
                 linkTo(methodOn(ProductSubCategoriesController.class)
                         .getProductSubCategoryById(productSubCategoryViewModel.getProductSubCategoryId())).withSelfRel(),

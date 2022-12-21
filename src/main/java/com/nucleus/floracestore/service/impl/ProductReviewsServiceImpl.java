@@ -19,8 +19,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
-@Service
 @Slf4j
+@Service
 public class ProductReviewsServiceImpl implements ProductReviewsService {
 
     private final UserService userService;
@@ -85,6 +85,7 @@ public class ProductReviewsServiceImpl implements ProductReviewsService {
     private ProductReviewsServiceModel mapToService(ProductReviewEntity productReview) {
         return modelMapper.map(productReview, ProductReviewsServiceModel.class);
     }
+
     private Optional<ProductReviewsServiceModel> mapToOptionalService(ProductReviewEntity productReview) {
         return Optional.of(modelMapper.map(productReview, ProductReviewsServiceModel.class));
     }

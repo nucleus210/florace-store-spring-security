@@ -1,4 +1,5 @@
 package com.nucleus.floracestore.config;
+
 import com.nucleus.floracestore.service.UserService;
 import com.nucleus.floracestore.service.impl.JwtTokenProvider;
 import com.nucleus.floracestore.service.impl.MyUserPrincipal;
@@ -15,6 +16,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+
 @Slf4j
 public class JwtTokenAuthenticationFilter extends OncePerRequestFilter {
 
@@ -42,8 +44,8 @@ public class JwtTokenAuthenticationFilter extends OncePerRequestFilter {
         String header = request.getHeader(jwtConfig.getHeader());
 
         // 2. validate the header and check the prefix
-        if(header == null || !header.startsWith(jwtConfig.getPrefix())) {
-            chain.doFilter(request, response);  		// If not valid, go to the next filter.
+        if (header == null || !header.startsWith(jwtConfig.getPrefix())) {
+            chain.doFilter(request, response);        // If not valid, go to the next filter.
             return;
         }
 
@@ -56,7 +58,7 @@ public class JwtTokenAuthenticationFilter extends OncePerRequestFilter {
         // 3. Get the token
         String token = header.replace(jwtConfig.getPrefix(), "");
 
-        if(tokenProvider.validateToken(token)) {
+        if (tokenProvider.validateToken(token)) {
             Claims claims = tokenProvider.getClaimsFromJWT(token);
             String username = claims.getSubject();
             System.out.println(username);

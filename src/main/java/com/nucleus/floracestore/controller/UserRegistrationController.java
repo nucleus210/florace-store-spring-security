@@ -7,7 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RestController
 public class UserRegistrationController {
-
     private final UserService userService;
     private final ModelMapper modelMapper;
 
@@ -26,17 +24,12 @@ public class UserRegistrationController {
     }
 
     @PostMapping("/register")
-    @CrossOrigin(origins = "http://localhost:4200", allowedHeaders = "*")
-
     public ResponseEntity<String> register(@RequestBody UserRegistrationDto userRegistrationDto) {
-                userService.registerAndLoginUser( UserRegistrationServiceModel.builder()
-                        .username(userRegistrationDto.getUsername())
-                        .email(userRegistrationDto.getEmail())
-                        .password(userRegistrationDto.getPassword())
-                        .build());
+        userService.registerAndLoginUser(UserRegistrationServiceModel.builder()
+                .username(userRegistrationDto.getUsername())
+                .email(userRegistrationDto.getEmail())
+                .password(userRegistrationDto.getPassword())
+                .build());
         return new ResponseEntity<>("User register successfully!.", HttpStatus.OK);
-
     }
-
-
 }

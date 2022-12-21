@@ -21,7 +21,7 @@ public class OrderStatusCodesEntity {
     // eg. Canceled, Completed
     @Column(name = "order_status_code_description", columnDefinition = "TEXT", nullable = false)
     private String statusDescription;
-    @JsonManagedReference(value="order-codes")
+    @JsonManagedReference(value = "order-codes")
     @OneToMany(targetEntity = OrderEntity.class,
             cascade = CascadeType.ALL,
             fetch = FetchType.LAZY,

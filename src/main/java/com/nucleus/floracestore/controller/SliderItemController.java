@@ -49,6 +49,7 @@ public class SliderItemController {
                 .body(assembler.toModel(mapToView(sliderItemServiceModel)));
 
     }
+
     @PutMapping("/slider/{id}")
     public ResponseEntity<EntityModel<SliderItemViewModel>> updateSlide(@RequestBody SliderItemDto model) {
         SliderItemServiceModel sliderItemServiceModel = sliderService.updateSlideById(model.getSlideItemId(),
@@ -62,23 +63,26 @@ public class SliderItemController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/slider/{id}")
-    public ResponseEntity<EntityModel<SliderItemViewModel>>  deleteSlide(@PathVariable Long sliderItemId) {
+    public ResponseEntity<EntityModel<SliderItemViewModel>> deleteSlide(@PathVariable Long sliderItemId) {
         SliderItemServiceModel sliderItemServiceModel = sliderService.deleteSlideById(sliderItemId, getCurrentLoggedUsername());
         return ResponseEntity
                 .created(linkTo(methodOn(SliderItemController.class).deleteSlide(sliderItemId)).toUri())
                 .body(assembler.toModel(mapToView(sliderItemServiceModel)));
     }
+
     public ResponseEntity<CollectionModel<EntityModel<SliderItemViewModel>>> getAllSliderItems() {
         List<EntityModel<SliderItemViewModel>> sliderItems = sliderService.getAllSlides().stream()
                 .map(entity -> assembler.toModel(mapToView(entity))).toList();
         return ResponseEntity.status(HttpStatus.OK)
                 .body(CollectionModel.of(sliderItems, linkTo(methodOn(SliderItemController.class).getAllSliderItems()).withSelfRel()));
     }
+
     private String getCurrentLoggedUsername() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         log.info("Principal: " + authentication.getName());
         return authentication.getName();
     }
+
     private SliderItemViewModel mapToView(SliderItemServiceModel model) {
         return modelMapper.map(model, SliderItemViewModel.class);
     }

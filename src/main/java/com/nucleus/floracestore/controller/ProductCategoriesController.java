@@ -22,6 +22,7 @@ import java.util.List;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 @Slf4j
 @RestController
 public class ProductCategoriesController {
@@ -61,6 +62,7 @@ public class ProductCategoriesController {
                 .body(assembler.toModel(mapToView(productCategoryService.getProductCategoryById(id))));
 
     }
+
     @GetMapping("/products/categories/{categoryName}/names")
     public ResponseEntity<EntityModel<ProductCategoryViewModel>> getCategoryByCategoryName(@PathVariable String categoryName) {
         return ResponseEntity.status(HttpStatus.OK)
@@ -71,18 +73,19 @@ public class ProductCategoriesController {
     public ResponseEntity<CollectionModel<EntityModel<ProductCategoryViewModel>>> getAllProductCategories() {
         List<EntityModel<ProductCategoryViewModel>> productCategories =
                 productCategoryService.getAllProductCategories()
-                .stream()
-                .map(entity -> assembler.toModel(mapToView(entity)))
-                .toList();
+                        .stream()
+                        .map(entity -> assembler.toModel(mapToView(entity)))
+                        .toList();
         return ResponseEntity.status(HttpStatus.OK)
                 .body(CollectionModel.of(productCategories, linkTo(methodOn(ProductCategoriesController.class)
-                .getAllProductCategories())
-                .withSelfRel()));
+                        .getAllProductCategories())
+                        .withSelfRel()));
     }
 
     private ProductCategoryViewModel mapToView(ProductCategoryServiceModel model) {
         return modelMapper.map(model, ProductCategoryViewModel.class);
     }
+
     private String getCurrentLoggedUsername() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         log.info("Principal: " + authentication.getName());

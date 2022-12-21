@@ -12,8 +12,10 @@ import java.util.Optional;
 public interface LikeRepository extends JpaRepository<LikeEntity, Long> {
     @Query("select l from LikeEntity l JOIN FETCH l.user u where u.username = :username")
     List<LikeEntity> findAllByUsername(String username);
+
     @Query("select l from LikeEntity l JOIN FETCH l.question q where q.questionId = :questionId")
     List<LikeEntity> findAllByQuestionId(Long questionId);
+
     @Query("select l from LikeEntity l JOIN l.user u JOIN l.question q where u.username = :username and q.questionId = :questionId")
     Optional<LikeEntity> findByUsernameAndQuestionId(String username, Long questionId);
 }

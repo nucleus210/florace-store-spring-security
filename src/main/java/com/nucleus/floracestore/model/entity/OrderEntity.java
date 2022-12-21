@@ -1,7 +1,6 @@
 package com.nucleus.floracestore.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -20,12 +19,12 @@ public class OrderEntity {
     @Column(name = "order_id")
     private Long orderId;
 
-    @ManyToOne(fetch=FetchType.EAGER)
-    @JoinColumn(referencedColumnName = "user_id", name = "user__id")
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @JoinColumn(name = "user_id", nullable = false)
     private UserEntity user;
-    @JsonBackReference(value="order-codes")
-    @ManyToOne(targetEntity=OrderStatusCodesEntity.class, fetch = FetchType.LAZY)
-    @JoinColumn(name="order_status_code_id")
+    @JsonBackReference(value = "order-codes")
+    @ManyToOne(targetEntity = OrderStatusCodesEntity.class, fetch = FetchType.LAZY)
+    @JoinColumn(name = "order_status_code_id")
     private OrderStatusCodesEntity orderStatusCode;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -34,10 +33,9 @@ public class OrderEntity {
 
     @Column(name = "order_details")
     private String orderDetails;
-    @JsonManagedReference(value = "order-items")
     @OneToMany(targetEntity = OrderItemEntity.class,
-            cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY,
+            cascade = CascadeType.MERGE,
+            fetch = FetchType.EAGER,
             mappedBy = "order")
     private Set<OrderItemEntity> orderItems;
 
