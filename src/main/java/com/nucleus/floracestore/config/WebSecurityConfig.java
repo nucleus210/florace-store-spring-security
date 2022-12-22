@@ -106,10 +106,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilterAfter(new JwtTokenVerifier(secretKey, jwtConfiguration), JwtUsernameAndPasswordAuthenticationFilter.class)
 //                .addFilterAfter(new CsrfTokenResponseHeaderBindingFilter(), CsrfFilter.class)
                 .authorizeRequests()
-//                .antMatchers(HttpMethod.GET,"/products/all").permitAll()
-                .antMatchers(HttpMethod.GET, "/category/all").permitAll()
-
-
+                .antMatchers(HttpMethod.GET, "/products").permitAll()
+                .antMatchers(HttpMethod.GET, "/products-categories").permitAll()
+                .antMatchers(HttpMethod.GET, "/products-sub-categories").permitAll()
                 .antMatchers(HttpMethod.POST, "/login").permitAll()
                 .antMatchers(HttpMethod.POST, "/register").permitAll()
                 .antMatchers(HttpMethod.POST, "/facebook/signin").permitAll()

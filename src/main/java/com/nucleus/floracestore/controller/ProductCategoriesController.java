@@ -45,7 +45,7 @@ public class ProductCategoriesController {
         this.assembler = assembler;
     }
 
-    @PostMapping("/products/categories")
+    @PostMapping("/products-categories")
     public ResponseEntity<EntityModel<ProductCategoryViewModel>> createProductCategory(@RequestBody ProductCategoryDto model) {
         ProductCategoryServiceModel productCategoryServiceModel =
                 productCategoryService.createProductCategory(modelMapper.map(model, ProductCategoryServiceModel.class), getCurrentLoggedUsername());
@@ -56,20 +56,20 @@ public class ProductCategoriesController {
 
     }
 
-    @GetMapping("/products/categories/{id}")
+    @GetMapping("/products-categories/{id}")
     public ResponseEntity<EntityModel<ProductCategoryViewModel>> getCategoryById(@PathVariable Long id) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(assembler.toModel(mapToView(productCategoryService.getProductCategoryById(id))));
 
     }
 
-    @GetMapping("/products/categories/{categoryName}/names")
+    @GetMapping("/products-categories/search/category-name/{categoryName}")
     public ResponseEntity<EntityModel<ProductCategoryViewModel>> getCategoryByCategoryName(@PathVariable String categoryName) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(assembler.toModel(mapToView(productCategoryService.getProductCategoryByCategoryName(categoryName))));
     }
 
-    @GetMapping(value = "/products/categories")
+    @GetMapping(value = "/products-categories")
     public ResponseEntity<CollectionModel<EntityModel<ProductCategoryViewModel>>> getAllProductCategories() {
         List<EntityModel<ProductCategoryViewModel>> productCategories =
                 productCategoryService.getAllProductCategories()

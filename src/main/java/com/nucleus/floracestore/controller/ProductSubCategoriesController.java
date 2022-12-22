@@ -42,7 +42,7 @@ public class ProductSubCategoriesController {
         this.assembler = assembler;
     }
 
-    @PostMapping("/products/sub-categories/sub")
+    @PostMapping("/products-sub-categories")
     public ResponseEntity<EntityModel<ProductSubCategoryViewModel>> createProductSubCategory(@RequestBody ProductSubCategoryDto model,
                                                                                              @PathVariable Long productCategoryId) {
         ProductCategoryServiceModel productCategoryServiceModel =
@@ -60,20 +60,20 @@ public class ProductSubCategoriesController {
                 .body(assembler.toModel(mapToView(productSubCategoryServiceModel)));
     }
 
-    @GetMapping("/products/sub-categories/{id}")
+    @GetMapping("/products-sub-categories/{id}")
     public ResponseEntity<EntityModel<ProductSubCategoryViewModel>> getProductSubCategoryById(@PathVariable Long id) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(assembler.toModel(mapToView(productSubCategoryService.getProductSubCategoryById(id))));
 
     }
 
-    @GetMapping("/products/sub-categories/{subCategoryName}/names")
+    @GetMapping("/products-sub-categories/search/sub-category-name/{subCategoryName}")
     public ResponseEntity<EntityModel<ProductSubCategoryViewModel>> getProductSubCategoryBySubCategoryName(@PathVariable String subCategoryName) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(assembler.toModel(mapToView(productSubCategoryService.getProductSubCategoryBySubCategoryName(subCategoryName))));
     }
 
-    @GetMapping(value = "/products/sub-categories")
+    @GetMapping(value = "/products-sub-categories")
     public ResponseEntity<CollectionModel<EntityModel<ProductSubCategoryViewModel>>> getAllProductCategories() {
         List<EntityModel<ProductSubCategoryViewModel>> productSubCategories =
                 productSubCategoryService.getAllSubCategories()
@@ -86,7 +86,7 @@ public class ProductSubCategoriesController {
                         .withSelfRel()));
     }
 
-    @GetMapping(value = "/products/categories/{categoryName}/sub-categories")
+    @GetMapping(value = "/products-categories/search/category-name/{categoryName}")
     public ResponseEntity<CollectionModel<EntityModel<ProductSubCategoryViewModel>>> getAllSubCategoriesByCategoryName(@PathVariable String categoryName) {
         List<EntityModel<ProductSubCategoryViewModel>> productSubCategories =
                 productSubCategoryService.getAllSubCategoriesByCategoryName(categoryName)
