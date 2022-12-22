@@ -67,7 +67,7 @@ public class ProductSubCategoriesController {
 
     }
 
-    @GetMapping("/products-sub-categories/search/sub-category-name/{subCategoryName}")
+    @GetMapping("/products-sub-categories/search/subCategoryName/{subCategoryName}")
     public ResponseEntity<EntityModel<ProductSubCategoryViewModel>> getProductSubCategoryBySubCategoryName(@PathVariable String subCategoryName) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(assembler.toModel(mapToView(productSubCategoryService.getProductSubCategoryBySubCategoryName(subCategoryName))));
@@ -86,7 +86,7 @@ public class ProductSubCategoriesController {
                         .withSelfRel()));
     }
 
-    @GetMapping(value = "/products-categories/search/category-name/{categoryName}")
+    @GetMapping(value = "/products-categories/search/categoryName/{categoryName}")
     public ResponseEntity<CollectionModel<EntityModel<ProductSubCategoryViewModel>>> getAllSubCategoriesByCategoryName(@PathVariable String categoryName) {
         List<EntityModel<ProductSubCategoryViewModel>> productSubCategories =
                 productSubCategoryService.getAllSubCategoriesByCategoryName(categoryName)
