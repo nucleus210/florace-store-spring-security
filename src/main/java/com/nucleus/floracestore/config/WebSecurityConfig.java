@@ -107,14 +107,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //                .addFilterAfter(new CsrfTokenResponseHeaderBindingFilter(), CsrfFilter.class)
                 .authorizeRequests()
                 .antMatchers(HttpMethod.GET, "/products").permitAll()
+                .antMatchers(HttpMethod.GET, "/products/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/products-categories").permitAll()
                 .antMatchers(HttpMethod.GET, "/products-sub-categories").permitAll()
                 .antMatchers(HttpMethod.POST, "/login").permitAll()
                 .antMatchers(HttpMethod.POST, "/register").permitAll()
                 .antMatchers(HttpMethod.POST, "/facebook/signin").permitAll()
-                .antMatchers("/products/**").hasRole(UserRoleEnum.ADMIN.name())
-                .antMatchers("/orders/**").hasRole(UserRoleEnum.ADMIN.name())
-
+                .antMatchers("/orders/**").hasRole(UserRoleEnum.USER.name())
+                .antMatchers("/order-items/**").hasRole(UserRoleEnum.USER.name())
                 .anyRequest().authenticated();
 //                .and()
 //                .addFilter(customAuthenticationFilter)
