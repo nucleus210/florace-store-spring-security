@@ -9,27 +9,17 @@ import java.util.List;
 import java.util.Optional;
 
 public interface UserService {
-    void registerAndLoginUser(UserRegistrationServiceModel userRegistrationServiceModel);
 
-    boolean isUserNameFree(String username);
 
-    Optional<UserServiceModel> getUserById(Long id);
-
-    Optional<UserServiceModel> findByUsername(String username);
-
-    UserServiceModel getUserByEmailAddress(String email);
-
-    List<UserServiceModel> getAllUsers();
-
-    void editUser(UserEditServiceModel serviceModel, MyUserPrincipal principal);
-
-    void updateUserPassword(String password, Long userId);
-
-    Boolean existsByUsername(String username);
-
-    Boolean existsByEmail(String email);
-
-    UserServiceModel register(UserRegistrationServiceModel user);
-
+    public String loginUser(String username, String password);
+    public String registerUser(UserRegistrationServiceModel user);
+    public UserServiceModel registerFacebookUser(UserRegistrationServiceModel user);
+    public void updateUser(UserEditServiceModel serviceModel, MyUserPrincipal principal);
+    public UserServiceModel findById(Long id);
+    public Optional<UserServiceModel> findBySocialId(Long id);
+    public UserServiceModel findByUsername(String username);
+    public UserServiceModel findByEmailAddress(String email);
+    public List<UserServiceModel> findAll();
+    boolean existsByUsername(String username);
 
 }

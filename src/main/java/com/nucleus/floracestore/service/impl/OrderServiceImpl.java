@@ -44,8 +44,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderServiceModel createOrder(OrderServiceModel orderServiceModel, String username) {
-        UserServiceModel userServiceModel = userService.findByUsername(username)
-                .orElseThrow(() -> new QueryRuntimeException("Could not find user " + username));
+        UserServiceModel userServiceModel = userService.findByUsername(username);
         orderServiceModel.setUser(userServiceModel);
         OrderStatusCodesServiceModel orderStatusCodesServiceModel =
                 orderStatusCodesService.getOrderStatusCodeByCodeName(OrderStatusCodes.DRAFT.getLevelName());
@@ -97,11 +96,8 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<OrderServiceModel> getAllOrderByUsername(String username) {
-        UserServiceModel userServiceModel = userService.findByUsername(username)
-                .orElseThrow(() -> new QueryRuntimeException("Could not find user " + username));
-
         return orderRepository
-                .findAllOrdersByUsername(userServiceModel.getUserId())
+                .findAllOrdersByUsername(username)
                 .stream()
                 .map(this::mapToService)
                 .collect(Collectors.toList());
@@ -136,13 +132,13 @@ public class OrderServiceImpl implements OrderService {
     public boolean isOwner(String userName, Long id) {
         Optional<OrderEntity> orderEntity = orderRepository.
                 findByOrderId(id);
-        Optional<UserServiceModel> caller = userService.
+       UserServiceModel caller = userService.
                 findByUsername(userName);
-        if (orderEntity.isEmpty() || caller.isEmpty()) {
+        if (orderEntity.isEmpty() || caller == null) {
             return false;
         } else {
             OrderEntity order = orderEntity.get();
-            return isAdmin(caller.get()) ||
+            return isAdmin(caller) ||
                     order.getUser().equals(userName);
         }
     }

@@ -54,8 +54,7 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public QuestionServiceModel createQuestion(QuestionServiceModel questionServiceModel, Long productId, String username) {
-        UserServiceModel userServiceModel = userService.findByUsername(username)
-                .orElseThrow(() -> new QueryRuntimeException("Could not find user with username " + username));
+        UserServiceModel userServiceModel = userService.findByUsername(username);
         ProductServiceModel product = productService.getProductById(productId);
         questionServiceModel.setProduct(product);
         questionServiceModel.setUser(userServiceModel);

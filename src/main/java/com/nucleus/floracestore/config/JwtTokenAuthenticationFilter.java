@@ -16,6 +16,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Optional;
 
 @Slf4j
 public class JwtTokenAuthenticationFilter extends OncePerRequestFilter {
@@ -63,7 +64,7 @@ public class JwtTokenAuthenticationFilter extends OncePerRequestFilter {
             String username = claims.getSubject();
             System.out.println(username);
             UsernamePasswordAuthenticationToken auth =
-                    userService.findByUsername(username)
+                    Optional.of(userService.findByUsername(username))
                             .map(MyUserPrincipal::new)
                             .map(userDetails -> {
                                 UsernamePasswordAuthenticationToken authentication =

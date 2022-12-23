@@ -62,22 +62,22 @@ public class ProfileServiceImpl implements ProfileService {
 
     @Override
     public void saveProfile(ProfileServiceModel profileServiceModel, String userIdentifier) {
-        UserServiceModel userServiceModel = userService.findByUsername(userIdentifier).orElseThrow();
+        UserServiceModel userServiceModel = userService.findByUsername(userIdentifier);
         profileServiceModel.setUser(userServiceModel);
     }
 
     public boolean isOwner(String userName, Long id) {
         Optional<ProfileEntity> profileOpt = profileRepository.
                 findById(id);
-        Optional<UserServiceModel> caller = userService.
+        UserServiceModel caller = userService.
                 findByUsername(userName);
 
-        if (profileOpt.isEmpty() || caller.isEmpty()) {
+        if (profileOpt.isEmpty() || caller == null) {
             return false;
         } else {
             ProfileEntity profileEntity = profileOpt.get();
 
-            return isAdmin(caller.get()) ||
+            return isAdmin(caller) ||
                     profileEntity.getUser().getUsername().equals(userName);
         }
     }

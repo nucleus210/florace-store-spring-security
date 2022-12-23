@@ -42,8 +42,7 @@ public class ProductRatesServiceImpl implements ProductRatesService {
         if (productRatesEntity.isPresent()) {
             throw new QueryRuntimeException("Already rate this product");
         }
-        UserServiceModel userServiceModel = userService.findByUsername(username)
-                .orElseThrow(() -> new QueryRuntimeException("Could not find user " + username));
+        UserServiceModel userServiceModel = userService.findByUsername(username);
         model.setUser(userServiceModel);
         ProductRateEntity productRates = productRatesRepository.save(modelMapper.map(model, ProductRateEntity.class));
         return mapToService(productRates);
@@ -78,8 +77,7 @@ public class ProductRatesServiceImpl implements ProductRatesService {
             throw new QueryRuntimeException("Already rate this product");
         }
 
-        UserServiceModel userServiceModel = userService.findByUsername(username)
-                .orElseThrow(() -> new QueryRuntimeException("Could not find user " + username));
+        UserServiceModel userServiceModel = userService.findByUsername(username);
         model.setUser(userServiceModel);
         ProductRateEntity productRates = productRatesRepository.save(modelMapper.map(model, ProductRateEntity.class));
         return mapToService(productRates);

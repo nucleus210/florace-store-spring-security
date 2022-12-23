@@ -1,10 +1,8 @@
 package com.nucleus.floracestore.controller;
 
-import com.nucleus.floracestore.error.QueryRuntimeException;
 import com.nucleus.floracestore.hateoas.OrderModelAssembler;
 import com.nucleus.floracestore.model.dto.OrderDto;
 import com.nucleus.floracestore.model.service.OrderServiceModel;
-import com.nucleus.floracestore.model.service.UserServiceModel;
 import com.nucleus.floracestore.model.view.OrderViewModel;
 import com.nucleus.floracestore.service.OrderService;
 import com.nucleus.floracestore.service.UserService;
@@ -19,7 +17,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -130,14 +127,5 @@ public class OrderController {
         return modelMapper.map(model, OrderViewModel.class);
     }
 
-    private UserServiceModel getLoginUser() {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String username;
-        if (principal instanceof UserDetails) {
-            username = ((UserDetails) principal).getUsername();
-        } else {
-            username = principal.toString();
-        }
-        return userService.findByUsername(username).orElseThrow(() -> new QueryRuntimeException("Couldn't find user " + username));
-    }
+
 }

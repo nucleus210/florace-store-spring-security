@@ -4,7 +4,6 @@ import com.nucleus.floracestore.jwt.JwtConfiguration;
 import com.nucleus.floracestore.jwt.JwtTokenVerifier;
 import com.nucleus.floracestore.jwt.JwtUsernameAndPasswordAuthenticationFilter;
 import com.nucleus.floracestore.model.enums.UserRoleEnum;
-import com.nucleus.floracestore.service.UserService;
 import com.nucleus.floracestore.service.impl.JwtTokenProvider;
 import com.nucleus.floracestore.service.impl.MyUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +38,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final JwtConfiguration jwtConfiguration;
     private final SecretKey secretKey;
     private final JwtTokenProvider tokenProvider;
-    private final UserService userService;
 
 
     @Autowired
@@ -48,15 +46,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                              DataSource dataSource,
                              JwtConfiguration jwtConfiguration,
                              SecretKey secretKey,
-                             JwtTokenProvider tokenProvider,
-                             UserService userService) {
+                             JwtTokenProvider tokenProvider) {
         this.userDetailsService = userDetailsService;
         this.passwordEncoder = passwordEncoder;
         this.dataSource = dataSource;
         this.jwtConfiguration = jwtConfiguration;
         this.secretKey = secretKey;
         this.tokenProvider = tokenProvider;
-        this.userService = userService;
     }
 
     @Override
@@ -113,8 +109,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, "/login").permitAll()
                 .antMatchers(HttpMethod.POST, "/register").permitAll()
                 .antMatchers(HttpMethod.POST, "/facebook/signin").permitAll()
-                .antMatchers("/orders/**").hasRole(UserRoleEnum.USER.name())
-                .antMatchers("/order-items/**").hasRole(UserRoleEnum.USER.name())
+                .antMatchers("/orders/**").hasAnyRole(UserRoleEnum.USER.name(), UserRoleEnum.ADMIN.name())
+                .antMatchers("/order-items/**").hasAnyRole(UserRoleEnum.USER.name(), UserRoleEnum.ADMIN.name())
                 .anyRequest().authenticated();
 //                .and()
 //                .addFilter(customAuthenticationFilter)

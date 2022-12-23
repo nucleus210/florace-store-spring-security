@@ -34,8 +34,7 @@ public class SliderItemServiceImpl implements SliderItemService {
 
     @Override
     public SliderItemServiceModel createSlide(SliderItemServiceModel sliderItemServiceModel, String username) {
-        UserServiceModel userServiceModel = userService.findByUsername(username)
-                .orElseThrow(() -> new QueryRuntimeException("Could not find user " + username));
+        UserServiceModel userServiceModel = userService.findByUsername(username);
         sliderItemServiceModel.setUser(userServiceModel);
         SliderItemEntity sliderItemEntity = sliderItemRepository.save(modelMapper.map(sliderItemServiceModel, SliderItemEntity.class));
         log.info("SliderItemController: created slide with id: " + sliderItemEntity.getSliderItemId());
@@ -44,9 +43,8 @@ public class SliderItemServiceImpl implements SliderItemService {
 
     @Override
     public SliderItemServiceModel updateSlideById(Long sliderItemId, SliderItemServiceModel sliderItemServiceModel, String username) {
-        UserServiceModel userServiceModel = userService.findByUsername(username)
-                .orElseThrow(() -> new QueryRuntimeException("Could not find user " + username));
-        // Todo user check permissions
+
+        // Todo user check permissions is owner
         SliderItemEntity sliderItemEntity = sliderItemRepository.save(modelMapper.map(sliderItemServiceModel, SliderItemEntity.class));
         return mapToService(sliderItemEntity);
     }

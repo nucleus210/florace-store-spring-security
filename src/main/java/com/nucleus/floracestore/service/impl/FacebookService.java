@@ -18,14 +18,14 @@ import java.util.Set;
 public class FacebookService {
     private final FacebookClient facebookClient;
     private FacebookUser facebookUser;
-    private final UserServiceSocialImpl userServiceSocialImpl;
+    private final UserServiceImpl userServiceSocialImpl;
     private final RoleService roleService;
     private final JwtTokenProvider tokenProvider;
 
     @Autowired
     public FacebookService(FacebookClient facebookClient,
                            FacebookUser facebookUser,
-                           UserServiceSocialImpl userServiceSocialImpl,
+                           UserServiceImpl userServiceSocialImpl,
                            RoleService roleService,
                            JwtTokenProvider tokenProvider) {
 
@@ -40,8 +40,8 @@ public class FacebookService {
         facebookUser = facebookClient.getUser(fbAccessToken);
 
 
-        return userServiceSocialImpl.findById(facebookUser.getId())
-                .or(() -> Optional.ofNullable(userServiceSocialImpl.registerUser(convertTo(facebookUser))))
+        return userServiceSocialImpl.findBySocialId(facebookUser.getId())
+                .or(() -> Optional.ofNullable(userServiceSocialImpl.registerFacebookUser(convertTo(facebookUser))))
                 .map(MyUserPrincipal::new)
                 .map(userDetails -> new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities()))

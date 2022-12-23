@@ -20,8 +20,8 @@ public interface OrderRepository extends JpaRepository<OrderEntity, Long> {
     @Query("select a from OrderEntity a JOIN a.user u JOIN a.orderStatusCode c where u.username = :username and c.statusCode = :statusCode")
     List<OrderEntity> findAllOrdersByUsernameAndOrderStatusCode(String username, String statusCode);
 
-    @Query("select a from OrderEntity a JOIN FETCH a.user u where u.userId = :userId")
-    List<OrderEntity> findAllOrdersByUsername(Long userId);
+    @Query("select a from OrderEntity a JOIN FETCH a.user u where u.username = :username")
+    List<OrderEntity> findAllOrdersByUsername(String username);
 
     @Query("select o from OrderEntity o where o.dateOrderPlaced <= :startDate and o.dateOrderPlaced >= :endDate")
     List<OrderEntity> findByDatePeriod(String startDate, String endDate);

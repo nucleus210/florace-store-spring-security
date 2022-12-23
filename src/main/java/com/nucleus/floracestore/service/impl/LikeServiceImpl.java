@@ -40,8 +40,7 @@ public class LikeServiceImpl implements LikeService {
 
     @Override
     public LikeServiceModel createLike(Long questionId, String username) {
-        UserServiceModel user = userService.findByUsername(username)
-                .orElseThrow(() -> new QueryRuntimeException("Could not find username " + username));
+        UserServiceModel user = userService.findByUsername(username);
         QuestionServiceModel questionServiceModel = questionService.getQuestionById(questionId);
         LikeServiceModel likeServiceModel = new LikeServiceModel();
         likeServiceModel.setUser(user);

@@ -34,8 +34,7 @@ public class BlogPostServiceImpl implements BlogPostService {
 
     @Override
     public BlogPostServiceModel createBlogPost(BlogPostServiceModel blogPostServiceModel, String username) {
-        UserServiceModel userServiceModel = userService.findByUsername(username)
-                .orElseThrow(() -> new QueryRuntimeException("Could not find user with username " + username));
+        UserServiceModel userServiceModel = userService.findByUsername(username);
         blogPostServiceModel.setUser(userServiceModel);
         BlogPostEntity blogPostEntity = modelMapper.map(blogPostServiceModel, BlogPostEntity.class);
         return mapToService(blogPostRepository.save(blogPostEntity));
@@ -45,8 +44,7 @@ public class BlogPostServiceImpl implements BlogPostService {
     public BlogPostServiceModel updateBlogPostById(Long blogPostId, BlogPostServiceModel blogPostServiceModel, String username) {
         BlogPostEntity blogPostEntity = blogPostRepository.findById(blogPostServiceModel.getBlogPostId())
                 .orElseThrow(() -> new QueryRuntimeException("Could not find blog post with id " + blogPostServiceModel.getBlogPostId()));
-        UserServiceModel userServiceModel = userService.findByUsername(username)
-                .orElseThrow(() -> new QueryRuntimeException("Could not find user with username " + username));
+
         if (blogPostEntity.getUser().getUsername().equals(username)) {
             blogPostEntity.setTitle(blogPostServiceModel.getTitle());
             blogPostEntity.setMetaTitle(blogPostServiceModel.getMetaTitle());

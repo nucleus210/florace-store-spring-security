@@ -3,14 +3,15 @@ package com.nucleus.floracestore.controller;
 import com.nucleus.floracestore.error.BadRequestException;
 import com.nucleus.floracestore.error.EmailAlreadyExistsException;
 import com.nucleus.floracestore.error.UsernameAlreadyExistsException;
+import com.nucleus.floracestore.model.dto.UserRegistrationDto;
 import com.nucleus.floracestore.model.entity.ProfileEntity;
 import com.nucleus.floracestore.model.payloads.*;
 import com.nucleus.floracestore.model.service.UserRegistrationServiceModel;
+import com.nucleus.floracestore.model.service.UserServiceModel;
 import com.nucleus.floracestore.service.RoleService;
 import com.nucleus.floracestore.service.impl.FacebookService;
-import com.nucleus.floracestore.service.impl.UserServiceSocialImpl;
+import com.nucleus.floracestore.service.impl.UserServiceImpl;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -25,21 +26,17 @@ import java.util.Set;
 @RestController
 public class AuthController {
 
-    private final UserServiceSocialImpl userService;
+    private final UserServiceImpl userService;
     private final FacebookService facebookService;
     private final RoleService roleService;
 
-    private final ModelMapper modelMapper;
-
     @Autowired
-    public AuthController(UserServiceSocialImpl userService,
+    public AuthController(UserServiceImpl userService,
                           FacebookService facebookService,
-                          RoleService roleService,
-                          ModelMapper modelMapper) {
+                          RoleService roleService) {
         this.userService = userService;
         this.facebookService = facebookService;
         this.roleService = roleService;
-        this.modelMapper = modelMapper;
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
@@ -55,8 +52,23 @@ public class AuthController {
         String token = facebookService.loginUser(facebookLoginRequest.getAccessToken());
         return ResponseEntity.ok(new JwtAuthenticationResponse(token));
     }
+    @PostMapping("/register")
+    public ResponseEntity<?> register(@Valid @RequestBody UserRegistrationDto userRegistrationDto) {
+        log.info("facebook login {}", userRegistrationDto);
+        UserRegistrationServiceModel user = UserRegistrationServiceModel
+                .builder()
+                .username(userRegistrationDto.getUsername())
+                .email(userRegistrationDto.getEmail())
+                .password(userRegistrationDto.getPassword())
+                .roles(Set.of(roleService.getByRoleName("USER")))
+                .setActive(true)
+                .build();
 
-    @PostMapping(value = "/users", produces = MediaType.APPLICATION_JSON_VALUE)
+        UserServiceModel newUser = userService.registerFacebookUser(user);
+        return ResponseEntity.ok(new JwtAuthenticationResponse(userService.loginUser(newUser.getUsername(), newUser.getPassword())));
+    }
+
+    @PostMapping(value = "/facebook/register", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> createUser(@Valid @RequestBody SignUpRequest payload) {
         log.info("creating user {}", payload.getUsername());
 
@@ -72,7 +84,7 @@ public class AuthController {
         profile.setFirstName(payload.getName());
 
         try {
-            userService.registerUser(user);
+            userService.registerFacebookUser(user);
         } catch (UsernameAlreadyExistsException | EmailAlreadyExistsException e) {
             throw new BadRequestException(e.getMessage());
         }

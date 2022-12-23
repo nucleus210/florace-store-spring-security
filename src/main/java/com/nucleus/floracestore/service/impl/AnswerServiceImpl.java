@@ -63,8 +63,7 @@ public class AnswerServiceImpl implements AnswerService {
 
     @Override
     public AnswerServiceModel createAnswer(AnswerServiceModel answerServiceModel, Long questionId, String username) {
-        UserServiceModel userServiceModel = userService.findByUsername(username)
-                .orElseThrow(() -> new QueryRuntimeException("Could not find user with name " + username));
+        UserServiceModel userServiceModel = userService.findByUsername(username);
         QuestionServiceModel questionServiceModel = questionService.getQuestionById(questionId);
         answerServiceModel.setQuestion(modelMapper.map(questionServiceModel, QuestionEntity.class));
         answerServiceModel.setUser(userServiceModel);

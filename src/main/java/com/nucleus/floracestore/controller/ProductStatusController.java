@@ -38,7 +38,7 @@ public class ProductStatusController {
         this.assembler = assembler;
     }
 
-    @PostMapping("/products/statuses")
+    @PostMapping("/products-statuses")
     public ResponseEntity<EntityModel<ProductStatusViewModel>> createProductStatus(@RequestBody ProductStatusDto model) {
         ProductStatusServiceModel productStatusServiceModel =
                 productStatusService.createProductStatus(modelMapper.map(model, ProductStatusServiceModel.class), getCurrentLoggedUsername());
@@ -49,7 +49,7 @@ public class ProductStatusController {
 
     }
 
-    @PutMapping("/products/statuses/{id}")
+    @PutMapping("/products-statuses/{id}")
     public ResponseEntity<EntityModel<ProductStatusViewModel>> updateProductStatus(@RequestBody ProductStatusDto model) {
         ProductStatusServiceModel productStatusServiceModel = productStatusService.updateProductStatusById(model.getProductStatusId(),
                 modelMapper.map(model, ProductStatusServiceModel.class),
@@ -61,7 +61,7 @@ public class ProductStatusController {
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @DeleteMapping("/products/statuses/{id}")
+    @DeleteMapping("/products-statuses/{id}")
     public ResponseEntity<EntityModel<ProductStatusViewModel>> deleteProductStatus(@PathVariable Long productStatusId) {
         ProductStatusServiceModel productStatusServiceModel = productStatusService.deleteProductStatusById(productStatusId, getCurrentLoggedUsername());
         return ResponseEntity
@@ -69,19 +69,19 @@ public class ProductStatusController {
                 .body(assembler.toModel(mapToView(productStatusServiceModel)));
     }
 
-    @GetMapping("/products/statuses/{id}")
+    @GetMapping("/products-statuses/{id}")
     public ResponseEntity<EntityModel<ProductStatusViewModel>> getProductStatusById(@PathVariable Long id) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(assembler.toModel(mapToView(productStatusService.getProductStatusById(id))));
     }
 
-    @GetMapping("/products/statuses/{productStatusName}/name")
+    @GetMapping("/products-statuses/search/productStatusName/{productStatusName}")
     public ResponseEntity<EntityModel<ProductStatusViewModel>> getProductStatusById(@PathVariable String productStatusName) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(assembler.toModel(mapToView(productStatusService.getProductStatusByProductStatusName(productStatusName))));
     }
 
-    @GetMapping("/products/statuses")
+    @GetMapping("/products-statuses")
     public ResponseEntity<CollectionModel<EntityModel<ProductStatusViewModel>>> getAllProductStatuses() {
         List<EntityModel<ProductStatusViewModel>> productStatuses = productStatusService.getAllProductStatuses().stream()
                 .map(entity -> assembler.toModel(mapToView(entity))).toList();

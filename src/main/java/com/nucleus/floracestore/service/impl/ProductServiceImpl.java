@@ -57,7 +57,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductServiceModel saveProduct(ProductServiceModel productServiceModel, String owner) {
-        UserServiceModel userServiceModel = userService.findByUsername(owner).orElseThrow();
+        UserServiceModel userServiceModel = userService.findByUsername(owner);
         productServiceModel.setUser(userServiceModel);
         ProductEntity productEntity = productRepository.save(modelMapper.map(productServiceModel, ProductEntity.class));
         return mapToService(productEntity);
@@ -119,14 +119,14 @@ public class ProductServiceImpl implements ProductService {
     public boolean isOwner(String userName, Long id) {
         Optional<ProductEntity> productEntity = productRepository.
                 findById(id);
-        Optional<UserServiceModel> caller = userService.
+        UserServiceModel caller = userService.
                 findByUsername(userName);
-        if (productEntity.isEmpty() || caller.isEmpty()) {
+        if (productEntity.isEmpty() || caller == null) {
             return false;
         } else {
             ProductEntity product = productEntity.get();
 
-            return isAdmin(caller.get()) ||
+            return isAdmin(caller) ||
                     product.getUser().equals(userName);
         }
     }

@@ -38,12 +38,12 @@ public class QuestionController {
         this.assembler = assembler;
     }
 
-    @PostMapping("/questions/products/{productId}")
-    public ResponseEntity<EntityModel<QuestionViewModel>> writeQuestion(@RequestBody QuestionDto model, @PathVariable Long productId) {
+    @PostMapping("/questions")
+    public ResponseEntity<EntityModel<QuestionViewModel>> writeQuestion(@RequestBody QuestionDto model) {
 
-        QuestionServiceModel questionServiceModel = questionService.createQuestion(mapToService(model), productId, getCurrentLoggedUsername());
+        QuestionServiceModel questionServiceModel = questionService.createQuestion(mapToService(model), model.getProduct().getProductId(), getCurrentLoggedUsername());
         return ResponseEntity
-                .created(linkTo(methodOn(QuestionController.class).writeQuestion(model, productId)).toUri())
+                .created(linkTo(methodOn(QuestionController.class).writeQuestion(model)).toUri())
                 .body(assembler.toModel(mapView(questionServiceModel)));
     }
 
