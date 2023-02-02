@@ -7,5 +7,5 @@ import lombok.Data;
 public class AnswerDto {
 
     private String answer;
-//    private QuestionEntity question;
+    private Long questionId;
 }

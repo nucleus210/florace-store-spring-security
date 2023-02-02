@@ -14,4 +14,5 @@ public interface QuestionRepository extends JpaRepository<QuestionEntity, Long> 
 
     @Query("select q from QuestionEntity q JOIN FETCH q.user u where u.username = :username")
     List<QuestionEntity> findAllByUsername(String username);
+
 }

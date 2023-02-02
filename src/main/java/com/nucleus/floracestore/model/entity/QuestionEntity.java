@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.HashSet;
 import java.util.Set;
 
 @Getter
@@ -19,17 +18,17 @@ public class QuestionEntity {
 
     @Column(name = "question", nullable = false, unique = true)
     private String question;
-
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
-    @JoinColumn(name = "user__id", referencedColumnName = "user_id")
+//    @JsonIgnore
+//    @JsonManagedReference(value = "question-users")
+    @ManyToOne(targetEntity = UserEntity.class, fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @JoinColumn(name = "user_id")
     private UserEntity user;
+//    @JsonManagedReference(value = "question-product")
     @ManyToOne(targetEntity = ProductEntity.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     private ProductEntity product;
 
-    @OneToMany(targetEntity = AnswerEntity.class,
-            cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY,
-            mappedBy = "question")
-    private Set<AnswerEntity> answers = new HashSet<>();
+    @OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY, mappedBy="question")
+    private Set<AnswerEntity> answers;
+
 }

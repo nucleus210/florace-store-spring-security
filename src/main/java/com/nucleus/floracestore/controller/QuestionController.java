@@ -4,6 +4,7 @@ import com.nucleus.floracestore.hateoas.QuestionAssembler;
 import com.nucleus.floracestore.model.dto.QuestionDto;
 import com.nucleus.floracestore.model.service.QuestionServiceModel;
 import com.nucleus.floracestore.model.view.QuestionViewModel;
+import com.nucleus.floracestore.repository.QuestionRepository;
 import com.nucleus.floracestore.service.QuestionService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -29,19 +30,21 @@ public class QuestionController {
     private final QuestionService questionService;
     private final QuestionAssembler assembler;
 
+    private final QuestionRepository questionRepository;
+
     @Autowired
     public QuestionController(ModelMapper modelMapper,
                               QuestionService questionService,
-                              QuestionAssembler assembler) {
+                              QuestionAssembler assembler, QuestionRepository questionRepository) {
         this.modelMapper = modelMapper;
         this.questionService = questionService;
         this.assembler = assembler;
+        this.questionRepository = questionRepository;
     }
 
     @PostMapping("/questions")
     public ResponseEntity<EntityModel<QuestionViewModel>> writeQuestion(@RequestBody QuestionDto model) {
-
-        QuestionServiceModel questionServiceModel = questionService.createQuestion(mapToService(model), model.getProduct().getProductId(), getCurrentLoggedUsername());
+        QuestionServiceModel questionServiceModel = questionService.createQuestion(mapToService(model), model.getProductId(), getCurrentLoggedUsername());
         return ResponseEntity
                 .created(linkTo(methodOn(QuestionController.class).writeQuestion(model)).toUri())
                 .body(assembler.toModel(mapView(questionServiceModel)));
@@ -52,15 +55,6 @@ public class QuestionController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(assembler.toModel(mapView(questionService.getQuestionById(questionId))));
     }
-
-    @GetMapping("/questions/users/{username}")
-    public ResponseEntity<CollectionModel<EntityModel<QuestionViewModel>>> getAllQuestionByUsername() {
-        List<EntityModel<QuestionViewModel>> questions = questionService.getAllQuestionByUsername(getCurrentLoggedUsername()).stream()
-                .map(entity -> assembler.toModel(mapView(entity))).toList();
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(CollectionModel.of(questions, linkTo(methodOn(QuestionController.class).getAllQuestionByUsername()).withSelfRel()));
-    }
-
     @PutMapping("/questions/{questionId}")
     public ResponseEntity<EntityModel<QuestionViewModel>> updateQuestion(@RequestBody QuestionDto model, @PathVariable Long questionId) {
 
@@ -69,14 +63,19 @@ public class QuestionController {
                 .created(linkTo(methodOn(QuestionController.class).updateQuestion(model, questionId)).toUri())
                 .body(assembler.toModel(mapView(questionServiceModel)));
     }
-
     @DeleteMapping("/questions/{questionId}")
     public ResponseEntity<EntityModel<QuestionViewModel>> deleteQuestion(@PathVariable Long questionId) {
         EntityModel<QuestionViewModel> questionViewModel = assembler.toModel(mapView(questionService.deleteQuestionById(questionId)));
         return ResponseEntity.status(HttpStatus.OK).body(questionViewModel);
     }
-
-    @GetMapping("/questions/products/{productId}")
+    @GetMapping("/questions/search/users/{username}")
+    public ResponseEntity<CollectionModel<EntityModel<QuestionViewModel>>> getAllQuestionByUsername() {
+        List<EntityModel<QuestionViewModel>> questions = questionService.getAllQuestionByUsername(getCurrentLoggedUsername()).stream()
+                .map(entity -> assembler.toModel(mapView(entity))).toList();
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(CollectionModel.of(questions, linkTo(methodOn(QuestionController.class).getAllQuestionByUsername()).withSelfRel()));
+    }
+    @GetMapping("/questions/search/products/{productId}")
     public ResponseEntity<CollectionModel<EntityModel<QuestionViewModel>>> getAllQuestionsByProductId(@PathVariable Long productId) {
         List<EntityModel<QuestionViewModel>> questions = questionService.getAllQuestionsByProductId(productId).stream()
                 .map(entity -> assembler.toModel(mapView(entity))).toList();

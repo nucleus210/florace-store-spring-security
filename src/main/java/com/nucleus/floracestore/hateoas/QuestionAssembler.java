@@ -19,6 +19,6 @@ public class QuestionAssembler implements RepresentationModelAssembler<QuestionV
                 linkTo(methodOn(QuestionController.class).getQuestionById(questionViewModel.getQuestionId())).withRel("getQuestionById"),
                 linkTo(methodOn(QuestionController.class).deleteQuestion(questionViewModel.getQuestionId())).withRel("deleteQuestion"),
                 linkTo(methodOn(QuestionController.class).getAllQuestionByUsername()).withRel("getAllQuestionByUsername"),
-                linkTo(methodOn(QuestionController.class).getAllQuestionsByProductId(questionViewModel.getProduct().getProductId())).withRel("getQuestions"));
+                linkTo(methodOn(QuestionController.class).getAllQuestionsByProductId(questionViewModel.getProductId())).withRel("getQuestions"));
     }
 }

@@ -35,45 +35,39 @@ public class AnswerController {
         this.assembler = assembler;
     }
 
-    @PostMapping("/answers/questions/{questionId}")
-    public ResponseEntity<EntityModel<AnswerViewModel>> writeAnswer(@RequestBody AnswerDto model, @PathVariable Long questionId) {
-
-        AnswerServiceModel answerServiceModel = answerService.createAnswer(mapToService(model), questionId, getCurrentLoggedUsername());
+    @PostMapping("/answers")
+    public ResponseEntity<EntityModel<AnswerViewModel>> writeAnswer(@RequestBody AnswerDto model) {
+        AnswerServiceModel answerServiceModel = answerService.createAnswer(mapToService(model), model.getQuestionId(), getCurrentLoggedUsername());
         return ResponseEntity
-                .created(linkTo(methodOn(AnswerController.class).writeAnswer(model, questionId)).toUri())
+                .created(linkTo(methodOn(AnswerController.class).writeAnswer(model)).toUri())
                 .body(assembler.toModel(mapView(answerServiceModel)));
     }
 
+    @PutMapping("/answers/{answerId}")
+    public ResponseEntity<EntityModel<AnswerViewModel>> updateAnswer(@RequestBody AnswerDto model, @PathVariable Long answerId) {
+        AnswerServiceModel answerServiceModel = answerService.updateAnswer(mapToService(model), answerId);
+        return ResponseEntity
+                .created(linkTo(methodOn(AnswerController.class).updateAnswer(model, answerId)).toUri())
+                .body(assembler.toModel(mapView(answerServiceModel)));
+    }
+    @DeleteMapping("/answers/{answerId}")
+    public ResponseEntity<EntityModel<AnswerViewModel>> deleteAnswer(@PathVariable Long answerId) {
+        EntityModel<AnswerViewModel> answerViewModel = assembler.toModel(mapView(answerService.deleteAnswerById(answerId)));
+        return ResponseEntity.status(HttpStatus.OK).body(answerViewModel);
+    }
     @GetMapping("/answers/{answerId}")
     public ResponseEntity<EntityModel<AnswerViewModel>> getAnswerById(@PathVariable Long answerId) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(assembler.toModel(mapView(answerService.getAnswerById(answerId))));
     }
-
-    @GetMapping("/answers/users/{username}")
+    @GetMapping("/answers/search/users/{username}")
     public ResponseEntity<CollectionModel<EntityModel<AnswerViewModel>>> getAllAnswersByUsername() {
         List<EntityModel<AnswerViewModel>> questions = answerService.getAllAnswersByUsername(getCurrentLoggedUsername()).stream()
                 .map(entity -> assembler.toModel(mapView(entity))).toList();
         return ResponseEntity.status(HttpStatus.OK)
                 .body(CollectionModel.of(questions, linkTo(methodOn(AnswerController.class).getAllAnswersByUsername()).withSelfRel()));
     }
-
-    @PutMapping("/answers/{answerId}")
-    public ResponseEntity<EntityModel<AnswerViewModel>> updateAnswer(@RequestBody AnswerDto model, @PathVariable Long answerId) {
-
-        AnswerServiceModel answerServiceModel = answerService.updateAnswer(mapToService(model), answerId);
-        return ResponseEntity
-                .created(linkTo(methodOn(AnswerController.class).updateAnswer(model, answerId)).toUri())
-                .body(assembler.toModel(mapView(answerServiceModel)));
-    }
-
-    @DeleteMapping("/answers/{answerId}")
-    public ResponseEntity<EntityModel<AnswerViewModel>> deleteAnswer(@PathVariable Long answerId) {
-        EntityModel<AnswerViewModel> answerViewModel = assembler.toModel(mapView(answerService.deleteAnswerById(answerId)));
-        return ResponseEntity.status(HttpStatus.OK).body(answerViewModel);
-    }
-
-    @GetMapping("/answers/questions/{questionId}")
+    @GetMapping("/answers/search/questions/{questionId}")
     public ResponseEntity<CollectionModel<EntityModel<AnswerViewModel>>> getAllAnswersByQuestionId(@PathVariable Long questionId) {
         List<EntityModel<AnswerViewModel>> answers = answerService.getAllAnswersByQuestionId(questionId).stream()
                 .map(entity -> assembler.toModel(mapView(entity))).toList();

@@ -46,7 +46,6 @@ public class AddressServiceImpl implements AddressService {
     @Override
     public void deleteAddress(Long profileId) {
         AddressEntity address = profileRepository.findById(profileId).get().getAddress();
-
         addressRepository.delete(address);
     }
 

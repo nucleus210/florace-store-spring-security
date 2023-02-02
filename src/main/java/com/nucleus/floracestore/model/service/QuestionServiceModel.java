@@ -9,7 +9,7 @@ public class QuestionServiceModel {
     private Long questionId;
     private String question;
     private UserServiceModel user;
-    private ProductServiceModel product;
-    private Set<LikeServiceModel> likes;
-    private Set<AnswerServiceModel> answers;
+    private Long productId;
+    Set<AnswerServiceModel> answers;
+
 }

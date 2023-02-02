@@ -1,7 +1,9 @@
 package com.nucleus.floracestore.service.impl;
 
 import com.nucleus.floracestore.error.QueryRuntimeException;
+import com.nucleus.floracestore.model.entity.ProductEntity;
 import com.nucleus.floracestore.model.entity.QuestionEntity;
+import com.nucleus.floracestore.model.entity.UserEntity;
 import com.nucleus.floracestore.model.service.ProductServiceModel;
 import com.nucleus.floracestore.model.service.QuestionServiceModel;
 import com.nucleus.floracestore.model.service.UserServiceModel;
@@ -11,6 +13,7 @@ import com.nucleus.floracestore.service.QuestionService;
 import com.nucleus.floracestore.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +23,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 public class QuestionServiceImpl implements QuestionService {
+    @Autowired
     private final ModelMapper modelMapper;
     private final UserService userService;
     private final ProductService productService;
@@ -56,10 +60,11 @@ public class QuestionServiceImpl implements QuestionService {
     public QuestionServiceModel createQuestion(QuestionServiceModel questionServiceModel, Long productId, String username) {
         UserServiceModel userServiceModel = userService.findByUsername(username);
         ProductServiceModel product = productService.getProductById(productId);
-        questionServiceModel.setProduct(product);
-        questionServiceModel.setUser(userServiceModel);
-        QuestionEntity questionEntity = questionRepository.save(modelMapper.map(questionServiceModel, QuestionEntity.class));
-        return mapToService(questionEntity);
+        QuestionEntity question = modelMapper.map(questionServiceModel, QuestionEntity.class);
+
+        question.setProduct( modelMapper.map(product, ProductEntity.class));
+        question.setUser(modelMapper.map(userServiceModel, UserEntity.class));
+        return mapToService(questionRepository.save(question));
     }
 
     @Override
@@ -82,13 +87,20 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public List<QuestionServiceModel> getAllQuestionsByProductId(Long productId) {
-        return questionRepository.findAllByProductId(productId)
+        List<QuestionServiceModel> questionEntities = questionRepository.findAllByProductId(productId)
                 .stream()
                 .map(this::mapToService)
                 .collect(Collectors.toList());
+        return  questionEntities;
     }
 
     private QuestionServiceModel mapToService(QuestionEntity questionEntity) {
+        TypeMap<QuestionEntity,QuestionServiceModel> typeMap ;
+        if(modelMapper.getTypeMap(QuestionEntity.class,QuestionServiceModel.class) == null) {
+            typeMap = modelMapper.createTypeMap(QuestionEntity.class, QuestionServiceModel.class).addMappings(mapper -> mapper.map(src ->
+                    src.getProduct().getProductId(), QuestionServiceModel::setProductId));
+        }
         return this.modelMapper.map(questionEntity, QuestionServiceModel.class);
     }
+
 }

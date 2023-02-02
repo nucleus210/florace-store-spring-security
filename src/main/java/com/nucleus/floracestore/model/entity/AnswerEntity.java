@@ -21,8 +21,9 @@ public class AnswerEntity {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name = "userId", referencedColumnName = "user_id")
     private UserEntity user;
-    @ManyToOne(targetEntity = QuestionEntity.class, fetch = FetchType.LAZY)
-    @JoinColumn(name = "question_Id")
+//    @JsonManagedReference(value = "question-answers")
+    @ManyToOne(targetEntity=QuestionEntity.class, fetch = FetchType.LAZY)
+    @JoinColumn(name="question_id")
     private QuestionEntity question;
 
 }

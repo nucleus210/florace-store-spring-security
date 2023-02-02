@@ -36,15 +36,19 @@ public class ProductEntity {
     private String productDescription;
     @Column(name = "product_details", columnDefinition = "TEXT", nullable = false)
     private String otherProductDetails;
+//    @JsonManagedReference(value = "product-statuses")
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(name = "productStatusId", referencedColumnName = "product_status_id")
     private ProductStatusEntity productStatus;
+//    @JsonManagedReference(value = "product-category")
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(name = "category_id", referencedColumnName = "product_category_id")
     private ProductCategoryEntity productCategory;
+//    @JsonManagedReference(value = "product-subcategory")
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(name = "sub_category_id", referencedColumnName = "product_sub_category_id")
     private ProductSubCategoryEntity productSubCategory;
+//    @JsonManagedReference(value = "product-users")
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(name = "user__id", referencedColumnName = "user_id")
     private UserEntity user;

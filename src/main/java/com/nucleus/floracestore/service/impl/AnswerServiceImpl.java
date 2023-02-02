@@ -3,9 +3,8 @@ package com.nucleus.floracestore.service.impl;
 import com.nucleus.floracestore.error.QueryRuntimeException;
 import com.nucleus.floracestore.model.entity.AnswerEntity;
 import com.nucleus.floracestore.model.entity.QuestionEntity;
+import com.nucleus.floracestore.model.entity.UserEntity;
 import com.nucleus.floracestore.model.service.AnswerServiceModel;
-import com.nucleus.floracestore.model.service.QuestionServiceModel;
-import com.nucleus.floracestore.model.service.UserServiceModel;
 import com.nucleus.floracestore.repository.AnswerRepository;
 import com.nucleus.floracestore.service.AnswerService;
 import com.nucleus.floracestore.service.QuestionService;
@@ -21,6 +20,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 public class AnswerServiceImpl implements AnswerService {
+    @Autowired
 
     private final ModelMapper modelMapper;
     private final AnswerRepository answerRepository;
@@ -63,11 +63,12 @@ public class AnswerServiceImpl implements AnswerService {
 
     @Override
     public AnswerServiceModel createAnswer(AnswerServiceModel answerServiceModel, Long questionId, String username) {
-        UserServiceModel userServiceModel = userService.findByUsername(username);
-        QuestionServiceModel questionServiceModel = questionService.getQuestionById(questionId);
-        answerServiceModel.setQuestion(modelMapper.map(questionServiceModel, QuestionEntity.class));
-        answerServiceModel.setUser(userServiceModel);
-        return mapToService(answerRepository.save(modelMapper.map(answerServiceModel, AnswerEntity.class)));
+        UserEntity user= modelMapper.map(userService.findByUsername(username), UserEntity.class);
+        QuestionEntity question = modelMapper.map(questionService.getQuestionById(questionId), QuestionEntity.class);
+        AnswerEntity answer = modelMapper.map(answerServiceModel, AnswerEntity.class);
+        answer.setQuestion(question);
+        answer.setUser(user);
+        return mapToService(answerRepository.save(answer));
     }
 
     @Override

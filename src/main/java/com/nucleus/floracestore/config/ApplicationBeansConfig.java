@@ -14,7 +14,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class ApplicationBeansConfig implements WebMvcConfigurer {
     @Bean
     public ModelMapper modelMapper() {
-        return new ModelMapper();
+       return new ModelMapper();
     }
 
     @Bean
