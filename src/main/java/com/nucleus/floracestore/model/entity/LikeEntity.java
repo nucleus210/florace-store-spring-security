@@ -19,7 +19,7 @@ public class LikeEntity {
     @JoinColumn(name = "user_liked_id", referencedColumnName = "user_id")
     private UserEntity user;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE, optional = true)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name = "questionId", referencedColumnName = "question_id")
     private QuestionEntity question;
 

@@ -11,15 +11,15 @@ import java.util.Optional;
 public interface UserService {
 
 
-    public String loginUser(String username, String password);
-    public String registerUser(UserRegistrationServiceModel user);
-    public UserServiceModel registerFacebookUser(UserRegistrationServiceModel user);
-    public void updateUser(UserEditServiceModel serviceModel, MyUserPrincipal principal);
-    public UserServiceModel findById(Long id);
-    public Optional<UserServiceModel> findBySocialId(Long id);
-    public UserServiceModel findByUsername(String username);
-    public UserServiceModel findByEmailAddress(String email);
-    public List<UserServiceModel> findAll();
+    String loginUser(String username, String password);
+    String registerUser(UserRegistrationServiceModel user);
+    UserServiceModel registerFacebookUser(UserRegistrationServiceModel user);
+    void updateUser(UserEditServiceModel serviceModel, MyUserPrincipal principal);
+    UserServiceModel findById(Long id);
+    Optional<UserServiceModel> findBySocialId(Long id);
+    UserServiceModel findByUsername(String username);
+    UserServiceModel findByEmailAddress(String email);
+    List<UserServiceModel> findAll();
     boolean existsByUsername(String username);
 
 }

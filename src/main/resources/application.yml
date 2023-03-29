@@ -32,7 +32,7 @@ spring:
       max-request-size: 15MB
 
   mvc:
-    hiddenmethod:
+    hidden-method:
       filter:
         enabled: true
 

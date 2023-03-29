@@ -64,9 +64,7 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
                             throw new QueryRuntimeException(String.format("Product category %s already exists",
                                     value.getProductCategoryName()));
                         },
-                        () -> {
-                            productCategoryRepository.save(modelMapper.map(category, ProductCategoryEntity.class));
-                        });
+                        () -> productCategoryRepository.save(modelMapper.map(category, ProductCategoryEntity.class)));
         return productCategoryRepository.findByProductCategoryName(category.getProductCategoryName())
                 .map(this::mapToService).orElseThrow(
                         () -> new QueryRuntimeException("Could not find product category " + category.getProductCategoryName()));

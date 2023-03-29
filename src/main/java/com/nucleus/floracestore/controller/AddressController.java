@@ -52,9 +52,7 @@ public class AddressController {
             return "redirect:/address/add";
         }
 
-        modelMapper.typeMap(AddressDto.class, AddressServiceModel.class).addMappings(mapper -> {
-            mapper.skip(AddressServiceModel::setAddressTypeEnum);
-        });
+        modelMapper.typeMap(AddressDto.class, AddressServiceModel.class).addMappings(mapper -> mapper.skip(AddressServiceModel::setAddressTypeEnum));
         AddressServiceModel serviceModel = modelMapper.map(addressModel, AddressServiceModel.class);
         serviceModel.setAddressTypeEnum(AddressTypeEnum.valueOf(addressModel.getAddressTypeEnum()));
 
