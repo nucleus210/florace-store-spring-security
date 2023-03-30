@@ -106,7 +106,14 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(assembler.toModel(mapToView(productService.getByProductName(productName))));
     }
-
+    @GetMapping("/products/search/categories/{categoryName}")
+    public ResponseEntity<CollectionModel<EntityModel<ProductViewModel>>> getAllProductsByCategoryName(@PathVariable String categoryName) {
+        List<EntityModel<ProductViewModel>> products = productService.getAllProductByCategoryName(categoryName).stream()
+                .map(entity -> assembler.toModel(mapToView(entity))).toList();
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(CollectionModel.of(products, linkTo(methodOn(ProductController.class)
+                        .getAllProductsByCategoryName(categoryName)).withSelfRel()));
+    }
     @GetMapping("/products/{id}")
     public ResponseEntity<EntityModel<ProductViewModel>> getProductById(@PathVariable Long id) {
         return ResponseEntity.status(HttpStatus.OK)

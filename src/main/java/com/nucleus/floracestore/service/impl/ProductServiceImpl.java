@@ -56,6 +56,14 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public List<ProductServiceModel> getAllProductByCategoryName(String categoryName) {
+        return productRepository.findAllProductsByProductCategory_ProductCategoryName(categoryName)
+                .stream()
+                .map(this::mapToService)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public ProductServiceModel saveProduct(ProductServiceModel productServiceModel, String owner) {
         UserServiceModel userServiceModel = userService.findByUsername(owner);
         productServiceModel.setUser(userServiceModel);

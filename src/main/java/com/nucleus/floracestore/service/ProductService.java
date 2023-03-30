@@ -22,4 +22,5 @@ public interface ProductService {
 
     ProductViewModel getById(Long id);
 
+    List<ProductServiceModel> getAllProductByCategoryName(String categoryName);
 }
