@@ -18,7 +18,7 @@ public class AddressDto {
     private String city;
     @NotNull
     @Size(min = 4, max = 30)
-    private String stateProvinceCounty;
+    private String stateProvinceRegion;
     @NotNull
     @Size(min = 4, max = 30)
     private String zipPostCode;
@@ -28,5 +28,5 @@ public class AddressDto {
     @Size(min = 10, max = 200)
     private String otherAddressDetails;
     @NotNull
-    private String addressTypeEnum;
+    private String addressType;
 }

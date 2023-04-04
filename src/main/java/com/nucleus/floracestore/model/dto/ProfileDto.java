@@ -10,7 +10,6 @@ import java.util.Date;
 
 @Data
 public class ProfileDto {
-    private Long profileId;
     @Size(min = 2, max = 20)
     private String companyName;
     @Size(min = 2, max = 20)
@@ -27,7 +26,7 @@ public class ProfileDto {
     @Size(min = 10, max = 20)
     private String phoneNumber;
     private StorageEntity profilePhotoUrl;
-    private UserEntity user;
+    private String username;
     private AddressEntity address;
     private String webSite;
 }

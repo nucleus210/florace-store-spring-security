@@ -15,7 +15,7 @@ public class ProductAssembler implements RepresentationModelAssembler<ProductVie
     @Override
     public EntityModel<ProductViewModel> toModel(ProductViewModel productModel) {
 
-        return EntityModel.of(productModel, //
+        return EntityModel.of(productModel,
                 linkTo(methodOn(ProductController.class).getProductById(productModel.getProductId())).withSelfRel(),
                 linkTo(methodOn(ProductController.class).getAllProducts()).withRel("products").withSelfRel());
 

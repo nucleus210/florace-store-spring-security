@@ -83,7 +83,7 @@ public class ProductController {
                 .body(assembler.toModel(mapToView(product)));
     }
 
-
+    //TODO: implement restful method
     @PatchMapping("/products/{id}")
     public String productEdit(@PathVariable Long id,
                               @Valid ProductDto productModel,

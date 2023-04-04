@@ -9,7 +9,7 @@ import java.util.Optional;
 
 @Repository("profile-repository")
 public interface ProfileRepository extends JpaRepository<ProfileEntity, Long> {
-    Optional<ProfileEntity> findByUser(UserEntity user);
+    Optional<ProfileEntity> findProfileEntityByUserEntity_Username(String username);
 
-    Optional<ProfileEntity> findProfileEntitiesByUser_UserId(Long userId);
+    Optional<ProfileEntity> findProfileEntitiesByUserEntity_UserId(Long userId);
 }

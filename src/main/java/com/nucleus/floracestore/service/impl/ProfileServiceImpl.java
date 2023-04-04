@@ -1,5 +1,6 @@
 package com.nucleus.floracestore.service.impl;
 
+import com.nucleus.floracestore.error.QueryRuntimeException;
 import com.nucleus.floracestore.model.entity.ProfileEntity;
 import com.nucleus.floracestore.model.entity.RoleEntity;
 import com.nucleus.floracestore.model.entity.StorageEntity;
@@ -29,13 +30,24 @@ public class ProfileServiceImpl implements ProfileService {
     }
 
     @Override
-    public Optional<ProfileEntity> getProfileById(Long profileId) {
-        return profileRepository.findById(profileId);
+    public ProfileServiceModel getProfileById(Long profileId) {
+        ProfileEntity profile = profileRepository.findById(profileId).orElseThrow(() ->
+                new QueryRuntimeException("Could not find profile with id " + profileId));
+        return mapToService(profile);
     }
 
     @Override
-    public Optional<ProfileEntity> getProfileByUserId(Long userId) {
-        return profileRepository.findProfileEntitiesByUser_UserId(userId);
+    public ProfileServiceModel getProfileByUserId(Long userId) {
+        ProfileEntity profile = profileRepository.findProfileEntitiesByUserEntity_UserId(userId).orElseThrow(() ->
+                new QueryRuntimeException("Could not find profile with id " + userId));
+        return mapToService(profile);
+    }
+
+    @Override
+    public ProfileServiceModel getProfileByUsername(String username) {
+        ProfileEntity profile = profileRepository.findProfileEntityByUserEntity_Username(username).orElseThrow(() ->
+                new QueryRuntimeException("Could not find profile with username " + username));
+        return mapToService(profile);
     }
 
     @Override
@@ -89,5 +101,9 @@ public class ProfileServiceImpl implements ProfileService {
                 map(RoleEntity::getRoleName).
                 anyMatch(r -> r.equals("ROLE_" + UserRoleEnum.ADMIN));
         return false;
+    }
+
+    private ProfileServiceModel mapToService(ProfileEntity profile) {
+        return modelMapper.map(profile, ProfileServiceModel.class);
     }
 }

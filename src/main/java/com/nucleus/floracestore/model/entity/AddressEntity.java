@@ -26,7 +26,7 @@ public class AddressEntity {
     private String city;
 
     @Column(name = "state_province_region")
-    private String stateProvinceCounty;
+    private String stateProvinceRegion;
 
     @Column(name = "zip_pos")
     private String zipPostCode;
@@ -39,6 +39,6 @@ public class AddressEntity {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private AddressTypeEnum addressTypeEnum;
+    private AddressTypeEnum addressType;
 
 }

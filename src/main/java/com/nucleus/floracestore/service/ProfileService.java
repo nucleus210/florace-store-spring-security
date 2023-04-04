@@ -6,9 +6,10 @@ import com.nucleus.floracestore.model.service.ProfileServiceModel;
 import java.util.Optional;
 
 public interface ProfileService {
-    Optional<ProfileEntity> getProfileById(Long profileId);
+    ProfileServiceModel getProfileById(Long profileId);
 
-    Optional<ProfileEntity> getProfileByUserId(Long userId);
+    ProfileServiceModel getProfileByUserId(Long userId);
+    ProfileServiceModel getProfileByUsername(String username);
 
     void updateProfile(ProfileServiceModel profileServiceModel);
 

@@ -35,11 +35,11 @@ public class AddressServiceImpl implements AddressService {
         address.setStreetAddress(addressModel.getStreetAddress());
         address.setStreetAddressSec(addressModel.getStreetAddressSec());
         address.setCity(addressModel.getCity());
-        address.setStateProvinceCounty(addressModel.getStateProvinceCounty());
+        address.setStateProvinceRegion(addressModel.getStateProvinceRegion());
         address.setZipPostCode(addressModel.getZipPostCode());
         address.setCountry(addressModel.getCountry());
         address.setOtherAddressDetails(addressModel.getOtherAddressDetails());
-        address.setAddressTypeEnum(addressModel.getAddressTypeEnum());
+        address.setAddressType(addressModel.getAddressType());
         addressRepository.save(address);
     }
 
@@ -55,7 +55,7 @@ public class AddressServiceImpl implements AddressService {
         address.setStreetAddress(addressModel.getStreetAddress());
         address.setStreetAddressSec(addressModel.getStreetAddressSec());
         address.setCity(addressModel.getCity());
-        address.setStateProvinceCounty(addressModel.getStateProvinceCounty());
+        address.setStateProvinceRegion(addressModel.getStateProvinceRegion());
         address.setZipPostCode(addressModel.getZipPostCode());
         address.setCountry(addressModel.getCountry());
         address.setOtherAddressDetails(addressModel.getOtherAddressDetails());

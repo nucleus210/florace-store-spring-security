@@ -1,11 +1,10 @@
-package com.nucleus.floracestore.model.service;
-
+package com.nucleus.floracestore.model.view;
 
 import com.nucleus.floracestore.model.enums.AddressTypeEnum;
 import lombok.Data;
 
 @Data
-public class AddressServiceModel {
+public class AddressViewModel {
     private Long addressId;
     private String streetAddress;
     private String streetAddressSec;
@@ -16,4 +15,3 @@ public class AddressServiceModel {
     private String otherAddressDetails;
     private AddressTypeEnum addressType;
 }
-
