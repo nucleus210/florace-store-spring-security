@@ -40,7 +40,7 @@ public class AnswerController {
         AnswerServiceModel answerServiceModel = answerService.createAnswer(mapToService(model), model.getQuestionId(), getCurrentLoggedUsername());
         return ResponseEntity
                 .created(linkTo(methodOn(AnswerController.class).writeAnswer(model)).toUri())
-                .body(assembler.toModel(mapView(answerServiceModel)));
+                .body(assembler.toModel(mapToView(answerServiceModel)));
     }
 
     @PutMapping("/answers/{answerId}")
@@ -48,34 +48,34 @@ public class AnswerController {
         AnswerServiceModel answerServiceModel = answerService.updateAnswer(mapToService(model), answerId);
         return ResponseEntity
                 .created(linkTo(methodOn(AnswerController.class).updateAnswer(model, answerId)).toUri())
-                .body(assembler.toModel(mapView(answerServiceModel)));
+                .body(assembler.toModel(mapToView(answerServiceModel)));
     }
     @DeleteMapping("/answers/{answerId}")
     public ResponseEntity<EntityModel<AnswerViewModel>> deleteAnswer(@PathVariable Long answerId) {
-        EntityModel<AnswerViewModel> answerViewModel = assembler.toModel(mapView(answerService.deleteAnswerById(answerId)));
+        EntityModel<AnswerViewModel> answerViewModel = assembler.toModel(mapToView(answerService.deleteAnswerById(answerId)));
         return ResponseEntity.status(HttpStatus.OK).body(answerViewModel);
     }
     @GetMapping("/answers/{answerId}")
     public ResponseEntity<EntityModel<AnswerViewModel>> getAnswerById(@PathVariable Long answerId) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(assembler.toModel(mapView(answerService.getAnswerById(answerId))));
+                .body(assembler.toModel(mapToView(answerService.getAnswerById(answerId))));
     }
     @GetMapping("/answers/search/users/{username}")
     public ResponseEntity<CollectionModel<EntityModel<AnswerViewModel>>> getAllAnswersByUsername() {
         List<EntityModel<AnswerViewModel>> questions = answerService.getAllAnswersByUsername(getCurrentLoggedUsername()).stream()
-                .map(entity -> assembler.toModel(mapView(entity))).toList();
+                .map(entity -> assembler.toModel(mapToView(entity))).toList();
         return ResponseEntity.status(HttpStatus.OK)
                 .body(CollectionModel.of(questions, linkTo(methodOn(AnswerController.class).getAllAnswersByUsername()).withSelfRel()));
     }
     @GetMapping("/answers/search/questions/{questionId}")
     public ResponseEntity<CollectionModel<EntityModel<AnswerViewModel>>> getAllAnswersByQuestionId(@PathVariable Long questionId) {
         List<EntityModel<AnswerViewModel>> answers = answerService.getAllAnswersByQuestionId(questionId).stream()
-                .map(entity -> assembler.toModel(mapView(entity))).toList();
+                .map(entity -> assembler.toModel(mapToView(entity))).toList();
         return ResponseEntity.status(HttpStatus.OK)
                 .body(CollectionModel.of(answers, linkTo(methodOn(AnswerController.class).getAllAnswersByQuestionId(questionId)).withSelfRel()));
     }
 
-    private AnswerViewModel mapView(AnswerServiceModel model) {
+    private AnswerViewModel mapToView(AnswerServiceModel model) {
         return modelMapper.map(model, AnswerViewModel.class);
     }
 

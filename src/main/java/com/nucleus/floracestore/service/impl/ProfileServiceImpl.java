@@ -36,16 +36,17 @@ public class ProfileServiceImpl implements ProfileService {
         return mapToService(profile);
     }
 
+
     @Override
     public ProfileServiceModel getProfileByUserId(Long userId) {
-        ProfileEntity profile = profileRepository.findProfileEntitiesByUserEntity_UserId(userId).orElseThrow(() ->
+        ProfileEntity profile = profileRepository.findProfileEntityByUser_UserId(userId).orElseThrow(() ->
                 new QueryRuntimeException("Could not find profile with id " + userId));
         return mapToService(profile);
     }
 
     @Override
     public ProfileServiceModel getProfileByUsername(String username) {
-        ProfileEntity profile = profileRepository.findProfileEntityByUserEntity_Username(username).orElseThrow(() ->
+        ProfileEntity profile = profileRepository.findProfileEntityByUser_Username(username).orElseThrow(() ->
                 new QueryRuntimeException("Could not find profile with username " + username));
         return mapToService(profile);
     }

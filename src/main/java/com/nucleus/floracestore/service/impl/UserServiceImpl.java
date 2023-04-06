@@ -56,14 +56,14 @@ public class UserServiceImpl implements UserService{
         return tokenProvider.generateToken(authentication);
     }
     @Override
-    public String registerUser(UserRegistrationServiceModel user) {
+    public UserServiceModel registerUser(UserRegistrationServiceModel user) {
         String password = user.getPassword();
         UserEntity userEntity = register(user);
         userEntity.setAccountCreatedDate(new Date());
         user.setRoles(new HashSet<>() {{
             add(roleService.getByRoleName("ROLE_USER"));
         }});
-        return loginUser(user.getUsername(), password);
+        return mapToService( userRepository.save(userEntity));
     }
     @Override
     public UserServiceModel registerFacebookUser(UserRegistrationServiceModel user) {

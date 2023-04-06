@@ -1,6 +1,6 @@
 package com.nucleus.floracestore.model.enums;
 
-public enum PhonePrefixes {
+public enum PhonePrefixesEnum {
     UK("+44"),
     USA("+1"),
     Algeria("+213"),
@@ -218,8 +218,13 @@ public enum PhonePrefixes {
     Zimbabwe("+263"),
     ;
 
-    String countryCode;
+    String prefix;
 
-    PhonePrefixes(String s) {
+    PhonePrefixesEnum(String prefix) {
+        this.prefix = prefix;
+    }
+
+    public String getPrefix() {
+        return prefix;
     }
 }

@@ -42,7 +42,7 @@ public class AuthController {
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody AuthenticationRequest loginRequest) {
         String token = userService.loginUser(loginRequest.getUsername(), loginRequest.getPassword());
-        log.info("facebook login {}", loginRequest);
+        log.info("Regular user login {}", loginRequest);
         return ResponseEntity.ok(new JwtAuthenticationResponse(token));
     }
 
@@ -63,9 +63,11 @@ public class AuthController {
                 .roles(Set.of(roleService.getByRoleName("USER")))
                 .setActive(true)
                 .build();
+        UserServiceModel newUser = userService.registerUser(user);
 
-        UserServiceModel newUser = userService.registerFacebookUser(user);
-        return ResponseEntity.ok(new JwtAuthenticationResponse(userService.loginUser(newUser.getUsername(), newUser.getPassword())));
+        String token = userService.loginUser(newUser.getUsername(), newUser.getPassword());
+
+        return ResponseEntity.ok(new JwtAuthenticationResponse(token));
     }
 
     @PostMapping(value = "/facebook/register", produces = MediaType.APPLICATION_JSON_VALUE)

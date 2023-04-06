@@ -253,14 +253,14 @@ public enum CountryEnum {
     ZM("Zambia"),
     ZW("Zimbabwe");
 
-    private final String displayValue;
+    private final String countryName;
     private static final Map<String, String> map = new HashMap<>();
 
-    CountryEnum(String displayValue) {
-        this.displayValue = displayValue;
+    CountryEnum(String countryName) {
+        this.countryName = countryName;
     }
 
-    public String getDisplayValue() {
-        return displayValue;
+    public String getCountryName() {
+        return countryName;
     }
 }

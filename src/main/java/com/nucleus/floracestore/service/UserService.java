@@ -12,7 +12,7 @@ public interface UserService {
 
 
     String loginUser(String username, String password);
-    String registerUser(UserRegistrationServiceModel user);
+    UserServiceModel registerUser(UserRegistrationServiceModel user);
     UserServiceModel registerFacebookUser(UserRegistrationServiceModel user);
     void updateUser(UserEditServiceModel serviceModel, MyUserPrincipal principal);
     UserServiceModel findById(Long id);

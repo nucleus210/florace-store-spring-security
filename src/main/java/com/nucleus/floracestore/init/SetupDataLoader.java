@@ -2,7 +2,9 @@ package com.nucleus.floracestore.init;
 
 import com.nucleus.floracestore.error.QueryRuntimeException;
 import com.nucleus.floracestore.model.entity.*;
+import com.nucleus.floracestore.model.enums.CountryEnum;
 import com.nucleus.floracestore.model.enums.OrderStatusCodes;
+import com.nucleus.floracestore.model.enums.PhonePrefixesEnum;
 import com.nucleus.floracestore.model.enums.ProductStatusEnum;
 import com.nucleus.floracestore.repository.*;
 import com.nucleus.floracestore.service.OrderItemsStatusCodesService;
@@ -30,10 +32,12 @@ import java.util.Set;
 @Component
 public class SetupDataLoader implements ApplicationListener<ContextRefreshedEvent> {
     boolean alreadySetup = false;
+    private final CountryRepository countryRepository;
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final PrivilegeRepository privilegeRepository;
     private final PasswordEncoder passwordEncoder;
+    private final PhonePrefixRepository phonePrefixRepository;
     private final ProductCategoryRepository productCategoryRepository;
     private final ProductSubCategoryRepository productSubCategoryRepository;
     private final ProductStatusRepository productStatusRepository;
@@ -46,11 +50,11 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
     private final OrderItemsStatusCodesService orderItemsStatusCodesService;
 
     @Autowired
-    public SetupDataLoader(UserRepository userRepository,
+    public SetupDataLoader(CountryRepository countryRepository, UserRepository userRepository,
                            RoleRepository roleRepository,
                            PrivilegeRepository privilegeRepository,
                            PasswordEncoder passwordEncoder,
-                           ProductCategoryRepository productCategoryRepository,
+                           PhonePrefixRepository phonePrefixRepository, ProductCategoryRepository productCategoryRepository,
                            ProductSubCategoryRepository productSubCategoryRepository,
                            ProductStatusRepository productStatusRepository,
                            ProductRepository productRepository,
@@ -59,10 +63,12 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
                            Environment environment,
                            OrderStatusCodesService orderStatusCodesService,
                            OrderItemsStatusCodesService orderItemsStatusCodesService) throws IOException, InterruptedException {
+        this.countryRepository = countryRepository;
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.privilegeRepository = privilegeRepository;
         this.passwordEncoder = passwordEncoder;
+        this.phonePrefixRepository = phonePrefixRepository;
         this.productCategoryRepository = productCategoryRepository;
         this.productSubCategoryRepository = productSubCategoryRepository;
         this.productStatusRepository = productStatusRepository;
@@ -140,12 +146,28 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
             user.setRoles(Set.of(userRole));
             userRepository.save(user);
 
+            CountryEnum[] countryCodes = CountryEnum.values();
+            Arrays.stream(countryCodes).forEach(country -> {
+                CountryEntity countryEntity = new CountryEntity();
+                countryEntity.setCountryName(country.getCountryName());
+                countryEntity.setCountryCode(country.name());
+                countryRepository.save(countryEntity);
+            });
+
             ProductStatusEnum[] productStatusEnumList = ProductStatusEnum.values();
             Arrays.stream(productStatusEnumList).forEach(status -> {
                 ProductStatusEntity productStatusEntity = new ProductStatusEntity();
                 productStatusEntity.setProductStatusName(status.getLevelName());
                 productStatusEntity.setProductStatusDescription(status.getLevelDescription());
                 productStatusRepository.save(productStatusEntity);
+            });
+
+            PhonePrefixesEnum[] phonePrefixesEnumList = PhonePrefixesEnum.values();
+            Arrays.stream(phonePrefixesEnumList).forEach(status -> {
+                PhonePrefixEntity phonePrefixEntity = new PhonePrefixEntity();
+                phonePrefixEntity.setCountryName(status.name());
+                phonePrefixEntity.setPrefix(status.getPrefix());
+                phonePrefixRepository.save(phonePrefixEntity);
             });
 
             ProductCategoryEntity flowers = createProductCategoryIfNotFound("Flowers", "Different types of flowers arranged as bouquets, in a box, in pots.");

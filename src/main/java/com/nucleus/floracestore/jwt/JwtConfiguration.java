@@ -3,7 +3,9 @@ package com.nucleus.floracestore.jwt;
 
 import com.google.common.net.HttpHeaders;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
 
+@Component
 @ConfigurationProperties(prefix = "application.jwt")
 public class JwtConfiguration {
 

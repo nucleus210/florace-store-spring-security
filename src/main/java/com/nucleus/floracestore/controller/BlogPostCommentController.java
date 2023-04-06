@@ -24,7 +24,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Slf4j
 @RestController
-public class BlogPostCommentController {
+public class  BlogPostCommentController {
     private final ModelMapper modelMapper;
     private final BlogPostCommentService blogPostCommentService;
     private final BlogPostCommentAssembler assembler;

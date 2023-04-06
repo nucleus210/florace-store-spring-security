@@ -6,6 +6,7 @@ import com.nucleus.floracestore.jwt.JwtUsernameAndPasswordAuthenticationFilter;
 import com.nucleus.floracestore.model.enums.UserRoleEnum;
 import com.nucleus.floracestore.service.impl.JwtTokenProvider;
 import com.nucleus.floracestore.service.impl.MyUserDetailsService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,10 +28,10 @@ import org.springframework.web.filter.CorsFilter;
 
 import javax.crypto.SecretKey;
 import javax.sql.DataSource;
-
-@Configuration
-@EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+@Slf4j
+//@Configuration
+//@EnableWebSecurity
+//@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final MyUserDetailsService userDetailsService;
     private final PasswordEncoder passwordEncoder;
@@ -39,14 +40,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final SecretKey secretKey;
     private final JwtTokenProvider tokenProvider;
 
-
     @Autowired
     public WebSecurityConfig(MyUserDetailsService userDetailsService,
                              PasswordEncoder passwordEncoder,
                              DataSource dataSource,
                              JwtConfiguration jwtConfiguration,
-                             SecretKey secretKey,
-                             JwtTokenProvider tokenProvider) {
+                             JwtTokenProvider tokenProvider,
+                             SecretKey secretKey)
+                           {
         this.userDetailsService = userDetailsService;
         this.passwordEncoder = passwordEncoder;
         this.dataSource = dataSource;
@@ -91,6 +92,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         JwtUsernameAndPasswordAuthenticationFilter jwtUsernameAndPasswordAuthenticationFilter =
                 new JwtUsernameAndPasswordAuthenticationFilter(authenticationManagerBean(), jwtConfiguration, secretKey);
         jwtUsernameAndPasswordAuthenticationFilter.setFilterProcessesUrl("/login");
+        log.info("Regular user login {}", secretKey);
+
         http
 
                 .csrf().disable()
@@ -117,11 +120,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //                .addFilterBefore(new JwtTokenAuthenticationFilter(jwtConfig, tokenProvider, userService), UsernamePasswordAuthenticationFilter.class);
     }
 
-    @Bean(BeanIds.AUTHENTICATION_MANAGER)
-    @Override
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
-    }
 
     @Bean
     public CorsFilter corsFilter() {
@@ -136,5 +134,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         source.registerCorsConfiguration("/**", config);
 
         return new CorsFilter(source);
+    }
+    @Bean(BeanIds.AUTHENTICATION_MANAGER)
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
     }
 }

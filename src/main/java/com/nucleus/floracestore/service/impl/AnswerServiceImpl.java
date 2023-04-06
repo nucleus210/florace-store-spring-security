@@ -20,8 +20,6 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 public class AnswerServiceImpl implements AnswerService {
-    @Autowired
-
     private final ModelMapper modelMapper;
     private final AnswerRepository answerRepository;
     private final QuestionService questionService;

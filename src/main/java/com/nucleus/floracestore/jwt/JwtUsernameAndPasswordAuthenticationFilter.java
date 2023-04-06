@@ -3,6 +3,9 @@ package com.nucleus.floracestore.jwt;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nucleus.floracestore.model.payloads.AuthenticationRequest;
 import io.jsonwebtoken.Jwts;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -26,10 +29,11 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
  * Class for verifying credentials
  **/
 @Slf4j
+@NoArgsConstructor
 public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
-    private final AuthenticationManager authenticationManager;
-    private final JwtConfiguration jwtConfiguration;
-    private final SecretKey secretKey;
+    private  AuthenticationManager authenticationManager;
+    private  JwtConfiguration jwtConfiguration;
+    private  SecretKey secretKey;
 
     @Autowired
     public JwtUsernameAndPasswordAuthenticationFilter(AuthenticationManager authenticationManager,
@@ -49,8 +53,7 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
             Authentication authentication = new UsernamePasswordAuthenticationToken(
                     authenticationRequest.getUsername(),
                     authenticationRequest.getPassword());
-            Authentication authenticate = authenticationManager.authenticate(authentication);
-            return authenticate;
+            return authenticationManager.authenticate(authentication);
 
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -71,7 +74,7 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
                 .signWith(secretKey)
                 .compact();
 
-        log.info("JWT Token: {}", token);
+        log.info("JwtUsernameAndPasswordAuthenticationFilter.class - JWT Token: {}", token);
         response.addHeader(jwtConfiguration.getAuthorizationHeader(), jwtConfiguration.getTokenPrefix() + token);
         response.setContentType(APPLICATION_JSON_VALUE);
         new ObjectMapper().writeValue(response.getOutputStream(), String.format(jwtConfiguration.getTokenPrefix() + token));

@@ -56,6 +56,7 @@ public class ProfileController {
        return ResponseEntity
                .created(linkTo(methodOn(ProfileController.class).addProfileConfirm(profileModel, principal)).toUri())
                .body(assembler.toModel(mapToView(serviceModel)));
+
     }
     @GetMapping("/users/profile/{id}")
     public ResponseEntity<EntityModel<ProfileViewModel>> getProfileById(@PathVariable Long id) {
