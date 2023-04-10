@@ -2,28 +2,26 @@ package com.nucleus.floracestore.controller;
 
 import com.nucleus.floracestore.hateoas.AddressAssembler;
 import com.nucleus.floracestore.model.dto.AddressDto;
-import com.nucleus.floracestore.model.dto.AddressDto;
+import com.nucleus.floracestore.model.entity.CountryEntity;
 import com.nucleus.floracestore.model.enums.AddressTypeEnum;
 import com.nucleus.floracestore.model.service.AddressServiceModel;
-import com.nucleus.floracestore.model.service.AddressServiceModel;
+import com.nucleus.floracestore.model.service.AddressTypeServiceModel;
+import com.nucleus.floracestore.model.service.CountryServiceModel;
 import com.nucleus.floracestore.model.view.AddressViewModel;
-import com.nucleus.floracestore.model.view.AnswerViewModel;
 import com.nucleus.floracestore.service.AddressService;
+import com.nucleus.floracestore.service.AddressTypeService;
+import com.nucleus.floracestore.service.CountryService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-
-import java.util.List;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -31,16 +29,19 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @RestController
 public class AddressController {
     private final ModelMapper modelMapper;
-
     private final AddressService addressService;
+    private final AddressTypeService addressTypeService;
     private final AddressAssembler assembler;
+    private final CountryService countryService;
     @Autowired
-    public AddressController(ModelMapper modelMapper, 
-                             AddressService addressService, 
-                             AddressAssembler assembler) {
+    public AddressController(ModelMapper modelMapper,
+                             AddressService addressService,
+                             AddressTypeService addressTypeService, AddressAssembler assembler, CountryService countryService) {
         this.modelMapper = modelMapper;
         this.addressService = addressService;
+        this.addressTypeService = addressTypeService;
         this.assembler = assembler;
+        this.countryService = countryService;
     }
 
     
@@ -49,31 +50,34 @@ public class AddressController {
         return new AddressDto();
     }
     
-    @PostMapping("/address/add")
+    @PostMapping("/addresses/add")
     public ResponseEntity<EntityModel<AddressViewModel>> createAddress(@Valid AddressDto addressModel) {
         
         modelMapper.typeMap(AddressDto.class, AddressServiceModel.class).addMappings(mapper -> mapper.skip(AddressServiceModel::setAddressType));
         AddressServiceModel serviceModel = modelMapper.map(addressModel, AddressServiceModel.class);
-        serviceModel.setAddressType(AddressTypeEnum.valueOf(addressModel.getAddressType()));
+        AddressTypeServiceModel addressType = addressTypeService.getAddressTypeByName(AddressTypeEnum.valueOf(addressModel.getAddressType()).name());
+        CountryServiceModel country = countryService.getCountryByCountryName(addressModel.getCountry());
+        serviceModel.setAddressType(addressType);
+        serviceModel.setCountry(country);
 
         return ResponseEntity
                 .created(linkTo(methodOn(AddressController.class).createAddress(addressModel)).toUri())
                 .body(assembler.toModel(mapToView(addressService.createAddress(serviceModel))));
     }
-    @PutMapping("/address/{addressId}")
+    @PutMapping("/addresses/{addressId}")
     public ResponseEntity<EntityModel<AddressViewModel>> updateAddress(@RequestBody AddressDto model, @PathVariable Long addressId) {
         AddressServiceModel addressServiceModel = addressService.updateAddress(mapToService(model));
         return ResponseEntity
                 .created(linkTo(methodOn(AddressController.class).updateAddress(model, addressId)).toUri())
                 .body(assembler.toModel(mapToView(addressServiceModel)));
     }
-    @DeleteMapping("/address/{addressId}")
+    @DeleteMapping("/addresses/{addressId}")
     public ResponseEntity<EntityModel<?>> deleteAddress(@PathVariable Long addressId) {
         EntityModel<AddressViewModel> address = assembler.toModel(mapToView(addressService.deleteAddress(addressId)));
         return ResponseEntity.status(HttpStatus.OK).body(address);
     }
 
-    @GetMapping("/address/{addressId}")
+    @GetMapping("/addresses/{addressId}")
     public ResponseEntity<EntityModel<AddressViewModel>> getAddressById(@PathVariable Long AddressId) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(assembler.toModel(mapToView(addressService.getAddressById(AddressId))));

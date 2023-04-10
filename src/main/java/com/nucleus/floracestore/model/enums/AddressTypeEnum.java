@@ -3,7 +3,7 @@ package com.nucleus.floracestore.model.enums;
 import java.util.HashMap;
 import java.util.Map;
 
-public enum AddressTypeEnum {
+public enum     AddressTypeEnum {
     NONE("No address type specified."),
     INVOICE("The address used on an invoice."),
     DELIVERY("A delivery address."),
@@ -25,14 +25,14 @@ public enum AddressTypeEnum {
     UN_LANDING_W("The unlading address for RU,LT,LV."),
     CONSIGNMENT_IN("The consignment address for IN.");
 
-    private final String displayValue;
+    private final String addressTypeDescription;
     private static final Map<String, String> map = new HashMap<>();
 
-    AddressTypeEnum(String displayValue) {
-        this.displayValue = displayValue;
+    AddressTypeEnum(String addressTypeDescription) {
+        this.addressTypeDescription = addressTypeDescription;
     }
 
-    public String getDisplayValue() {
-        return displayValue;
+    public String getAddressTypeDescription() {
+        return addressTypeDescription;
     }
 }

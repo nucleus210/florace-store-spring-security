@@ -1,5 +1,6 @@
 package com.nucleus.floracestore.service.impl;
 
+import com.nucleus.floracestore.config.MyCustomDSL;
 import com.nucleus.floracestore.error.EmailAlreadyExistsException;
 import com.nucleus.floracestore.error.QueryRuntimeException;
 import com.nucleus.floracestore.error.UsernameAlreadyExistsException;
@@ -34,19 +35,21 @@ public class UserServiceImpl implements UserService{
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider tokenProvider;
     private final UserRepository userRepository;
+    private final MyCustomDSL myCustomDSL;
 
     @Autowired
     public UserServiceImpl(PasswordEncoder passwordEncoder,
                            ModelMapper modelMapper,
                            RoleService roleService,
                            AuthenticationManager authenticationManager,
-                           JwtTokenProvider tokenProvider, UserRepository userRepository) {
+                           JwtTokenProvider tokenProvider, UserRepository userRepository, MyCustomDSL myCustomDSL) {
         this.passwordEncoder = passwordEncoder;
         this.modelMapper = modelMapper;
         this.roleService = roleService;
         this.authenticationManager = authenticationManager;
         this.tokenProvider = tokenProvider;
         this.userRepository = userRepository;
+        this.myCustomDSL = myCustomDSL;
     }
 
     @Override

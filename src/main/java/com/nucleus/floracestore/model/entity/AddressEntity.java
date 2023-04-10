@@ -1,13 +1,13 @@
 package com.nucleus.floracestore.model.entity;
 
 import com.nucleus.floracestore.model.enums.AddressTypeEnum;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
 
-@Getter
-@Setter
+@Data
 @Entity
 @Table(name = "address")
 public class AddressEntity {
@@ -31,14 +31,15 @@ public class AddressEntity {
     @Column(name = "zip_pos")
     private String zipPostCode;
 
-    @Column(name = "country")
-    private String country;
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @JoinColumn(name = "country_id", referencedColumnName = "country_id")
+    private CountryEntity country;
 
     @Column(name = "other_address_details", columnDefinition = "TEXT")
     private String otherAddressDetails;
 
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private AddressTypeEnum addressType;
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @JoinColumn(name = "address_type_id", referencedColumnName = "address_type_id")
+    private AddressTypeEntity addressType;
 
 }

@@ -2,6 +2,7 @@ package com.nucleus.floracestore.controller;
 
 import com.nucleus.floracestore.error.StorageFileNotFoundException;
 import com.nucleus.floracestore.hateoas.StorageAssembler;
+import com.nucleus.floracestore.model.dto.UploadDto;
 import com.nucleus.floracestore.model.service.StorageServiceModel;
 import com.nucleus.floracestore.model.view.SingleUploadResponseMessage;
 import com.nucleus.floracestore.model.view.StorageViewModel;
@@ -22,13 +23,16 @@ import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBui
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
 public class StorageController {
+    private static final String UPLOADED_FOLDER = "./resource-collector/";
     private final StorageService storageService;
     private final ModelMapper modelMapper;
     private final StorageAssembler assembler;
@@ -40,20 +44,69 @@ public class StorageController {
         this.modelMapper = modelMapper;
         this.assembler = assembler;
     }
+    @PostMapping(path = "/storages/uploads", consumes = {"multipart/form-data" }, produces = "application/json")
+    public ResponseEntity<UploadDto> multiUploadFileModel(@RequestBody UploadDto uploadFileModel) {
+        System.out.println("Upload Files: " + uploadFileModel);
+//        try {
+//            Arrays.stream(uploadFileModel.getFiles()).forEach(file -> {
+//                try {
+//                    saveUploadedFile(file);
+//                } catch (IOException e) {
+//                    throw new RuntimeException(e);
+//                }
+//            });
+//
+//            // Save as you want as per requiremens
+//            saveUploadedFile(uploadFileModel.getFile());
+//        } catch (IOException e) {
+//            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+//        }
 
-    @PostMapping(value = "/storages/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+        return new ResponseEntity("Successfully uploaded!", HttpStatus.OK);
+    }
+    private void saveUploadedFile(MultipartFile file) throws IOException {
+        if (!file.isEmpty()) {
+            byte[] bytes = file.getBytes();
+            Path path = Paths.get(UPLOADED_FOLDER + file.getOriginalFilename());
+            Files.write(path, bytes);
+        }
+    }
+//    @PostMapping(value = "/storages/files", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping("/storages/files")
+    public ResponseEntity<EntityModel<SingleUploadResponseMessage>> uploadMultipleStorages(@RequestParam("files") MultipartFile[] files) {
+        List<StorageViewModel> storages = new ArrayList<>();
+        System.out.println(files);
+
+        try {
+            Arrays.stream(files).forEach(f -> {
+                StorageViewModel storage = mapToView(storageService.storeFile(f));
+                storages.add(storage);
+            });
+            System.out.println(storages);
+
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(assembler.toModel(new SingleUploadResponseMessage("Uploaded the file successfully: "
+                            ,null, files,null, storages)));
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED)
+                    .body(assembler.toModel(new SingleUploadResponseMessage("Could not upload the file: " ,
+            null, files,null, storages)));
+        }
+    }
+
+    @PostMapping(value = "/storages/file", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<EntityModel<SingleUploadResponseMessage>> uploadFileToStorages(@RequestParam("file") MultipartFile file) {
         try {
-
             StorageViewModel storage = mapToView(storageService.storeFile(file));
             return ResponseEntity.status(HttpStatus.OK)
                     .body(assembler.toModel(new SingleUploadResponseMessage("Uploaded the file successfully: "
-                            + file.getOriginalFilename(), file, storage)));
+                            + file.getOriginalFilename(), file, null, storage, null)));
 
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED)
                     .body(assembler.toModel(new SingleUploadResponseMessage("Could not upload the file: "
-                            + file.getOriginalFilename() + "!", file, null)));
+                            + file.getOriginalFilename() + "!", file, null, null, null)));
         }
     }
 

@@ -1,8 +1,12 @@
 package com.nucleus.floracestore.controller;
 
+import com.nucleus.floracestore.config.MyCustomDSL;
 import com.nucleus.floracestore.error.BadRequestException;
 import com.nucleus.floracestore.error.EmailAlreadyExistsException;
 import com.nucleus.floracestore.error.UsernameAlreadyExistsException;
+import com.nucleus.floracestore.jwt.JwtConfiguration;
+import com.nucleus.floracestore.jwt.JwtTokenVerifier;
+import com.nucleus.floracestore.jwt.JwtUsernameAndPasswordAuthenticationFilter;
 import com.nucleus.floracestore.model.dto.UserRegistrationDto;
 import com.nucleus.floracestore.model.entity.ProfileEntity;
 import com.nucleus.floracestore.model.payloads.*;
@@ -13,11 +17,15 @@ import com.nucleus.floracestore.service.impl.FacebookService;
 import com.nucleus.floracestore.service.impl.UserServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.crypto.SecretKey;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.Set;
@@ -29,21 +37,38 @@ public class AuthController {
     private final UserServiceImpl userService;
     private final FacebookService facebookService;
     private final RoleService roleService;
-
+    private final JwtConfiguration jwtConfiguration;
+    private final SecretKey secretKey;
+    private final MyCustomDSL myCustomDSL;
     @Autowired
     public AuthController(UserServiceImpl userService,
                           FacebookService facebookService,
-                          RoleService roleService) {
+                          RoleService roleService, JwtConfiguration jwtConfiguration, SecretKey secretKey, MyCustomDSL myCustomDSL) {
         this.userService = userService;
         this.facebookService = facebookService;
         this.roleService = roleService;
+        this.jwtConfiguration = jwtConfiguration;
+        this.secretKey = secretKey;
+        this.myCustomDSL = myCustomDSL;
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody AuthenticationRequest loginRequest) {
+        try {
+//            new JwtTokenVerifier(secretKey, jwtConfiguration), JwtUsernameAndPasswordAuthenticationFilter.class);
         String token = userService.loginUser(loginRequest.getUsername(), loginRequest.getPassword());
         log.info("Regular user login {}", loginRequest);
-        return ResponseEntity.ok(new JwtAuthenticationResponse(token));
+//        return ResponseEntity.ok(new JwtAuthenticationResponse(token));
+        return ResponseEntity.ok()
+                .header(HttpHeaders.AUTHORIZATION)
+                .body(new JwtAuthenticationResponse(token));
+    } catch (
+    BadCredentialsException ex) {
+            log.info("UNAUTHORIZED login {}", ex);
+
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    }
+
     }
 
     @PostMapping("/facebook/signin")

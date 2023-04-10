@@ -42,7 +42,7 @@ public class JwtTokenAuthenticationFilter extends OncePerRequestFilter {
         log.info("doFilterInternal");
 
         // 1. get the authentication header. Tokens are supposed to be passed in the authentication header
-        String header = request.getHeader(jwtConfig.getHeader());
+        final String header = request.getHeader(jwtConfig.getHeader());
 
         // 2. validate the header and check the prefix
         if (header == null || !header.startsWith(jwtConfig.getPrefix())) {
@@ -57,7 +57,7 @@ public class JwtTokenAuthenticationFilter extends OncePerRequestFilter {
         // And If user tried to access without access token, then he won't be authenticated and an exception will be thrown.
 
         // 3. Get the token
-        String token = header.replace(jwtConfig.getPrefix(), "");
+        final String token = header.replace(jwtConfig.getPrefix(), "");
 
         if (tokenProvider.validateToken(token)) {
             Claims claims = tokenProvider.getClaimsFromJWT(token);

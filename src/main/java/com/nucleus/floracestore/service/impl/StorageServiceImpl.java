@@ -24,10 +24,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -80,10 +77,49 @@ public class StorageServiceImpl implements StorageService {
 
     @Override
     public StorageServiceModel storeFile(MultipartFile file) {
+
+        // create a string of uppercase and lowercase characters and numbers
+        String upperAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        String lowerAlphabet = "abcdefghijklmnopqrstuvwxyz";
+        String numbers = "0123456789";
+
+        // combine all strings
+        String alphaNumeric = upperAlphabet + lowerAlphabet + numbers;
+
+        // create random string builder
+        StringBuilder sb = new StringBuilder();
+
+        // create an object of Random class
+        Random random = new Random();
+
+        // specify length of random string
+        int length = 10;
+
+        for(int i = 0; i < length; i++) {
+
+            // generate random index number
+            int index = random.nextInt(alphaNumeric.length());
+
+            // get character specified by index
+            // from the string
+            char randomChar = alphaNumeric.charAt(index);
+
+            // append the character to string builder
+            sb.append(randomChar);
+        }
+
+        String randomString = sb.toString();
+
+
+
+
+//        File.createTempFile(String prefix,
+//                String suffix,
+//                File director);
         // Normalize file name
-        String fileName =
-                new SimpleDateFormat("yyyy-MM-dd'_'hh-mm-ss-SSS")
-                        .format(new Date()) + "-file." + getFileExtension(file.getOriginalFilename());
+        String fileName = randomString + "." + getFileExtension(file.getOriginalFilename());
+//                new SimpleDateFormat("yyyy-MM-dd'_'hh-mm-ss-SSS")
+//                        .format(new Date()) + "-file." + getFileExtension(file.getOriginalFilename());
         try {
             // Check if the filename contains invalid characters
             if (fileName.contains("..")) {

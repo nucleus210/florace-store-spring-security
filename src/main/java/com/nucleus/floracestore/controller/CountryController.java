@@ -1,7 +1,7 @@
 package com.nucleus.floracestore.controller;
 
 import com.nucleus.floracestore.hateoas.CountryAssembler;
-import com.nucleus.floracestore.model.dto.CountryDTO;
+import com.nucleus.floracestore.model.dto.CountryDto;
 import com.nucleus.floracestore.model.service.CountryServiceModel;
 import com.nucleus.floracestore.model.view.CountryViewModel;
 import com.nucleus.floracestore.service.CountryService;
@@ -35,7 +35,7 @@ public class CountryController {
     }
 
     @PostMapping("/countries")
-    public ResponseEntity<EntityModel<CountryViewModel>> createCountry(@RequestBody CountryDTO model) {
+    public ResponseEntity<EntityModel<CountryViewModel>> createCountry(@RequestBody CountryDto model) {
         CountryServiceModel countryServiceModel = countryService.createCountry(mapToService(model));
         return ResponseEntity
                 .created(linkTo(methodOn(CountryController.class).createCountry(model)).toUri())
@@ -43,7 +43,7 @@ public class CountryController {
     }
 
     @PutMapping("/countries/{countryId}")
-    public ResponseEntity<EntityModel<CountryViewModel>> updateCountry(@RequestBody CountryDTO model, @PathVariable Long countryId) {
+    public ResponseEntity<EntityModel<CountryViewModel>> updateCountry(@RequestBody CountryDto model, @PathVariable Long countryId) {
         CountryServiceModel countryServiceModel = countryService.updateAnswer(mapToService(model), countryId);
         return ResponseEntity
                 .created(linkTo(methodOn(CountryController.class).updateCountry(model, countryId)).toUri())
@@ -55,7 +55,7 @@ public class CountryController {
         return ResponseEntity.status(HttpStatus.OK).body(CountryViewModel);
     }
 
-    @GetMapping("/countries/all")
+    @GetMapping("/countries")
     public ResponseEntity<CollectionModel<EntityModel<CountryViewModel>>> getAllCountries() {
         List<EntityModel<CountryViewModel>> questions = countryService.getAllCountries().stream()
                 .map(entity -> assembler.toModel(mapToView(entity))).toList();
@@ -81,7 +81,7 @@ public class CountryController {
         return modelMapper.map(model, CountryViewModel.class);
     }
 
-    private CountryServiceModel mapToService(CountryDTO model) {
+    private CountryServiceModel mapToService(CountryDto model) {
         return modelMapper.map(model, CountryServiceModel.class);
     }
 

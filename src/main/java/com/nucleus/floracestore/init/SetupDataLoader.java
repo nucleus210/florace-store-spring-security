@@ -2,13 +2,11 @@ package com.nucleus.floracestore.init;
 
 import com.nucleus.floracestore.error.QueryRuntimeException;
 import com.nucleus.floracestore.model.entity.*;
-import com.nucleus.floracestore.model.enums.CountryEnum;
-import com.nucleus.floracestore.model.enums.OrderStatusCodes;
-import com.nucleus.floracestore.model.enums.PhonePrefixesEnum;
-import com.nucleus.floracestore.model.enums.ProductStatusEnum;
+import com.nucleus.floracestore.model.enums.*;
 import com.nucleus.floracestore.repository.*;
 import com.nucleus.floracestore.service.OrderItemsStatusCodesService;
 import com.nucleus.floracestore.service.OrderStatusCodesService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -32,6 +30,9 @@ import java.util.Set;
 @Component
 public class SetupDataLoader implements ApplicationListener<ContextRefreshedEvent> {
     boolean alreadySetup = false;
+
+    private final AddressRepository addressRepository;
+    private final AddressTypeRepository addressTypeRepository;
     private final CountryRepository countryRepository;
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
@@ -43,6 +44,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
     private final ProductStatusRepository productStatusRepository;
     private final ProductRepository productRepository;
     private final StorageRepository storageRepository;
+    private final SupplierRepository supplierRepository;
     private final ResourceLoader resourceLoader;
     private final Path fileStorageLocation;
     private final OrderStatusCodesService orderStatusCodesService;
@@ -50,19 +52,24 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
     private final OrderItemsStatusCodesService orderItemsStatusCodesService;
 
     @Autowired
-    public SetupDataLoader(CountryRepository countryRepository, UserRepository userRepository,
+    public SetupDataLoader(AddressRepository addressRepository, AddressTypeRepository addressTypeRepository,
+                           CountryRepository countryRepository,
+                           UserRepository userRepository,
                            RoleRepository roleRepository,
                            PrivilegeRepository privilegeRepository,
                            PasswordEncoder passwordEncoder,
-                           PhonePrefixRepository phonePrefixRepository, ProductCategoryRepository productCategoryRepository,
+                           PhonePrefixRepository phonePrefixRepository,
+                           ProductCategoryRepository productCategoryRepository,
                            ProductSubCategoryRepository productSubCategoryRepository,
                            ProductStatusRepository productStatusRepository,
                            ProductRepository productRepository,
                            StorageRepository storageRepository,
-                           ResourceLoader resourceLoader,
+                           SupplierRepository supplierRepository, ResourceLoader resourceLoader,
                            Environment environment,
                            OrderStatusCodesService orderStatusCodesService,
                            OrderItemsStatusCodesService orderItemsStatusCodesService) throws IOException, InterruptedException {
+        this.addressRepository = addressRepository;
+        this.addressTypeRepository = addressTypeRepository;
         this.countryRepository = countryRepository;
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
@@ -74,6 +81,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         this.productStatusRepository = productStatusRepository;
         this.productRepository = productRepository;
         this.storageRepository = storageRepository;
+        this.supplierRepository = supplierRepository;
         this.resourceLoader = resourceLoader;
         this.fileStorageLocation = Paths.get(environment.getProperty("app.file.upload-dir", "./src/main/resources/static/images/uploads"));
         this.orderStatusCodesService = orderStatusCodesService;
@@ -169,6 +177,71 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
                 phonePrefixEntity.setPrefix(status.getPrefix());
                 phonePrefixRepository.save(phonePrefixEntity);
             });
+            AddressTypeEnum[] addressTypeEnums = AddressTypeEnum.values();
+            Arrays.stream(addressTypeEnums).forEach(status -> {
+                AddressTypeEntity addressTypeEntity = new AddressTypeEntity();
+                addressTypeEntity.setAddressTypeName(status.name());
+                addressTypeEntity.setAddressTypeDescription(status.getAddressTypeDescription());
+                addressTypeRepository.save(addressTypeEntity);
+            });
+
+            CountryEntity bulgaria = countryRepository.findCountryEntityByCountryName("Bulgaria").orElse(null);
+            CountryEntity china = countryRepository.findCountryEntityByCountryName("China").orElse(null);
+            AddressTypeEntity addressTypeEntity = addressTypeRepository.findAddressTypeByAddressTypeName("BUSINESS").orElse(null);
+            StorageEntity sofiaFlowerLogo = null;
+            try {
+                sofiaFlowerLogo = createStorage(fileStorageLocation + "supplierLogos/sofia_flowers_logo.jpg");
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            StorageEntity unionFlowerLogo = null;
+            try {
+                unionFlowerLogo = createStorage(fileStorageLocation + "supplierLogos/union-flowers.jpg");
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            AddressEntity sofiaFlowersAddress = createAddressIfNotFound(
+                    "Dr. Boris Vulchev 10",
+                    "",
+                    "Sofia",
+                    "Sofia/Sofia/Sofia",
+                    "9000",
+                    bulgaria,
+                    "",
+                    addressTypeEntity);
+            AddressEntity unionFlower = createAddressIfNotFound(
+                    "22F Sellers Union Building",
+                    "",
+                    "Sofia",
+                    "Zone/Ningbo/China",
+                    "510000",
+                    china,
+                    "",
+                    addressTypeEntity);
+            createSupplierIfNotFound("sofia Flowers",
+                    "Teodor Ivanov",
+                    "Manager",
+                    "sofiaFlowers@gmail.com",
+                    "+3598765778899",
+                    "+3598765778899",
+                    "",
+                    sofiaFlowerLogo,
+                    userRepository.findByUsername("admin").orElse(null),
+                    sofiaFlowersAddress,
+                    "https://sofiaflowers.com/");
+            createSupplierIfNotFound("Union Flower",
+                    "Linda Li",
+                    "Manager",
+                    "dep02@sellersunion.com",
+                    "+8613819802369",
+                    "+8613819802369",
+                    "",
+                    unionFlowerLogo,
+                    userRepository.findByUsername("admin").orElse(null),
+                    unionFlower,
+                    "https://union-flower.com/");
+
+
 
             ProductCategoryEntity flowers = createProductCategoryIfNotFound("Flowers", "Different types of flowers arranged as bouquets, in a box, in pots.");
             ProductCategoryEntity Plants = createProductCategoryIfNotFound("Plants", "Different types of plants for the home and garden.");
@@ -388,11 +461,87 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         Thread.sleep(3000);
 
     }
+    @Transactional
+    public StorageEntity createStorage(String path) throws IOException, RuntimeException {
+        Resource r = ResourcePatternUtils.getResourcePatternResolver(resourceLoader).getResource(path);
 
+            String[] arrOfStr = r.getURL().toString().split("static", 0);
+            System.out.println("File path: " + arrOfStr[1]);
+            String resourceType = r.getFilename().split("\\.", 0)[1];
+            System.out.println(resourceType);
+            StorageEntity storageEntity = new StorageEntity();
+            storageEntity.setFileName(r.getFilename());
+//            storageEntity.setFileUrl(arrOfStr[1]);
+            storageEntity.setFileUrl("http://localhost:8080" + arrOfStr[1]);
+            if (r.getURI().getPath().contains("/C:")) {
+                String resultPath = r.getURI().getPath().replace("/C:", "");
+                storageEntity.setSize(Files.size(Path.of(resultPath)));
+            } else {
+                storageEntity.setSize(Files.size(Path.of(r.getURI().getPath())));
+            }
+        return storageRepository.save(storageEntity);
+
+
+    }
     public Resource[] loadResources(String pattern) throws IOException {
         return ResourcePatternUtils.getResourcePatternResolver(resourceLoader).getResources(pattern);
     }
 
+
+    @Transactional
+    private AddressEntity createAddressIfNotFound(String streetAddress,
+                                              String streetAddressSec,
+                                              String city,
+                                              String stateProvinceRegion,
+                                              String zipPostCode,
+                                              CountryEntity country,
+                                              String otherAddressDetails,
+                                              AddressTypeEntity addressType) {
+        AddressEntity address = new AddressEntity();
+            address = new AddressEntity();
+            address.setStreetAddress(streetAddress);
+            address.setStreetAddressSec(streetAddressSec);
+            address.setCity(city);
+            address.setStateProvinceRegion(stateProvinceRegion);
+            address.setZipPostCode(zipPostCode);
+            address.setCountry(country);
+            address.setOtherAddressDetails(otherAddressDetails);
+            address.setAddressType(addressType);
+            addressRepository.save(address);
+
+        return addressRepository.save(address);
+    }
+    @Transactional
+    private Supplier createSupplierIfNotFound(String companyName,
+                                                           String contactName,
+                                                           String contactJobTitle,
+                                                           String emailAddress,
+                                                           String companyPhoneNumber,
+                                                           String contactPhoneNumber,
+                                                           String notes,
+                                                           StorageEntity companyLogo,
+                                                           UserEntity user,
+                                                           AddressEntity address,
+                                                           String webSite) {
+        Supplier supplier = supplierRepository.findSupplierByCompanyName(companyName).orElse(null);
+        if (supplier == null) {
+            supplier = new Supplier();
+            supplier.setCompanyName(companyName);
+            supplier.setContactName(contactName);
+            supplier.setContactJobTitle(contactJobTitle);
+            supplier.setEmailAddress(emailAddress);
+            supplier.setCompanyPhoneNumber(companyPhoneNumber);
+            supplier.setContactPhoneNumber(contactPhoneNumber);
+            supplier.setNotes(notes);
+            supplier.setCompanyLogo(companyLogo);
+            supplier.setUser(user);
+            supplier.setAddress(address);
+            supplier.setWebSite(webSite);
+
+            supplierRepository.save(supplier);
+        }
+        return supplier;
+    }
     @Transactional
     private ProductCategoryEntity createProductCategoryIfNotFound(String categoryName,
                                                                   String categoryDescription) {

@@ -38,15 +38,7 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     public AddressServiceModel createAddress(AddressServiceModel addressModel) {
-        AddressEntity address = new AddressEntity();
-        address.setStreetAddress(addressModel.getStreetAddress());
-        address.setStreetAddressSec(addressModel.getStreetAddressSec());
-        address.setCity(addressModel.getCity());
-        address.setStateProvinceRegion(addressModel.getStateProvinceRegion());
-        address.setZipPostCode(addressModel.getZipPostCode());
-        address.setCountry(addressModel.getCountry());
-        address.setOtherAddressDetails(addressModel.getOtherAddressDetails());
-        address.setAddressType(addressModel.getAddressType());
+        AddressEntity address = modelMapper.map(addressModel, AddressEntity.class);
         addressRepository.save(address);
         return mapToService(addressRepository.save(address));
     }
@@ -67,7 +59,7 @@ public class AddressServiceImpl implements AddressService {
         address.setCity(addressModel.getCity());
         address.setStateProvinceRegion(addressModel.getStateProvinceRegion());
         address.setZipPostCode(addressModel.getZipPostCode());
-        address.setCountry(addressModel.getCountry());
+//        address.setCountry(addressModel.getCountry());
         address.setOtherAddressDetails(addressModel.getOtherAddressDetails());
 
         return mapToService(addressRepository.save(address));

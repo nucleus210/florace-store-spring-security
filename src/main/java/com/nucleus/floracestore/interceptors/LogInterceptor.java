@@ -13,8 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 public class LogInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        log.info("LogInterceptor preHandle IP addresses: {}", request.getRemoteAddr());
-        log.info("LogInterceptor preHandle IP addresses: {}", request.getRequestURI());
+//        log.info("LogInterceptor preHandle IP addresses: {}", request.getRemoteAddr());
+//        log.info("LogInterceptor preHandle IP addresses: {}", request.getRequestURI());
 
         return HandlerInterceptor.super.preHandle(request, response, handler);
     }

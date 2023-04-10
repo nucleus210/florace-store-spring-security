@@ -3,7 +3,7 @@ package com.nucleus.floracestore.config;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class StorageProperties {
+public class StorageProperties{
     private String location = "./resource-collector/";
 
     public String getLocation() {
@@ -13,4 +13,6 @@ public class StorageProperties {
     public void setLocation(String location) {
         this.location = location;
     }
+
+
 }

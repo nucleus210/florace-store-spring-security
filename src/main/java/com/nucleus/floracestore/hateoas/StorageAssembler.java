@@ -20,6 +20,8 @@ public class StorageAssembler implements RepresentationModelAssembler<SingleUplo
 
         return EntityModel.of(singleUploadResponseMessage,
                 linkTo(methodOn(StorageController.class).uploadFileToStorages(singleUploadResponseMessage.getFile())).withRel("uploadFile"),
+//                linkTo(methodOn(StorageController.class).multiUploadFileModel(singleUploadResponseMessage)).withRel("uploadFile"),
+
                 linkTo(methodOn(StorageController.class).getListFiles()).withSelfRel());
     }
 }

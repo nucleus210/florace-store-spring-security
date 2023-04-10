@@ -2,6 +2,7 @@ package com.nucleus.floracestore.model.dto;
 
 import com.nucleus.floracestore.model.entity.ProductReviewEntity;
 import com.nucleus.floracestore.model.service.ProductCategoryServiceModel;
+import com.nucleus.floracestore.model.service.ProductStatusServiceModel;
 import com.nucleus.floracestore.model.service.ProductSubCategoryServiceModel;
 import com.nucleus.floracestore.model.service.StorageServiceModel;
 import com.nucleus.floracestore.model.view.ProductStatusViewModel;
@@ -37,13 +38,11 @@ public class ProductDto {
     @Size(min = 10, max = 500)
     private String otherProductDetails;
     @NotNull
-    private ProductStatusViewModel productStatus;
+    private String productStatus;
     @NotNull
-    private String categoryName;
+    private String productCategory;
     @NotNull
-    private ProductCategoryServiceModel productCategory;
-    @NotNull
-    private ProductSubCategoryServiceModel productSubCategory;
+    private String productSubCategory;
     private Set<StorageServiceModel> storages;
     private Set<ProductReviewEntity> productReviews;
 

@@ -2,13 +2,12 @@ package com.nucleus.floracestore.controller;
 
 import com.nucleus.floracestore.hateoas.ProductAssembler;
 import com.nucleus.floracestore.model.dto.ProductDto;
+import com.nucleus.floracestore.model.service.ProductCategoryServiceModel;
 import com.nucleus.floracestore.model.service.ProductServiceModel;
 import com.nucleus.floracestore.model.service.ProductStatusServiceModel;
+import com.nucleus.floracestore.model.service.ProductSubCategoryServiceModel;
 import com.nucleus.floracestore.model.view.ProductViewModel;
-import com.nucleus.floracestore.service.ProductCategoryService;
-import com.nucleus.floracestore.service.ProductService;
-import com.nucleus.floracestore.service.StorageService;
-import com.nucleus.floracestore.service.UserService;
+import com.nucleus.floracestore.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,52 +31,49 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @Slf4j
 @RestController
 public class ProductController {
-
+    private final ModelMapper modelMapper;
     private final ProductService productService;
     private final ProductCategoryService productCategoryService;
-    private final ModelMapper modelMapper;
-    private final UserService userService;
-    private final StorageService storageService;
+    private final ProductSubCategoryService productSubCategoryService;
+    private final ProductStatusService productStatusService;
     private final ProductAssembler assembler;
-
+    private final StorageService storageService;
+    private final UserService userService;
     @Autowired
-    public ProductController(ProductService productService,
+    public ProductController(ModelMapper modelMapper,
+                             ProductService productService,
                              ProductCategoryService productCategoryService,
-                             ModelMapper modelMapper,
-                             UserService userService,
+                             ProductSubCategoryService productSubCategoryService,
+                             ProductStatusService productStatusService,
+                             ProductAssembler assembler,
                              StorageService storageService,
-                             ProductAssembler assembler) {
+                             UserService userService) {
+        this.modelMapper = modelMapper;
         this.productService = productService;
         this.productCategoryService = productCategoryService;
-        this.modelMapper = modelMapper;
-        this.userService = userService;
-        this.storageService = storageService;
+        this.productSubCategoryService = productSubCategoryService;
+        this.productStatusService = productStatusService;
         this.assembler = assembler;
+        this.storageService = storageService;
+        this.userService = userService;
     }
 
-
-    @PostMapping("/products/add")
+    @PostMapping("/products")
     public ResponseEntity<EntityModel<ProductViewModel>> productCreate(@RequestBody ProductDto model) {
+        ProductCategoryServiceModel productCategory =
+                productCategoryService.getProductCategoryByCategoryName(model.getProductCategory());
+        ProductSubCategoryServiceModel productSubCategory =
+                productSubCategoryService.getProductSubCategoryBySubCategoryName(model.getProductSubCategory());
+        ProductStatusServiceModel productStatus = productStatusService.getProductStatusByProductStatusName(model.getProductStatus());
+        ProductServiceModel productServiceModel = modelMapper.map(model, ProductServiceModel.class);
 
-        ProductServiceModel productServiceModel = new ProductServiceModel();
-        productServiceModel.setProductName(model.getProductName());
-        productServiceModel.setUnitQuantity(model.getUnitQuantity());
-        productServiceModel.setUnitSellPrice(model.getUnitSellPrice());
-        productServiceModel.setUnitOrderPrice(model.getUnitOrderPrice());
-        productServiceModel.setUnitDiscount(model.getUnitDiscount());
-        productServiceModel.setProductColor(model.getProductColor());
-        productServiceModel.setProductSize(model.getProductSize());
-        productServiceModel.setProductWeight(model.getProductWeight());
-        productServiceModel.setProductDescription(model.getProductDescription());
-        productServiceModel.setOtherProductDetails(model.getOtherProductDetails());
-        productServiceModel.setProductStatus(modelMapper.map(model.getProductStatus(), ProductStatusServiceModel.class));
-        productServiceModel.setProductCategory(model.getProductCategory());
-        productServiceModel.setProductSubCategory(model.getProductSubCategory());
-        productServiceModel.setStorages(model.getStorages());
+        productServiceModel.setProductStatus(productStatus);
+        productServiceModel.setProductCategory(productCategory);
+        productServiceModel.setProductSubCategory(productSubCategory);
 
-        productService.saveProduct(productServiceModel, getCurrentLoggedUsername());
+        ProductServiceModel product = productService.saveProduct(productServiceModel, getCurrentLoggedUsername());
 
-        ProductServiceModel product = productService.getByProductName(model.getProductName());
+//        ProductServiceModel product = productService.getByProductName(model.getProductName());
         return ResponseEntity
                 .created(linkTo(methodOn(ProductController.class).productCreate(model)).toUri())
                 .body(assembler.toModel(mapToView(product)));

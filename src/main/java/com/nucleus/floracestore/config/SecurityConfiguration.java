@@ -13,7 +13,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -21,7 +23,7 @@ import org.springframework.security.web.access.channel.ChannelProcessingFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.handler.MappedInterceptor;
 
 import javax.crypto.SecretKey;
@@ -29,7 +31,8 @@ import javax.sql.DataSource;
 
 @Slf4j
 @Configuration
-
+@EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration {
     private final MyUserDetailsService userDetailsService;
     private final PasswordEncoder passwordEncoder;
@@ -37,7 +40,6 @@ public class SecurityConfiguration {
     private final JwtConfiguration jwtConfiguration;
     private final SecretKey secretKey;
     private final MyCustomDSL myCustomDSL;
-
     @Autowired
     public SecurityConfiguration(MyUserDetailsService userDetailsService,
                                  PasswordEncoder passwordEncoder,
@@ -51,6 +53,7 @@ public class SecurityConfiguration {
         this.secretKey = secretKey;
         this.myCustomDSL = myCustomDSL;
     }
+
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
@@ -70,29 +73,43 @@ public class SecurityConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         http
-                .authorizeHttpRequests((authz) -> authz
+                .authorizeHttpRequests((authz) -> {
+                            try {
+                                authz
+                                        .antMatchers(HttpMethod.GET, "/addresses/address-types").permitAll()
+                                        .antMatchers(HttpMethod.GET, "/countries").permitAll()
+                                        .antMatchers(HttpMethod.GET, "/phone-prefixes").permitAll()
+                                        .antMatchers(HttpMethod.GET, "/products").permitAll()
+                                        .antMatchers(HttpMethod.GET, "/products/**").permitAll()
+                                        .antMatchers(HttpMethod.GET, "/products-categories").permitAll()
+                                        .antMatchers(HttpMethod.GET, "/products-sub-categories").permitAll()
+                                        .antMatchers(HttpMethod.POST, "/storages/uploads").permitAll()
+                                        .antMatchers(HttpMethod.POST, "/storages/files").permitAll()
+                                        .antMatchers(HttpMethod.POST, "/storages/file").permitAll()
 
-                        .antMatchers(HttpMethod.GET, "/products").permitAll()
-                        .antMatchers(HttpMethod.GET, "/products/**").permitAll()
-                        .antMatchers(HttpMethod.GET, "/products-categories").permitAll()
-                        .antMatchers(HttpMethod.GET, "/products-sub-categories").permitAll()
-                        .antMatchers(HttpMethod.POST, "/login").permitAll()
-                        .antMatchers(HttpMethod.POST, "/register").permitAll()
-                        .antMatchers(HttpMethod.POST, "/facebook/signin").permitAll()
-                        .antMatchers("/orders/**").hasAnyRole(UserRoleEnum.USER.name(), UserRoleEnum.ADMIN.name())
-                        .antMatchers("/order-items/**").hasAnyRole(UserRoleEnum.USER.name(), UserRoleEnum.ADMIN.name())
-                        .anyRequest().authenticated()
-                        .and()
-                        .addFilterBefore(corsFilter(), ChannelProcessingFilter.class)
-                        .addFilterAfter(new JwtTokenVerifier(secretKey, jwtConfiguration), JwtUsernameAndPasswordAuthenticationFilter.class)
+
+                                        .antMatchers(HttpMethod.POST, "/login").permitAll()
+                                        .antMatchers(HttpMethod.POST, "/register").permitAll()
+                                        .antMatchers(HttpMethod.POST, "/facebook/signin").permitAll()
+                                        .antMatchers("/orders/**").hasAnyRole(UserRoleEnum.USER.name(), UserRoleEnum.ADMIN.name())
+                                        .antMatchers("/order-items/**").hasAnyRole(UserRoleEnum.USER.name(), UserRoleEnum.ADMIN.name())
+                                        .anyRequest().authenticated()
+                                        .and()
+                                        .addFilterBefore(corsFilter(), ChannelProcessingFilter.class)
+                                        .addFilter(new JwtUsernameAndPasswordAuthenticationFilter(authenticationManager(http),  jwtConfiguration, secretKey))
+                                        .addFilterAfter(new JwtTokenVerifier(secretKey, jwtConfiguration), JwtUsernameAndPasswordAuthenticationFilter.class);
+                            } catch (Exception e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
 
 
                 )
 
                 .csrf().disable()
                 .cors().disable()
-                .httpBasic().disable()
-                .apply(myCustomDSL);
+                .httpBasic().disable();
+//                .apply(myCustomDSL);
         return http.build();
     }
     @Bean

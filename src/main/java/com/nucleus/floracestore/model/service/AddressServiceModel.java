@@ -12,8 +12,8 @@ public class AddressServiceModel {
     private String city;
     private String stateProvinceRegion;
     private String zipPostCode;
-    private String country;
+    private CountryServiceModel country;
     private String otherAddressDetails;
-    private AddressTypeEnum addressType;
+    private AddressTypeServiceModel addressType;
 }
 

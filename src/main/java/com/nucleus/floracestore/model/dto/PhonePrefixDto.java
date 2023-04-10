@@ -3,7 +3,7 @@ package com.nucleus.floracestore.model.dto;
 import lombok.Data;
 
 @Data
-public class PhonePrefixDTO {
+public class PhonePrefixDto {
 
     private String countryName;
     private String prefix;
