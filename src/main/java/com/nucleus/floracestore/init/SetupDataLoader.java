@@ -97,6 +97,9 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
                 return;
             try {
                 initializeStorage();
+                createStorage( "classpath:/static/images/uploads/blank/blank_company_logo.jpg");
+                createStorage( "classpath:/static/images/uploads/blank/blank_profile_picture.jpg");
+                createStorage( "classpath:/static/images/uploads/blank/blank_product.jpg");
             } catch (IOException | InterruptedException e) {
                 throw new RuntimeException(e);
             }
@@ -185,61 +188,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
                 addressTypeRepository.save(addressTypeEntity);
             });
 
-            CountryEntity bulgaria = countryRepository.findCountryEntityByCountryName("Bulgaria").orElse(null);
-            CountryEntity china = countryRepository.findCountryEntityByCountryName("China").orElse(null);
-            AddressTypeEntity addressTypeEntity = addressTypeRepository.findAddressTypeByAddressTypeName("BUSINESS").orElse(null);
-            StorageEntity sofiaFlowerLogo = null;
-            try {
-                sofiaFlowerLogo = createStorage(fileStorageLocation + "supplierLogos/sofia_flowers_logo.jpg");
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            StorageEntity unionFlowerLogo = null;
-            try {
-                unionFlowerLogo = createStorage(fileStorageLocation + "supplierLogos/union-flowers.jpg");
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            AddressEntity sofiaFlowersAddress = createAddressIfNotFound(
-                    "Dr. Boris Vulchev 10",
-                    "",
-                    "Sofia",
-                    "Sofia/Sofia/Sofia",
-                    "9000",
-                    bulgaria,
-                    "",
-                    addressTypeEntity);
-            AddressEntity unionFlower = createAddressIfNotFound(
-                    "22F Sellers Union Building",
-                    "",
-                    "Sofia",
-                    "Zone/Ningbo/China",
-                    "510000",
-                    china,
-                    "",
-                    addressTypeEntity);
-            createSupplierIfNotFound("sofia Flowers",
-                    "Teodor Ivanov",
-                    "Manager",
-                    "sofiaFlowers@gmail.com",
-                    "+3598765778899",
-                    "+3598765778899",
-                    "",
-                    sofiaFlowerLogo,
-                    userRepository.findByUsername("admin").orElse(null),
-                    sofiaFlowersAddress,
-                    "https://sofiaflowers.com/");
-            createSupplierIfNotFound("Union Flower",
-                    "Linda Li",
-                    "Manager",
-                    "dep02@sellersunion.com",
-                    "+8613819802369",
-                    "+8613819802369",
-                    "",
-                    unionFlowerLogo,
-                    userRepository.findByUsername("admin").orElse(null),
-                    unionFlower,
-                    "https://union-flower.com/");
+
 
 
 
@@ -375,6 +324,74 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
             Arrays.stream(values).forEach(orderStatusCodesService::initializeOrderStatusCodesFromEnum);
             ProductStatusEnum[] orderStatusCodes = ProductStatusEnum.values();
             Arrays.stream(orderStatusCodes).forEach(orderItemsStatusCodesService::createOrderItemStatus);
+
+
+
+            CountryEntity bulgaria = countryRepository.findCountryEntityByCountryName("Bulgaria").orElse(null);
+            AddressTypeEntity sofiaFlowerAddressType = addressTypeRepository.findAddressTypeByAddressTypeName("BUSINESS").orElse(null);
+
+            StorageEntity sofiaFlowerLogo = null;
+            try {
+                sofiaFlowerLogo = createStorage( "classpath:/static/images/uploads/supplierLogos/sofia_flowers_logo.jpg");
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+            AddressEntity sofiaFlowersAddress = createAddressIfNotFound(
+                    "Dr. Boris Vulchev 10",
+                    "",
+                    "Sofia",
+                    "Sofia/Sofia/Sofia",
+                    "9000",
+                    bulgaria,
+                    "",
+                    sofiaFlowerAddressType);
+
+            createSupplierIfNotFound("Sofia Flowers",
+                    "Teodor Ivanov",
+                    "Manager",
+                    "sofiaFlowers@gmail.com",
+                    "+3598765778899",
+                    "+3598765778898",
+                    "",
+                    sofiaFlowerLogo,
+                    userRepository.findByUsername("admin").orElse(null),
+                    sofiaFlowersAddress,
+                    "https://sofiaflowers.com/");
+
+            StorageEntity unionFlowerLogo = null;
+            try {
+                unionFlowerLogo = createStorage( "classpath:/static/images/uploads/supplierLogos/union-flowers.jpg");
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            AddressTypeEntity addressTypeEntity = addressTypeRepository.findAddressTypeByAddressTypeName("BUSINESS").orElse(null);
+            CountryEntity china = countryRepository.findCountryEntityByCountryName("China").orElse(null);
+            AddressEntity unionFlower = createAddressIfNotFound(
+                    "22F Sellers Union Building",
+                    "",
+                    "Sofia",
+                    "Zone/Ningbo/China",
+                    "510000",
+                    china,
+                    "",
+                    addressTypeEntity);
+            createSupplierIfNotFound("Union Flower",
+                    "Linda Li",
+                    "Manager",
+                    "dep02@sellersunion.com",
+                    "+8613819802369",
+                    "+8613819802368",
+                    "",
+                    unionFlowerLogo,
+                    userRepository.findByUsername("admin").orElse(null),
+                    unionFlower,
+                    "https://union-flower.com/");
+
+
+
+
+
             alreadySetup = true;
         }
     }
@@ -464,6 +481,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
     @Transactional
     public StorageEntity createStorage(String path) throws IOException, RuntimeException {
         Resource r = ResourcePatternUtils.getResourcePatternResolver(resourceLoader).getResource(path);
+        System.out.println("File path: " + r.getURL());
 
             String[] arrOfStr = r.getURL().toString().split("static", 0);
             System.out.println("File path: " + arrOfStr[1]);
@@ -507,7 +525,6 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
             address.setCountry(country);
             address.setOtherAddressDetails(otherAddressDetails);
             address.setAddressType(addressType);
-            addressRepository.save(address);
 
         return addressRepository.save(address);
     }
@@ -524,7 +541,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
                                                            AddressEntity address,
                                                            String webSite) {
         Supplier supplier = supplierRepository.findSupplierByCompanyName(companyName).orElse(null);
-        if (supplier == null) {
+        if(supplier == null) {
             supplier = new Supplier();
             supplier.setCompanyName(companyName);
             supplier.setContactName(contactName);
@@ -540,6 +557,8 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 
             supplierRepository.save(supplier);
         }
+//        Thread.sleep(3000);
+
         return supplier;
     }
     @Transactional

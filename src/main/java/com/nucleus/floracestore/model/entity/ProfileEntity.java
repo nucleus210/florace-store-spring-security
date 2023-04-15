@@ -46,16 +46,16 @@ public class ProfileEntity {
     @Column(name = "work_phone_number")
     private String workPhoneNumber;
 
-    @OneToOne(optional = false)
+    @ManyToOne(optional = false)
     @JoinColumn(name = "profile_photo_id",
             referencedColumnName = "resources_id")
     private StorageEntity profilePhotoUrl;
 
-    @OneToOne(optional = false)
+    @ManyToOne(optional = false)
     @JoinColumn(referencedColumnName = "user_id", name = "user__id")
     private UserEntity user;
 
-    @OneToOne(optional = false)
+    @ManyToOne(optional = false)
     @JoinColumn(name = "profile_address_id",
             referencedColumnName = "address_id")
     private AddressEntity address;

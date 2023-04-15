@@ -15,7 +15,7 @@ public class Supplier {
     @Column(name = "supplier_id")
     private Long supplierId;
 
-    @Column(name = "company_name")
+    @Column(name = "company_name", unique = true)
     private String companyName;
 
     @Column(name = "contact_name", nullable = false)
@@ -27,7 +27,7 @@ public class Supplier {
     @Column(name = "email_address", nullable = false)
     private String emailAddress;
 
-    @Column(name = "company_phone_number", nullable = false)
+    @Column(name = "company_phone_number")
     private String companyPhoneNumber;
 
     @Column(name = "contact_phone_number")
@@ -36,18 +36,16 @@ public class Supplier {
     @Column(name = "notes")
     private String notes;
 
-    @OneToOne(optional = false)
-    @JoinColumn(name = "profile_photo_id",
-            referencedColumnName = "resources_id")
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "company_logo_id", referencedColumnName = "resources_id")
     private StorageEntity companyLogo;
 
-    @OneToOne(optional = false)
-    @JoinColumn(referencedColumnName = "user_id", name = "user__id")
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "user__id", referencedColumnName = "user_id")
     private UserEntity user;
 
-    @OneToOne(optional = false)
-    @JoinColumn(name = "profile_address_id",
-            referencedColumnName = "address_id")
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "address__id", referencedColumnName = "address_id")
     private AddressEntity address;
 
     @Column(name = "web_site")

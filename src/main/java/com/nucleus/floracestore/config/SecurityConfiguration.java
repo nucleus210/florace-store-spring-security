@@ -82,11 +82,14 @@ public class SecurityConfiguration {
                                         .antMatchers(HttpMethod.GET, "/products").permitAll()
                                         .antMatchers(HttpMethod.GET, "/products/**").permitAll()
                                         .antMatchers(HttpMethod.GET, "/products-categories").permitAll()
+
                                         .antMatchers(HttpMethod.GET, "/products-sub-categories").permitAll()
+                                        .antMatchers(HttpMethod.GET, "/products-sub-categories/**").permitAll()
+
                                         .antMatchers(HttpMethod.POST, "/storages/uploads").permitAll()
                                         .antMatchers(HttpMethod.POST, "/storages/files").permitAll()
                                         .antMatchers(HttpMethod.POST, "/storages/file").permitAll()
-
+                                        .antMatchers(HttpMethod.GET, "/products-statuses").permitAll()
 
                                         .antMatchers(HttpMethod.POST, "/login").permitAll()
                                         .antMatchers(HttpMethod.POST, "/register").permitAll()

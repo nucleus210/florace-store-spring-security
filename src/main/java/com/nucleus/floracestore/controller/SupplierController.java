@@ -2,10 +2,15 @@ package com.nucleus.floracestore.controller;
 
 import com.nucleus.floracestore.hateoas.SupplierAssembler;
 import com.nucleus.floracestore.model.dto.SupplierDto;
+import com.nucleus.floracestore.model.entity.UserEntity;
+import com.nucleus.floracestore.model.service.StorageServiceModel;
 import com.nucleus.floracestore.model.service.SupplierServiceModel;
+import com.nucleus.floracestore.model.service.UserServiceModel;
 import com.nucleus.floracestore.model.view.SupplierViewModel;
-import com.nucleus.floracestore.repository.SupplierRepository;
+import com.nucleus.floracestore.service.StorageService;
 import com.nucleus.floracestore.service.SupplierService;
+import com.nucleus.floracestore.service.UserService;
+import com.nucleus.floracestore.service.impl.MyUserDetailsService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,24 +34,41 @@ public class SupplierController {
     private final ModelMapper modelMapper;
     private final SupplierService supplierService;
     private final SupplierAssembler assembler;
-    private final SupplierRepository supplierRepository;
-
+    private final StorageService storageService;
+    private final UserService userService;
+    private final MyUserDetailsService userDetailsService;
     @Autowired
     public SupplierController(ModelMapper modelMapper,
                               SupplierService supplierService,
-                              SupplierAssembler assembler, SupplierRepository supplierRepository) {
+                              SupplierAssembler assembler,
+                              StorageService storageService, UserService userService, MyUserDetailsService userDetailsService) {
         this.modelMapper = modelMapper;
         this.supplierService = supplierService;
         this.assembler = assembler;
-        this.supplierRepository = supplierRepository;
+        this.storageService = storageService;
+        this.userService = userService;
+        this.userDetailsService = userDetailsService;
     }
 
     @PostMapping("/suppliers")
     public ResponseEntity<EntityModel<SupplierViewModel>> createSupplier(@RequestBody SupplierDto model) {
-        SupplierServiceModel supplierServiceModel = supplierService.createSupplier(mapToService(model));
+
+        if(model.getCompanyLogo() == null) {
+            StorageServiceModel storage = storageService.getByName("blank_profile_picture.jpg");
+            model.setCompanyLogo(storage);
+        }
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        UserServiceModel userEntity = userService.findByUsername(auth.getPrincipal().toString());
+
+        log.info("Login user: {}" + auth.getPrincipal().toString());
+        log.info("Login user: " + userEntity);
+
+        SupplierServiceModel supplierServiceModel = mapToService(model);
+        supplierServiceModel.setUser(userEntity);
+
         return ResponseEntity
                 .created(linkTo(methodOn(SupplierController.class).createSupplier(model)).toUri())
-                .body(assembler.toModel(mapToView(supplierServiceModel)));
+                .body(assembler.toModel(mapToView(supplierService.createSupplier(supplierServiceModel))));
     }
 
     @GetMapping("/suppliers/{supplierId}")

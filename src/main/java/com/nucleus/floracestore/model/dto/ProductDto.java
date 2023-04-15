@@ -1,10 +1,8 @@
 package com.nucleus.floracestore.model.dto;
 
 import com.nucleus.floracestore.model.entity.ProductReviewEntity;
-import com.nucleus.floracestore.model.service.ProductCategoryServiceModel;
-import com.nucleus.floracestore.model.service.ProductStatusServiceModel;
-import com.nucleus.floracestore.model.service.ProductSubCategoryServiceModel;
-import com.nucleus.floracestore.model.service.StorageServiceModel;
+import com.nucleus.floracestore.model.entity.Supplier;
+import com.nucleus.floracestore.model.service.*;
 import com.nucleus.floracestore.model.view.ProductStatusViewModel;
 import lombok.Data;
 
@@ -43,6 +41,7 @@ public class ProductDto {
     private String productCategory;
     @NotNull
     private String productSubCategory;
+    private SupplierServiceModel supplier;
     private Set<StorageServiceModel> storages;
     private Set<ProductReviewEntity> productReviews;
 

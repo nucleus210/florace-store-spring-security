@@ -25,7 +25,7 @@ public class ProductServiceModel {
     private ProductCategoryServiceModel productCategory;
     private ProductSubCategoryServiceModel productSubCategory;
     private Set<StorageServiceModel> storages;
-    private Supplier supplier;
+    private SupplierServiceModel supplier;
     private UserServiceModel user;
     private Set<ProductReviewEntity> productReviews;
 
