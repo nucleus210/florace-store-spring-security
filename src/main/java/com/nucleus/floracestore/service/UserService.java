@@ -14,7 +14,7 @@ public interface UserService {
     String loginUser(String username, String password);
     UserServiceModel registerUser(UserRegistrationServiceModel user);
     UserServiceModel registerFacebookUser(UserRegistrationServiceModel user);
-    void updateUser(UserEditServiceModel serviceModel, MyUserPrincipal principal);
+    void updateUser(UserServiceModel serviceModel, String username);
     UserServiceModel findById(Long id);
     Optional<UserServiceModel> findBySocialId(Long id);
     UserServiceModel findByUsername(String username);
@@ -22,4 +22,7 @@ public interface UserService {
     List<UserServiceModel> findAll();
     boolean existsByUsername(String username);
 
+    UserServiceModel deleteUser(Long userId);
+
+    void updateUserById(Long userId, UserServiceModel mapToService);
 }

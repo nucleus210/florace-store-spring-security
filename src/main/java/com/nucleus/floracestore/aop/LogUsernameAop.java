@@ -9,10 +9,7 @@ import org.springframework.stereotype.Component;
 @Aspect
 @Component
 public class LogUsernameAop {
-
     private Authentication auth;
-
-
     @Before("@annotation(LogUsername)")
     public String logUsername() throws Throwable {
         return auth.getName();

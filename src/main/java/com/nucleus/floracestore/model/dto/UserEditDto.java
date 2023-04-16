@@ -10,12 +10,12 @@ import javax.validation.constraints.Size;
 
 @Data
 public class UserEditDto {
-    @NotBlank
+    @NotNull
     @Size(min = 4, max = 20)
     @IUniqueUserName
     private String username;
-    @NotNull
+
     @IValidEmail
     @NotNull
-    private String emailAddress;
+    private String email;
 }

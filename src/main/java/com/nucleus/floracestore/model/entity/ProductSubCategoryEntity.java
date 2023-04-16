@@ -9,7 +9,6 @@ import javax.persistence.*;
 @Setter
 @Entity
 @Table(name = "product_sub_categories")
-
 public class ProductSubCategoryEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -19,7 +18,7 @@ public class ProductSubCategoryEntity {
     private String productSubCategoryName;
     @Column(name = "product_sub_category_description", columnDefinition = "TEXT", nullable = false)
     private String productSubCategoryDescription;
-    @ManyToOne(targetEntity = ProductCategoryEntity.class, fetch = FetchType.LAZY)
+    @ManyToOne(targetEntity = ProductCategoryEntity.class, fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(name = "product_category_id")
     private ProductCategoryEntity productCategory;
 }

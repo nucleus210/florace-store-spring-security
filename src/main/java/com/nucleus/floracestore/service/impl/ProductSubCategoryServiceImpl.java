@@ -2,7 +2,6 @@ package com.nucleus.floracestore.service.impl;
 
 import com.nucleus.floracestore.error.QueryRuntimeException;
 import com.nucleus.floracestore.model.entity.ProductSubCategoryEntity;
-import com.nucleus.floracestore.model.service.ProductCategoryServiceModel;
 import com.nucleus.floracestore.model.service.ProductSubCategoryServiceModel;
 import com.nucleus.floracestore.repository.ProductSubCategoryRepository;
 import com.nucleus.floracestore.service.ProductCategoryService;
@@ -65,14 +64,9 @@ public class ProductSubCategoryServiceImpl implements ProductSubCategoryService 
     }
 
     @Override
-    public ProductSubCategoryServiceModel createProductSubCategory(ProductSubCategoryServiceModel productSubCategoryServiceModel,
-                                                                   Long productCategoryId,
-                                                                   String username) {
-        ProductCategoryServiceModel productCategoryServiceModel =
-                productCategoryService.getProductCategoryById(productCategoryId);
-        productSubCategoryServiceModel.setProductCategory(productCategoryServiceModel);
-        ProductSubCategoryEntity productSubCategoryEntity = modelMapper.map(productSubCategoryServiceModel, ProductSubCategoryEntity.class);
-
+    public ProductSubCategoryServiceModel createProductSubCategory(ProductSubCategoryServiceModel productSubCategoryServiceModel) {
+        ProductSubCategoryEntity productSubCategoryEntity =
+        productSubCategoryRepository.save(modelMapper.map(productSubCategoryServiceModel, ProductSubCategoryEntity.class));
         return mapToService(productSubCategoryEntity);
     }
 
@@ -90,7 +84,7 @@ public class ProductSubCategoryServiceImpl implements ProductSubCategoryService 
     }
 
     @Override
-    public ProductSubCategoryServiceModel deleteSubProductCategoryById(Long productSubCategoryId, String username) {
+    public ProductSubCategoryServiceModel deleteSubProductCategoryById(Long productSubCategoryId) {
         ProductSubCategoryEntity productSubCategoryEntity =
                 productSubCategoryRepository.findByProductSubCategoryId(productSubCategoryId)
                         .orElseThrow(() -> new QueryRuntimeException("Could not find product sub category with id: " + productSubCategoryId));

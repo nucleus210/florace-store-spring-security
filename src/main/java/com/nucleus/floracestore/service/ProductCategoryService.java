@@ -13,11 +13,11 @@ public interface ProductCategoryService {
 
     List<ProductCategoryServiceModel> getAllProductCategories();
 
-    ProductCategoryServiceModel createProductCategory(ProductCategoryServiceModel category, String username);
+    ProductCategoryServiceModel createProductCategory(ProductCategoryServiceModel category);
 
     ProductCategoryServiceModel updateProductCategoryById(Long productCategoryId, ProductCategoryServiceModel category, String username);
 
-    ProductCategoryServiceModel deleteProductCategoryById(Long productCategoryId, String username);
+    ProductCategoryServiceModel deleteProductCategoryById(Long productCategoryId);
 
     void saveAllCategories(Set<ProductCategoryEntity> categories);
 }

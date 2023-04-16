@@ -52,7 +52,6 @@ public class AddressController {
     
     @PostMapping("/addresses/add")
     public ResponseEntity<EntityModel<AddressViewModel>> createAddress(@Valid AddressDto addressModel) {
-        
         modelMapper.typeMap(AddressDto.class, AddressServiceModel.class).addMappings(mapper -> mapper.skip(AddressServiceModel::setAddressType));
         AddressServiceModel serviceModel = modelMapper.map(addressModel, AddressServiceModel.class);
         AddressTypeServiceModel addressType = addressTypeService.getAddressTypeByName(AddressTypeEnum.valueOf(addressModel.getAddressType()).name());
@@ -96,6 +95,4 @@ public class AddressController {
         log.info("Principal: " + authentication.getName());
         return authentication.getName();
     }
-
-
 }

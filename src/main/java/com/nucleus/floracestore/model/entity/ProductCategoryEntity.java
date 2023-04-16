@@ -20,8 +20,8 @@ public class ProductCategoryEntity {
     @Column(name = "product_category_description", columnDefinition = "TEXT", nullable = false)
     private String productCategoryDescription;
     @OneToMany(targetEntity = ProductSubCategoryEntity.class,
-            cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY,
+            cascade = CascadeType.MERGE,
+            fetch = FetchType.EAGER,
             mappedBy = "productCategory")
     private Set<ProductSubCategoryEntity> productSubCategories;
 

@@ -23,7 +23,7 @@ public class ProductServiceModel {
     private String otherProductDetails;
     private ProductStatusServiceModel productStatus;
     private ProductCategoryServiceModel productCategory;
-    private ProductSubCategoryServiceModel productSubCategory;
+    private Long productSubCategoryId;
     private Set<StorageServiceModel> storages;
     private SupplierServiceModel supplier;
     private UserServiceModel user;

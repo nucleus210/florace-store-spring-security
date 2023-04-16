@@ -134,14 +134,14 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
             UserEntity admin = new UserEntity();
             admin.setUsername("admin");
             admin.setEmail("test@test.com");
-            admin.setPassword(passwordEncoder.encode("hektor123!@#"));
+            admin.setPassword(passwordEncoder.encode("123456"));
             admin.setAccountCreatedDate(new Date(System.currentTimeMillis()));
             admin.setRoles(Set.of(adminRole));
             userRepository.save(admin);
 
             RoleEntity staffRole = roleRepository.findByRoleName("STAFF");
             UserEntity staff = new UserEntity();
-            staff.setUsername("kiro");
+            staff.setUsername("lorenzo");
             staff.setEmail("test123@test.com");
             staff.setPassword(passwordEncoder.encode("lorenzo123!@#"));
             staff.setAccountCreatedDate(new Date(System.currentTimeMillis()));

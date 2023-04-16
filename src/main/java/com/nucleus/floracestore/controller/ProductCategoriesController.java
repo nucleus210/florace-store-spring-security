@@ -14,6 +14,7 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -44,11 +45,11 @@ public class ProductCategoriesController {
         this.userService = userService;
         this.assembler = assembler;
     }
-
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/products-categories")
     public ResponseEntity<EntityModel<ProductCategoryViewModel>> createProductCategory(@RequestBody ProductCategoryDto model) {
         ProductCategoryServiceModel productCategoryServiceModel =
-                productCategoryService.createProductCategory(modelMapper.map(model, ProductCategoryServiceModel.class), getCurrentLoggedUsername());
+                productCategoryService.createProductCategory(modelMapper.map(model, ProductCategoryServiceModel.class));
         log.info("ProductCategoryController: created product category with id: " + productCategoryServiceModel.getProductCategoryId());
         return ResponseEntity
                 .created(linkTo(methodOn(ProductCategoriesController.class).createProductCategory(model)).toUri())
@@ -80,6 +81,11 @@ public class ProductCategoriesController {
                 .body(CollectionModel.of(productCategories, linkTo(methodOn(ProductCategoriesController.class)
                         .getAllProductCategories())
                         .withSelfRel()));
+    }
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @DeleteMapping("/products-categories/{id}")
+    public void deleteProductCategory(@PathVariable Long id) {
+        productCategoryService.deleteProductCategoryById(id);
     }
 
     private ProductCategoryViewModel mapToView(ProductCategoryServiceModel model) {

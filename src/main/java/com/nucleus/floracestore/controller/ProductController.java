@@ -69,7 +69,7 @@ public class ProductController {
 
         productServiceModel.setProductStatus(productStatus);
         productServiceModel.setProductCategory(productCategory);
-        productServiceModel.setProductSubCategory(productSubCategory);
+//        productServiceModel.setProductSubCategory(productSubCategory);
 
         ProductServiceModel product = productService.saveProduct(productServiceModel, getCurrentLoggedUsername());
 

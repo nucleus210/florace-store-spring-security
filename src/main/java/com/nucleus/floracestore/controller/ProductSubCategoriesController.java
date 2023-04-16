@@ -2,10 +2,8 @@ package com.nucleus.floracestore.controller;
 
 import com.nucleus.floracestore.hateoas.ProductSubCategoryAssembler;
 import com.nucleus.floracestore.model.dto.ProductSubCategoryDto;
-import com.nucleus.floracestore.model.service.ProductCategoryServiceModel;
 import com.nucleus.floracestore.model.service.ProductSubCategoryServiceModel;
 import com.nucleus.floracestore.model.view.ProductSubCategoryViewModel;
-import com.nucleus.floracestore.service.ProductCategoryService;
 import com.nucleus.floracestore.service.ProductSubCategoryService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -14,6 +12,7 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -27,36 +26,26 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @RestController
 public class ProductSubCategoriesController {
     private final ModelMapper modelMapper;
-    private final ProductCategoryService productCategoryService;
     private final ProductSubCategoryService productSubCategoryService;
     private final ProductSubCategoryAssembler assembler;
 
     @Autowired
     public ProductSubCategoriesController(ModelMapper modelMapper,
-                                          ProductCategoryService productCategoryService,
                                           ProductSubCategoryService productSubCategoryService,
                                           ProductSubCategoryAssembler assembler) {
         this.modelMapper = modelMapper;
-        this.productCategoryService = productCategoryService;
         this.productSubCategoryService = productSubCategoryService;
         this.assembler = assembler;
     }
-
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/products-sub-categories")
-    public ResponseEntity<EntityModel<ProductSubCategoryViewModel>> createProductSubCategory(@RequestBody ProductSubCategoryDto model,
-                                                                                             @PathVariable Long productCategoryId) {
-        ProductCategoryServiceModel productCategoryServiceModel =
-                productCategoryService.getProductCategoryById(productCategoryId);
-        model.setProductCategory(productCategoryServiceModel);
+    public ResponseEntity<EntityModel<ProductSubCategoryViewModel>> createProductSubCategory(@RequestBody ProductSubCategoryDto model) {
         ProductSubCategoryServiceModel productSubCategoryServiceModel =
-                productSubCategoryService.createProductSubCategory(modelMapper.map(model, ProductSubCategoryServiceModel.class),
-                        productCategoryId,
-                        getCurrentLoggedUsername());
+                productSubCategoryService.createProductSubCategory(modelMapper.map(model, ProductSubCategoryServiceModel.class));
         log.info("ProductSubCategoryController: created product sub category with id: "
-                + productSubCategoryServiceModel.getProductSubCategoryId());
-
+                + productSubCategoryServiceModel);
         return ResponseEntity
-                .created(linkTo(methodOn(ProductSubCategoriesController.class).createProductSubCategory(model, productCategoryId)).toUri())
+                .created(linkTo(methodOn(ProductSubCategoriesController.class).createProductSubCategory(model)).toUri())
                 .body(assembler.toModel(mapToView(productSubCategoryServiceModel)));
     }
 
@@ -64,8 +53,8 @@ public class ProductSubCategoriesController {
     public ResponseEntity<EntityModel<ProductSubCategoryViewModel>> getProductSubCategoryById(@PathVariable Long id) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(assembler.toModel(mapToView(productSubCategoryService.getProductSubCategoryById(id))));
-
     }
+
     @GetMapping("/products-sub-categories/search/sub-category-name/{subCategoryName}")
     public ResponseEntity<EntityModel<ProductSubCategoryViewModel>> getProductSubCategoryBySubCategoryName(@PathVariable String subCategoryName) {
         return ResponseEntity.status(HttpStatus.OK)
@@ -100,6 +89,11 @@ public class ProductSubCategoriesController {
 
     private ProductSubCategoryViewModel mapToView(ProductSubCategoryServiceModel productSubCategoryServiceModel) {
         return modelMapper.map(productSubCategoryServiceModel, ProductSubCategoryViewModel.class);
+    }
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @DeleteMapping("/products-sub-categories/{id}")
+    public void deleteProductSubCategory(@PathVariable Long id) {
+        productSubCategoryService.deleteSubProductCategoryById(id);
     }
 
     private String getCurrentLoggedUsername() {

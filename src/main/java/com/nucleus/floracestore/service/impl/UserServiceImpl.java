@@ -5,7 +5,6 @@ import com.nucleus.floracestore.error.EmailAlreadyExistsException;
 import com.nucleus.floracestore.error.QueryRuntimeException;
 import com.nucleus.floracestore.error.UsernameAlreadyExistsException;
 import com.nucleus.floracestore.model.entity.UserEntity;
-import com.nucleus.floracestore.model.service.UserEditServiceModel;
 import com.nucleus.floracestore.model.service.UserRegistrationServiceModel;
 import com.nucleus.floracestore.model.service.UserServiceModel;
 import com.nucleus.floracestore.repository.UserRepository;
@@ -78,18 +77,31 @@ public class UserServiceImpl implements UserService{
         return mapToService( userRepository.save(userEntity));
     }
     @Override
-    public void updateUser(UserEditServiceModel serviceModel, MyUserPrincipal principal) {
-        Optional<UserEntity> userOpt = userRepository.findByUsername(principal.getUsername());
-        if (userOpt.isPresent()) {
-            UserEntity userEntity = userOpt.get();
-            userEntity.setUserId(userOpt.get().getUserId());
+    public void updateUser(UserServiceModel serviceModel, String username) {
+        UserEntity userEntity = userRepository.findByUsername(username)
+                .orElseThrow(() -> new QueryRuntimeException("Could not find user with username " + username));
             userEntity.setUsername(serviceModel.getUsername());
             userEntity.setEmail(serviceModel.getEmail());
-            userEntity.setPassword(userEntity.getPassword());
-            userEntity.setRoles(userOpt.get().getRoles());
             userRepository.save(userEntity);
-        }
     }
+
+    @Override
+    public UserServiceModel deleteUser(Long userId) {
+        UserEntity userEntity = userRepository.findById(userId)
+                .orElseThrow(() -> new QueryRuntimeException("Could not find user with id " + userId));
+        userRepository.delete(userEntity);
+        return mapToService(userEntity);
+    }
+
+    @Override
+    public void updateUserById(Long userId, UserServiceModel userServiceModel) {
+        UserEntity userEntity = userRepository.findById(userId)
+                .orElseThrow(() -> new QueryRuntimeException("Could not find user with id " + userId));
+        userEntity.setUsername(userServiceModel.getUsername());
+        userEntity.setEmail(userServiceModel.getEmail());
+        userRepository.save(userEntity);
+    }
+
     @Override
     public UserServiceModel findById(Long id) {
         log.info("UserService: retrieving user {}", id);
@@ -152,6 +164,8 @@ public class UserServiceImpl implements UserService{
     public boolean existsByUsername(String username) {
         return userRepository.findByUsername(username).isPresent();
     }
+
+
     public Boolean existsByEmail(String email) {
         return userRepository.findByEmail(email).isPresent();
     }

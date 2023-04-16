@@ -57,7 +57,7 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
     }
 
     @Override
-    public ProductCategoryServiceModel createProductCategory(ProductCategoryServiceModel category, String username) {
+    public ProductCategoryServiceModel createProductCategory(ProductCategoryServiceModel category) {
         productCategoryRepository.findByProductCategoryName(category.getProductCategoryName())
                 .ifPresentOrElse((value)
                                 -> {
@@ -68,6 +68,8 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
         return productCategoryRepository.findByProductCategoryName(category.getProductCategoryName())
                 .map(this::mapToService).orElseThrow(
                         () -> new QueryRuntimeException("Could not find product category " + category.getProductCategoryName()));
+
+
     }
 
 
@@ -84,7 +86,7 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
     }
 
     @Override
-    public ProductCategoryServiceModel deleteProductCategoryById(Long productCategoryId, String username) {
+    public ProductCategoryServiceModel deleteProductCategoryById(Long productCategoryId) {
         ProductCategoryEntity productCategoryEntity = productCategoryRepository.findById(productCategoryId)
                 .orElseThrow(() -> new QueryRuntimeException("Could not find product category with id " + productCategoryId));
         productCategoryRepository.delete(productCategoryEntity);

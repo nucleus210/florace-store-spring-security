@@ -5,6 +5,7 @@ import lombok.Data;
 
 @Data
 public class ProductSubCategoryDto {
+    private Long productSubCategoryId;
     private String productSubCategoryName;
     private String productSubCategoryDescription;
     private ProductCategoryServiceModel productCategory;

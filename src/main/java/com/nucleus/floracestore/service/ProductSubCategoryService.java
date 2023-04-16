@@ -11,15 +11,13 @@ public interface ProductSubCategoryService {
 
     List<ProductSubCategoryServiceModel> getAllSubCategories();
 
-    ProductSubCategoryServiceModel createProductSubCategory(ProductSubCategoryServiceModel subCategory,
-                                                            Long categoryId,
-                                                            String username);
+    ProductSubCategoryServiceModel createProductSubCategory(ProductSubCategoryServiceModel subCategory);
 
     ProductSubCategoryServiceModel updateProductSubCategoryById(Long productSubCategoryId,
                                                                 ProductSubCategoryServiceModel subCategory,
                                                                 String username);
 
-    ProductSubCategoryServiceModel deleteSubProductCategoryById(Long productSubCategoryId, String username);
+    ProductSubCategoryServiceModel deleteSubProductCategoryById(Long productSubCategoryId);
 
     List<ProductSubCategoryServiceModel> getAllSubCategoriesByCategoryName(String categoryName);
 }

@@ -23,7 +23,9 @@ public class ProfileServiceImpl implements ProfileService {
     private final ModelMapper modelMapper;
 
     @Autowired
-    public ProfileServiceImpl(ProfileRepository profileRepository, UserService userService, ModelMapper modelMapper) {
+    public ProfileServiceImpl(ProfileRepository profileRepository,
+                              UserService userService,
+                              ModelMapper modelMapper) {
         this.profileRepository = profileRepository;
         this.userService = userService;
         this.modelMapper = modelMapper;
@@ -77,6 +79,7 @@ public class ProfileServiceImpl implements ProfileService {
     public void saveProfile(ProfileServiceModel profileServiceModel, String userIdentifier) {
         UserServiceModel userServiceModel = userService.findByUsername(userIdentifier);
         profileServiceModel.setUser(userServiceModel);
+        profileRepository.save(modelMapper.map(profileServiceModel, ProfileEntity.class));
     }
 
     public boolean isOwner(String userName, Long id) {

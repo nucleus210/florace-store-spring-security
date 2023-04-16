@@ -87,7 +87,7 @@ public class ProductServiceImpl implements ProductService {
         productEntity.setOtherProductDetails(productServiceModel.getOtherProductDetails());
         productEntity.setProductStatus(modelMapper.map(productServiceModel.getProductStatus(), ProductStatusEntity.class));
         productEntity.setProductCategory(modelMapper.map(productServiceModel.getProductCategory(), ProductCategoryEntity.class));
-        productEntity.setProductSubCategory(modelMapper.map(productServiceModel.getProductSubCategory(), ProductSubCategoryEntity.class));
+//        productEntity.setProductSubCategory(modelMapper.map(productServiceModel.getProductSubCategory(), ProductSubCategoryEntity.class));
         productRepository.save(productEntity);
     }
 

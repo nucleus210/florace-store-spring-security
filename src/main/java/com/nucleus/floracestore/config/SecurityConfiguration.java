@@ -5,7 +5,6 @@ import com.nucleus.floracestore.jwt.JwtConfiguration;
 import com.nucleus.floracestore.jwt.JwtTokenVerifier;
 import com.nucleus.floracestore.jwt.JwtUsernameAndPasswordAuthenticationFilter;
 import com.nucleus.floracestore.model.enums.UserRoleEnum;
-import com.nucleus.floracestore.service.impl.MyUserDetailsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -17,38 +16,27 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.channel.ChannelProcessingFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.handler.MappedInterceptor;
 
 import javax.crypto.SecretKey;
-import javax.sql.DataSource;
 
 @Slf4j
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration {
-    private final MyUserDetailsService userDetailsService;
-    private final PasswordEncoder passwordEncoder;
-    private final DataSource dataSource;
     private final JwtConfiguration jwtConfiguration;
     private final SecretKey secretKey;
     private final MyCustomDSL myCustomDSL;
     @Autowired
-    public SecurityConfiguration(MyUserDetailsService userDetailsService,
-                                 PasswordEncoder passwordEncoder,
-                                 DataSource dataSource,
-                                 JwtConfiguration jwtConfiguration,
+    public SecurityConfiguration(JwtConfiguration jwtConfiguration,
                                  SecretKey secretKey, MyCustomDSL myCustomDSL) {
-        this.userDetailsService = userDetailsService;
-        this.passwordEncoder = passwordEncoder;
-        this.dataSource = dataSource;
+
         this.jwtConfiguration = jwtConfiguration;
         this.secretKey = secretKey;
         this.myCustomDSL = myCustomDSL;
@@ -85,12 +73,25 @@ public class SecurityConfiguration {
 
                                         .antMatchers(HttpMethod.GET, "/products-sub-categories").permitAll()
                                         .antMatchers(HttpMethod.GET, "/products-sub-categories/**").permitAll()
+                                        .antMatchers(HttpMethod.POST, "/products-sub-categories").permitAll()
+                                        .antMatchers(HttpMethod.POST, "/products-sub-categories/**").permitAll()
 
                                         .antMatchers(HttpMethod.POST, "/storages/uploads").permitAll()
                                         .antMatchers(HttpMethod.POST, "/storages/files").permitAll()
                                         .antMatchers(HttpMethod.POST, "/storages/file").permitAll()
                                         .antMatchers(HttpMethod.GET, "/products-statuses").permitAll()
-
+                                        .antMatchers(HttpMethod.POST, "/profile/**").permitAll()
+                                        .antMatchers(HttpMethod.GET, "/profiles").permitAll()
+                                        .antMatchers(HttpMethod.POST, "/profiles").permitAll()
+                                        .antMatchers(HttpMethod.GET, "/profile").permitAll()
+                                        .antMatchers(HttpMethod.POST, "/profile").permitAll()
+                                        .antMatchers( "/users/**").permitAll()
+                                        .antMatchers( "/users/search/**").permitAll()
+                                        .antMatchers( "/users/search/**").permitAll()
+                                        .antMatchers("/users/search").permitAll()
+                                        .antMatchers( "/users/user-names/**").permitAll()
+                                        .antMatchers( "/users/search").permitAll()
+                                        .antMatchers(HttpMethod.POST, "/users/search").permitAll()
                                         .antMatchers(HttpMethod.POST, "/login").permitAll()
                                         .antMatchers(HttpMethod.POST, "/register").permitAll()
                                         .antMatchers(HttpMethod.POST, "/facebook/signin").permitAll()
@@ -99,7 +100,7 @@ public class SecurityConfiguration {
                                         .anyRequest().authenticated()
                                         .and()
                                         .addFilterBefore(corsFilter(), ChannelProcessingFilter.class)
-                                        .addFilter(new JwtUsernameAndPasswordAuthenticationFilter(authenticationManager(http),  jwtConfiguration, secretKey))
+//                                        .addFilter(new JwtUsernameAndPasswordAuthenticationFilter(authenticationManager(http),  jwtConfiguration, secretKey))
                                         .addFilterAfter(new JwtTokenVerifier(secretKey, jwtConfiguration), JwtUsernameAndPasswordAuthenticationFilter.class);
                             } catch (Exception e) {
                                 throw new RuntimeException(e);
@@ -111,8 +112,8 @@ public class SecurityConfiguration {
 
                 .csrf().disable()
                 .cors().disable()
-                .httpBasic().disable();
-//                .apply(myCustomDSL);
+                .httpBasic().disable()
+                 .apply(myCustomDSL);
         return http.build();
     }
     @Bean
