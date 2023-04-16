@@ -37,7 +37,7 @@ public class ProductSubCategoriesController {
         this.productSubCategoryService = productSubCategoryService;
         this.assembler = assembler;
     }
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_ADMIN')")
     @PostMapping("/products-sub-categories")
     public ResponseEntity<EntityModel<ProductSubCategoryViewModel>> createProductSubCategory(@RequestBody ProductSubCategoryDto model) {
         ProductSubCategoryServiceModel productSubCategoryServiceModel =

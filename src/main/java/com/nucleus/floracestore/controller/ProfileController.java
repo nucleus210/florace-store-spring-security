@@ -48,7 +48,7 @@ public class ProfileController {
     public ProfileDto profileModel() {
         return new ProfileDto();
     }
-
+    @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') or hasRole('ROLE_FACEBOOK_USER')")
     @RequestMapping(value = "/profile",  method = POST)
     public ResponseEntity<EntityModel<ProfileViewModel>> addProfileConfirm(
             @Valid ProfileDto profileModel,
@@ -62,7 +62,7 @@ public class ProfileController {
                .body(assembler.toModel(mapToView(serviceModel)));
 
     }
-
+    @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') or hasRole('ROLE_FACEBOOK_USER')")
     @RequestMapping(value = "/profiles",  method = POST)
     public ResponseEntity<EntityModel<ProfileViewModel>> addProfileConfirmSec(
             @Valid ProfileDto profileModel) {
@@ -77,12 +77,13 @@ public class ProfileController {
     }
 
 
-
+    @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') or hasRole('ROLE_FACEBOOK_USER')")
     @GetMapping("/profile/{id}")
     public ResponseEntity<EntityModel<ProfileViewModel>> getProfileById(@PathVariable Long id) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(assembler.toModel(mapToView(profileService.getProfileById(id))));
     }
+    @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') or hasRole('ROLE_FACEBOOK_USER')")
     @GetMapping("/{username}/profile")
     public ResponseEntity<EntityModel<ProfileViewModel>> getProfileByUsername(@PathVariable String username) {
         return ResponseEntity.status(HttpStatus.OK)
@@ -94,7 +95,6 @@ public class ProfileController {
         profileService.deleteProfile(id);
         return ResponseEntity.status(HttpStatus.OK).body(assembler.toModel(mapToView(profileService.getProfileById(id))));
     }
-
     private ProfileViewModel mapToView(ProfileServiceModel profile) {
         return modelMapper.map(profile, ProfileViewModel.class);
     }

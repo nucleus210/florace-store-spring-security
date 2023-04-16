@@ -55,19 +55,17 @@ public class AuthController {
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody AuthenticationRequest loginRequest) {
         try {
-//            new JwtTokenVerifier(secretKey, jwtConfiguration), JwtUsernameAndPasswordAuthenticationFilter.class);
-        String token = userService.loginUser(loginRequest.getUsername(), loginRequest.getPassword());
-        log.info("Regular user login {}", loginRequest);
-//        return ResponseEntity.ok(new JwtAuthenticationResponse(token));
-        return ResponseEntity.ok()
-                .header(HttpHeaders.AUTHORIZATION)
-                .body(new JwtAuthenticationResponse(token));
-    } catch (
-    BadCredentialsException ex) {
+            String token = userService.loginUser(loginRequest.getUsername(), loginRequest.getPassword());
+            log.info("Regular user login {}", loginRequest);
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.AUTHORIZATION)
+                    .body(new JwtAuthenticationResponse(token));
+        } catch (
+                BadCredentialsException ex) {
             log.info("UNAUTHORIZED login {}", ex);
 
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-    }
+        }
 
     }
 

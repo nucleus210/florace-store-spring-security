@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -49,7 +50,7 @@ public class AddressController {
     public AddressDto addressModel() {
         return new AddressDto();
     }
-    
+    @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') or hasRole('ROLE_FACEBOOK_USER')")
     @PostMapping("/addresses/add")
     public ResponseEntity<EntityModel<AddressViewModel>> createAddress(@Valid AddressDto addressModel) {
         modelMapper.typeMap(AddressDto.class, AddressServiceModel.class).addMappings(mapper -> mapper.skip(AddressServiceModel::setAddressType));
@@ -63,6 +64,7 @@ public class AddressController {
                 .created(linkTo(methodOn(AddressController.class).createAddress(addressModel)).toUri())
                 .body(assembler.toModel(mapToView(addressService.createAddress(serviceModel))));
     }
+    @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') or hasRole('ROLE_FACEBOOK_USER')")
     @PutMapping("/addresses/{addressId}")
     public ResponseEntity<EntityModel<AddressViewModel>> updateAddress(@RequestBody AddressDto model, @PathVariable Long addressId) {
         AddressServiceModel addressServiceModel = addressService.updateAddress(mapToService(model));
@@ -70,12 +72,13 @@ public class AddressController {
                 .created(linkTo(methodOn(AddressController.class).updateAddress(model, addressId)).toUri())
                 .body(assembler.toModel(mapToView(addressServiceModel)));
     }
+    @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') or hasRole('ROLE_FACEBOOK_USER')")
     @DeleteMapping("/addresses/{addressId}")
     public ResponseEntity<EntityModel<?>> deleteAddress(@PathVariable Long addressId) {
         EntityModel<AddressViewModel> address = assembler.toModel(mapToView(addressService.deleteAddress(addressId)));
         return ResponseEntity.status(HttpStatus.OK).body(address);
     }
-
+    @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') or hasRole('ROLE_FACEBOOK_USER')")
     @GetMapping("/addresses/{addressId}")
     public ResponseEntity<EntityModel<AddressViewModel>> getAddressById(@PathVariable Long AddressId) {
         return ResponseEntity.status(HttpStatus.OK)

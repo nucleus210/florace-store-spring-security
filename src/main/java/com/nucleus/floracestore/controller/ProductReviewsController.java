@@ -13,6 +13,7 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -39,12 +40,12 @@ public class ProductReviewsController {
         this.assembler = assembler;
     }
 
+    @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') or hasRole('ROLE_FACEBOOK_USER')")
     @PostMapping("/reviews")
     public ProductReviewsServiceModel addProductReview(@RequestBody ProductReviewsDto model) {
-
         return productReviewsService.writeProductReview(modelMapper.map(model, ProductReviewsServiceModel.class), getCurrentLoggedUsername());
     }
-
+    @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') or hasRole('ROLE_FACEBOOK_USER')")
     @PostMapping("/reviews/products/{productId}")
     public ProductReviewsServiceModel writePreview(@RequestBody ProductReviewsDto model, @PathVariable Long productId) {
         return productReviewsService.createProductReview(modelMapper.map(model, ProductReviewsServiceModel.class), productId, getCurrentLoggedUsername());

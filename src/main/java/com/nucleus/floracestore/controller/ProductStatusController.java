@@ -60,7 +60,7 @@ public class ProductStatusController {
                 .body(assembler.toModel(mapToView(productStatusServiceModel)));
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_ADMIN')")
     @DeleteMapping("/products-statuses/{id}")
     public ResponseEntity<EntityModel<ProductStatusViewModel>> deleteProductStatus(@PathVariable Long productStatusId) {
         ProductStatusServiceModel productStatusServiceModel = productStatusService.deleteProductStatusById(productStatusId, getCurrentLoggedUsername());

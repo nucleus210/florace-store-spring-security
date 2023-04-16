@@ -17,19 +17,19 @@ public class ContactEntity {
   @Column(name = "contact_id", nullable = false)
   private Long contactId;
   @Column(name = "first_name", nullable = false)
-  private String fistName;
+  private String firstName;
   @Column(name = "last_name", nullable = false)
   private String lastName;
   @Column(name = "email_name", nullable = false)
   private String email;
   @Column(name = "phone")
   private String phone;
-  @Column(name = "comment", nullable = false)
-  private String comment;
+  @Column(name = "message", nullable = false)
+  private String message;
   @DateTimeFormat(pattern = "yyyy-MM-dd")
   @Column(name = "created_date", nullable = false)
   private Date createdDate;
   @DateTimeFormat(pattern = "yyyy-MM-dd")
-  @Column(name = "response_date", nullable = false)
+  @Column(name = "response_date")
   private Date responseDate;
 }

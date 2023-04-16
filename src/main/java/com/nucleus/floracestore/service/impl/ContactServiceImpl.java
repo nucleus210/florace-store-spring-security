@@ -9,6 +9,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,6 +28,7 @@ public class ContactServiceImpl implements ContactService {
     @Override
     public ContactServiceModel createContact(ContactServiceModel contactServiceModel) {
         ContactEntity contactEntity = modelMapper.map(contactServiceModel, ContactEntity.class);
+        contactEntity.setCreatedDate(new Date());
         return mapToService(contactRepository.save(contactEntity));
     }
 

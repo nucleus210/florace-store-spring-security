@@ -6,11 +6,11 @@ import java.util.Date;
 
 @Data
 public class ContactDto {
-    private String fistName;
+    private String firstName;
     private String lastName;
     private String email;
     private String phone;
-    private String comment;
+    private String message;
     private Date createdDate;
 
 }

@@ -38,7 +38,7 @@ public class SliderItemController {
         this.sliderService = sliderService;
         this.assembler = assembler;
     }
-
+    @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_ADMIN')")
     @PostMapping("/slider")
     public ResponseEntity<EntityModel<SliderItemViewModel>> createSlide(@RequestBody SliderItemDto model) {
         SliderItemServiceModel sliderItemServiceModel =
@@ -49,7 +49,7 @@ public class SliderItemController {
                 .body(assembler.toModel(mapToView(sliderItemServiceModel)));
 
     }
-
+    @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_ADMIN')")
     @PutMapping("/slider/{id}")
     public ResponseEntity<EntityModel<SliderItemViewModel>> updateSlide(@RequestBody SliderItemDto model) {
         SliderItemServiceModel sliderItemServiceModel = sliderService.updateSlideById(model.getSlideItemId(),
@@ -61,7 +61,7 @@ public class SliderItemController {
                 .body(assembler.toModel(mapToView(sliderItemServiceModel)));
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_ADMIN')")
     @DeleteMapping("/slider/{id}")
     public ResponseEntity<EntityModel<SliderItemViewModel>> deleteSlide(@PathVariable Long sliderItemId) {
         SliderItemServiceModel sliderItemServiceModel = sliderService.deleteSlideById(sliderItemId, getCurrentLoggedUsername());

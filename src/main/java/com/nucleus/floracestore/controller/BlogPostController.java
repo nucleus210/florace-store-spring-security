@@ -38,6 +38,7 @@ public class BlogPostController {
         this.assembler = assembler;
     }
 
+    @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_ADMIN')")
     @PostMapping("/blog-posts")
     public ResponseEntity<EntityModel<BlogPostViewModel>> createBlogPost(@RequestBody BlogPostDto model) {
         BlogPostServiceModel blogPostServiceModel =
@@ -48,7 +49,7 @@ public class BlogPostController {
                 .body(assembler.toModel(mapToView(blogPostServiceModel)));
 
     }
-
+    @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_ADMIN')")
     @PutMapping("/blog-posts/{id}")
     public ResponseEntity<EntityModel<BlogPostViewModel>> updateBlogPost(@RequestBody BlogPostDto model) {
         BlogPostServiceModel blogPostServiceModel = blogPostService.updateBlogPostById(model.getBlogPostId(),
@@ -60,7 +61,7 @@ public class BlogPostController {
                 .body(assembler.toModel(mapToView(blogPostServiceModel)));
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_ADMIN')")
     @DeleteMapping("/blog-posts/{id}")
     public ResponseEntity<EntityModel<BlogPostViewModel>> deleteBlogPost(@PathVariable Long blogPostId) {
         BlogPostServiceModel blogPostServiceModel = blogPostService.deleteBlogPostById(blogPostId, getCurrentLoggedUsername());

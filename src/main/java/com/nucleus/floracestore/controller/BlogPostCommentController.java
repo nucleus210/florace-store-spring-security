@@ -38,6 +38,7 @@ public class  BlogPostCommentController {
         this.assembler = assembler;
     }
 
+    @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') or hasRole('ROLE_FACEBOOK_USER')")
     @PostMapping("/blog-posts/{blogPostId}/comments")
     public ResponseEntity<EntityModel<BlogPostCommentViewModel>> createBlogPostComment(@PathVariable Long blogPostId,
                                                                                        @RequestBody BlogPostCommentDto model) {
@@ -52,6 +53,7 @@ public class  BlogPostCommentController {
                 .body(assembler.toModel(mapToView(blogPostCommentServiceModel)));
     }
 
+    @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') or hasRole('ROLE_FACEBOOK_USER')")
     @PutMapping("/blog-posts/comments/{id}")
     public ResponseEntity<EntityModel<BlogPostCommentViewModel>> updateBlogPostComment(@RequestBody BlogPostCommentDto model) {
         BlogPostCommentServiceModel blogPostCommentServiceModel = blogPostCommentService.updateBlogPostComment(
@@ -63,8 +65,7 @@ public class  BlogPostCommentController {
                 .created(linkTo(methodOn(BlogPostCommentController.class).updateBlogPostComment(model)).toUri())
                 .body(assembler.toModel(mapToView(blogPostCommentServiceModel)));
     }
-
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_ADMIN')")
     @DeleteMapping("/blog-posts/comments/{id}")
     public ResponseEntity<EntityModel<BlogPostCommentViewModel>> deleteBlogPost(@PathVariable Long blogPostId) {
         BlogPostCommentServiceModel blogPostCommentServiceModel =

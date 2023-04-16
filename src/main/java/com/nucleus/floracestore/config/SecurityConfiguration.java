@@ -66,10 +66,12 @@ public class SecurityConfiguration {
                                 authz
                                         .antMatchers(HttpMethod.GET, "/addresses/address-types").permitAll()
                                         .antMatchers(HttpMethod.GET, "/countries").permitAll()
+                                        .antMatchers(HttpMethod.POST, "/contacts").permitAll()
                                         .antMatchers(HttpMethod.GET, "/phone-prefixes").permitAll()
                                         .antMatchers(HttpMethod.GET, "/products").permitAll()
                                         .antMatchers(HttpMethod.GET, "/products/**").permitAll()
                                         .antMatchers(HttpMethod.GET, "/products-categories").permitAll()
+                                        .antMatchers(HttpMethod.GET, "/products-statuses").permitAll()
 
                                         .antMatchers(HttpMethod.GET, "/products-sub-categories").permitAll()
                                         .antMatchers(HttpMethod.GET, "/products-sub-categories/**").permitAll()
@@ -79,7 +81,7 @@ public class SecurityConfiguration {
                                         .antMatchers(HttpMethod.POST, "/storages/uploads").permitAll()
                                         .antMatchers(HttpMethod.POST, "/storages/files").permitAll()
                                         .antMatchers(HttpMethod.POST, "/storages/file").permitAll()
-                                        .antMatchers(HttpMethod.GET, "/products-statuses").permitAll()
+
                                         .antMatchers(HttpMethod.POST, "/profile/**").permitAll()
                                         .antMatchers(HttpMethod.GET, "/profiles").permitAll()
                                         .antMatchers(HttpMethod.POST, "/profiles").permitAll()

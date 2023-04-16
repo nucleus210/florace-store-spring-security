@@ -57,7 +57,7 @@ public class ProductController {
         this.storageService = storageService;
         this.userService = userService;
     }
-
+    @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_ADMIN')")
     @PostMapping("/products")
     public ResponseEntity<EntityModel<ProductViewModel>> productCreate(@RequestBody ProductDto model) {
         ProductCategoryServiceModel productCategory =
@@ -79,7 +79,7 @@ public class ProductController {
                 .body(assembler.toModel(mapToView(product)));
     }
 
-    //TODO: implement restful method
+    @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_ADMIN')")
     @PatchMapping("/products/{id}")
     public String productEdit(@PathVariable Long id,
                               @Valid ProductDto productModel,
@@ -124,7 +124,7 @@ public class ProductController {
                 .body(CollectionModel.of(products, linkTo(methodOn(ProductController.class).getAllProducts()).withSelfRel()));
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_ADMIN')")
     @DeleteMapping("/products/{id}")
     public void deleteProduct(@PathVariable Long id) {
         productService.deleteProduct(id);

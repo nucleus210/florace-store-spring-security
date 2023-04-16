@@ -12,6 +12,7 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -49,6 +50,7 @@ public class CountryController {
                 .created(linkTo(methodOn(CountryController.class).updateCountry(model, countryId)).toUri())
                 .body(assembler.toModel(mapToView(countryServiceModel)));
     }
+    @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_ADMIN')")
     @DeleteMapping("/countries/{countryId}")
     public ResponseEntity<EntityModel<CountryViewModel>> deleteCountry(@PathVariable Long countryId) {
         EntityModel<CountryViewModel> CountryViewModel = assembler.toModel(mapToView(countryService.deleteCountryById(countryId)));

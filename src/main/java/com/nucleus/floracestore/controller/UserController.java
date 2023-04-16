@@ -12,6 +12,7 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -36,17 +37,19 @@ public class UserController {
         this.assembler = assembler;
     }
 
-
+    @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') or hasRole('ROLE_FACEBOOK_USER')")
     @GetMapping("/{userId}")
     public ResponseEntity<EntityModel<UserViewModel>> getUserById(@PathVariable Long userId) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(assembler.toModel(mapToView(userService.findById(userId))));
     }
+    @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') or hasRole('ROLE_FACEBOOK_USER')")
     @GetMapping("/user-names/{username}")
     public ResponseEntity<EntityModel<UserViewModel>> getUserByUsername(@PathVariable String username) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(assembler.toModel(mapToView(userService.findByUsername(username))));
     }
+    @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') or hasRole('ROLE_FACEBOOK_USER')")
     @PostMapping("/user-names/{username}")
     public ResponseEntity<EntityModel<UserViewModel>> updateUserByUsername(@PathVariable String username, @RequestBody UserEditDto model) {
         userService.updateUser(mapToService(model), username);
@@ -54,7 +57,7 @@ public class UserController {
                 .created(linkTo(methodOn(UserController.class).updateUserByUsername(username, model)).toUri())
                 .body(assembler.toModel(modelMapper.map(model, UserViewModel.class)));
     }
-
+    @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') or hasRole('ROLE_FACEBOOK_USER')")
     @PostMapping("/{userId}")
     public ResponseEntity<EntityModel<UserViewModel>> updateUserById(@PathVariable Long userId, @RequestBody UserEditDto model) {
 
@@ -64,11 +67,13 @@ public class UserController {
                 .created(linkTo(methodOn(UserController.class).updateUserById(userId, model)).toUri())
                 .body(assembler.toModel(modelMapper.map(model, UserViewModel.class)));
     }
+    @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') or hasRole('ROLE_FACEBOOK_USER')")
     @DeleteMapping("/{userId}")
     public ResponseEntity<EntityModel<UserViewModel>> deleteUserById(@PathVariable Long userId) {
         EntityModel<UserViewModel> userViewModel = assembler.toModel(mapToView(userService.deleteUser(userId)));
         return ResponseEntity.status(HttpStatus.OK).body(userViewModel);
     }
+    @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_ADMIN')")
     @GetMapping("/all")
     public ResponseEntity<CollectionModel<EntityModel<UserViewModel>>> getAllUsers() {
         List<EntityModel<UserViewModel>> users = userService.findAll().stream()

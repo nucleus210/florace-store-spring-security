@@ -12,6 +12,7 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -43,7 +44,7 @@ public class PhonePrefixController {
                 .created(linkTo(methodOn(PhonePrefixController.class).createPhonePrefix(model)).toUri())
                 .body(assembler.toModel(mapToView(phonePrefixServiceModel)));
     }
-
+    @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_ADMIN')")
     @PutMapping("/phone-prefixes/{phonePrefixId}")
     public ResponseEntity<EntityModel<PhonePrefixViewModel>> updatePhonePrefix(@RequestBody PhonePrefixDto model, @PathVariable Long phonePrefixId) {
         PhonePrefixServiceModel phonePrefixServiceModel = phonePrefixService.updatePhonePrefixById(mapToService(model), phonePrefixId);
@@ -51,6 +52,7 @@ public class PhonePrefixController {
                 .created(linkTo(methodOn(PhonePrefixController.class).updatePhonePrefix(model, phonePrefixId)).toUri())
                 .body(assembler.toModel(mapToView(phonePrefixServiceModel)));
     }
+    @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_ADMIN')")
     @DeleteMapping("/phone-prefixes/{phonePrefixId}")
     public ResponseEntity<EntityModel<PhonePrefixViewModel>> deletePhonePrefix(@PathVariable Long phonePrefixId) {
         EntityModel<PhonePrefixViewModel> phonePrefixViewModel = assembler.toModel(mapToView(phonePrefixService.deletePhonePrefixById(phonePrefixId)));
@@ -64,21 +66,25 @@ public class PhonePrefixController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(CollectionModel.of(phonePrefixes, linkTo(methodOn(PhonePrefixController.class).getAllPhonePrefixes()).withSelfRel()));
     }
+
     @GetMapping("/phone-prefixes/search/id/{phonePrefixId}")
     public ResponseEntity<EntityModel<PhonePrefixViewModel>> getPhonePrefixById(@PathVariable Long phonePrefixId) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(assembler.toModel(mapToView(phonePrefixService.getPhonePrefixById(phonePrefixId))));
     }
+
     @GetMapping("/phone-prefixes/search/country-name/{countryName}")
     public ResponseEntity<EntityModel<PhonePrefixViewModel>> getPhonePrefixByCountryName(@PathVariable String countryName) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(assembler.toModel(mapToView(phonePrefixService.getPhonePrefixByCountryName(countryName))));
     }
+
     @GetMapping("/phone-prefixes/search/prefix/{prefix}")
     public ResponseEntity<EntityModel<PhonePrefixViewModel>> getPhonePrefixByPhonePrefix(@PathVariable String prefix) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(assembler.toModel(mapToView(phonePrefixService.getPhonePrefixByPrefix(prefix))));
     }
+
     private PhonePrefixViewModel mapToView(PhonePrefixServiceModel model) {
         return modelMapper.map(model, PhonePrefixViewModel.class);
     }

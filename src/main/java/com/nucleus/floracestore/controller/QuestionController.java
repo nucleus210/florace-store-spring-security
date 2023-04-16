@@ -13,6 +13,7 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -41,7 +42,7 @@ public class QuestionController {
         this.assembler = assembler;
         this.questionRepository = questionRepository;
     }
-
+    @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') or hasRole('ROLE_FACEBOOK_USER')")
     @PostMapping("/questions")
     public ResponseEntity<EntityModel<QuestionViewModel>> writeQuestion(@RequestBody QuestionDto model) {
         QuestionServiceModel questionServiceModel = questionService.createQuestion(mapToService(model), model.getProductId(), getCurrentLoggedUsername());
@@ -55,6 +56,7 @@ public class QuestionController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(assembler.toModel(mapView(questionService.getQuestionById(questionId))));
     }
+    @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') or hasRole('ROLE_FACEBOOK_USER')")
     @PutMapping("/questions/{questionId}")
     public ResponseEntity<EntityModel<QuestionViewModel>> updateQuestion(@RequestBody QuestionDto model, @PathVariable Long questionId) {
 
@@ -63,6 +65,7 @@ public class QuestionController {
                 .created(linkTo(methodOn(QuestionController.class).updateQuestion(model, questionId)).toUri())
                 .body(assembler.toModel(mapView(questionServiceModel)));
     }
+    @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') or hasRole('ROLE_FACEBOOK_USER')")
     @DeleteMapping("/questions/{questionId}")
     public ResponseEntity<EntityModel<QuestionViewModel>> deleteQuestion(@PathVariable Long questionId) {
         EntityModel<QuestionViewModel> questionViewModel = assembler.toModel(mapView(questionService.deleteQuestionById(questionId)));

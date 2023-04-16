@@ -15,6 +15,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -44,6 +45,7 @@ public class StorageController {
         this.modelMapper = modelMapper;
         this.assembler = assembler;
     }
+    @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') or hasRole('ROLE_FACEBOOK_USER')")
     @PostMapping(path = "/storages/uploads", consumes = {"multipart/form-data" }, produces = "application/json")
     public ResponseEntity<UploadDto> multiUploadFileModel(@RequestBody UploadDto uploadFileModel) {
         System.out.println("Upload Files: " + uploadFileModel);
@@ -71,7 +73,7 @@ public class StorageController {
             Files.write(path, bytes);
         }
     }
-//    @PostMapping(value = "/storages/files", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') or hasRole('ROLE_FACEBOOK_USER')")
     @PostMapping("/storages/files")
     public ResponseEntity<EntityModel<SingleUploadResponseMessage>> uploadMultipleStorages(@RequestParam("files") MultipartFile[] files) {
         List<StorageViewModel> storages = new ArrayList<>();
@@ -94,7 +96,7 @@ public class StorageController {
             null, files,null, storages)));
         }
     }
-
+    @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') or hasRole('ROLE_FACEBOOK_USER')")
     @PostMapping(value = "/storages/file", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<EntityModel<SingleUploadResponseMessage>> uploadFileToStorages(@RequestParam("file") MultipartFile file) {
         try {

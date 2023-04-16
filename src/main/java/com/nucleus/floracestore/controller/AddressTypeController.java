@@ -12,6 +12,7 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -43,7 +44,7 @@ public class AddressTypeController {
                 .created(linkTo(methodOn(AddressTypeController.class).createAddressType(model)).toUri())
                 .body(assembler.toModel(mapToView(addressTypeServiceModel)));
     }
-
+    @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_ADMIN')")
     @PutMapping("/addresses/address-types/{addressTypeId}")
     public ResponseEntity<EntityModel<AddressTypeViewModel>> updateAddressType(@RequestBody AddressTypeDto model, @PathVariable Long addressTypeId) {
         AddressTypeServiceModel addressTypeServiceModel = addressTypeService.updateAddressTypeById(mapToService(model), addressTypeId);

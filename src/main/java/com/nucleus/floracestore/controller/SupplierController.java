@@ -18,6 +18,7 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -50,6 +51,7 @@ public class SupplierController {
         this.userDetailsService = userDetailsService;
     }
 
+    @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_ADMIN')")
     @PostMapping("/suppliers")
     public ResponseEntity<EntityModel<SupplierViewModel>> createSupplier(@RequestBody SupplierDto model) {
 
@@ -71,11 +73,13 @@ public class SupplierController {
                 .body(assembler.toModel(mapToView(supplierService.createSupplier(supplierServiceModel))));
     }
 
+    @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') or hasRole('ROLE_FACEBOOK_USER')")
     @GetMapping("/suppliers/{supplierId}")
     public ResponseEntity<EntityModel<SupplierViewModel>> getSupplierById(@PathVariable Long SupplierId) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(assembler.toModel(mapToView(supplierService.getSupplierById(SupplierId))));
     }
+    @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_ADMIN')")
     @PutMapping("/suppliers/{supplierId}")
     public ResponseEntity<EntityModel<SupplierViewModel>> updateSupplierById(@RequestBody SupplierDto model, @PathVariable Long SupplierId) {
 
@@ -84,11 +88,13 @@ public class SupplierController {
                 .created(linkTo(methodOn(SupplierController.class).updateSupplierById(model, SupplierId)).toUri())
                 .body(assembler.toModel(mapToView(supplierServiceModel)));
     }
+    @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_ADMIN')")
     @DeleteMapping("/suppliers/{supplierId}")
     public ResponseEntity<EntityModel<SupplierViewModel>> deleteSupplierById(@PathVariable Long SupplierId) {
         EntityModel<SupplierViewModel> SupplierViewModel = assembler.toModel(mapToView(supplierService.deleteSupplierById(SupplierId)));
         return ResponseEntity.status(HttpStatus.OK).body(SupplierViewModel);
     }
+    @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') or hasRole('ROLE_FACEBOOK_USER')")
     @GetMapping("/suppliers")
     public ResponseEntity<CollectionModel<EntityModel<SupplierViewModel>>> getAllSuppliers() {
         List<EntityModel<SupplierViewModel>> suppliers = supplierService.getAllSuppliers().stream()

@@ -10,6 +10,7 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -48,7 +49,7 @@ public class LikeController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(CollectionModel.of(likesCount, linkTo(methodOn(AnswerController.class).getAllAnswersByQuestionId(questionId)).withSelfRel()));
     }
-
+    @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') or hasRole('ROLE_FACEBOOK_USER')")
     @DeleteMapping("/likes/{likeId}")
     public ResponseEntity<EntityModel<LikeViewModel>> deleteLikeById(@PathVariable Long likeId) {
         log.info("LikeController: delete like with id " + likeId);
