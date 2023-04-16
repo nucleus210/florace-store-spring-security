@@ -1,9 +1,7 @@
 package com.nucleus.floracestore.model.dto;
 
 import com.nucleus.floracestore.model.entity.ProductReviewEntity;
-import com.nucleus.floracestore.model.entity.Supplier;
 import com.nucleus.floracestore.model.service.*;
-import com.nucleus.floracestore.model.view.ProductStatusViewModel;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;

@@ -1,6 +1,5 @@
 package com.nucleus.floracestore.repository;
 
-import com.nucleus.floracestore.model.entity.CountryEntity;
 import com.nucleus.floracestore.model.entity.PhonePrefixEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

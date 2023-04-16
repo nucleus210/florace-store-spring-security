@@ -102,12 +102,15 @@ public class ProductServiceImpl implements ProductService {
         return this.productRepository.
                 findById(id).
                 map(o -> mapDetailsView(currentUser, o))
-                .get();
+                .orElseThrow(()->new QueryRuntimeException("Could not find order item with userId " + id));
     }
 
     @Override
     public ProductViewModel getById(Long id) {
-        return productRepository.findByProductId(id).map(this::mapView).get();
+        return productRepository
+                .findByProductId(id)
+                .map(this::mapView)
+                .orElseThrow(()->new QueryRuntimeException("Could not find order item with productId " + id));
     }
 
     private ProductViewModel mapDetailsView(String currentUser, ProductEntity product) {
@@ -135,7 +138,7 @@ public class ProductServiceImpl implements ProductService {
             ProductEntity product = productEntity.get();
 
             return isAdmin(caller) ||
-                    product.getUser().equals(userName);
+                    product.getUser().getUsername().equals(userName);
         }
     }
 

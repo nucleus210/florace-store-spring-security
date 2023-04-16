@@ -22,8 +22,8 @@ spring:
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
     url: "jdbc:mysql://localhost:3306/florancedb?allowPublicKeyRetrieval=true&useSSL=false&createDatabaseIfNotExist=true&serverTimezone=UTC"
-    username: root
-    password: Zion123!@#
+    username: ''
+    password: ''
 
   servlet:
     multipart:
@@ -76,8 +76,8 @@ spring:
     _data-source-ref: persistentTokenRepository
   #Cloudinary Properties
   #cloudinary:
-  #api-key: 
-  #api-secret: 
+  #api-key:
+  #api-secret:
   #cloud-name:
 
 

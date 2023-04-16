@@ -1,9 +1,6 @@
 package com.nucleus.floracestore.service;
 
-import com.nucleus.floracestore.model.entity.ProfileEntity;
 import com.nucleus.floracestore.model.service.ProfileServiceModel;
-
-import java.util.Optional;
 
 public interface ProfileService {
     ProfileServiceModel getProfileById(Long profileId);

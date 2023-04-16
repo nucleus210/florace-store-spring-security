@@ -1,7 +1,6 @@
 package com.nucleus.floracestore.service.impl;
 
 import com.nucleus.floracestore.error.QueryRuntimeException;
-import com.nucleus.floracestore.model.entity.AddressEntity;
 import com.nucleus.floracestore.model.entity.Supplier;
 import com.nucleus.floracestore.model.service.AddressServiceModel;
 import com.nucleus.floracestore.model.service.SupplierServiceModel;

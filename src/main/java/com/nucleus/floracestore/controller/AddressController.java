@@ -2,7 +2,6 @@ package com.nucleus.floracestore.controller;
 
 import com.nucleus.floracestore.hateoas.AddressAssembler;
 import com.nucleus.floracestore.model.dto.AddressDto;
-import com.nucleus.floracestore.model.entity.CountryEntity;
 import com.nucleus.floracestore.model.enums.AddressTypeEnum;
 import com.nucleus.floracestore.model.service.AddressServiceModel;
 import com.nucleus.floracestore.model.service.AddressTypeServiceModel;

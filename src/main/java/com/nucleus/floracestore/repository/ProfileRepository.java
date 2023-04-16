@@ -1,7 +1,6 @@
 package com.nucleus.floracestore.repository;
 
 import com.nucleus.floracestore.model.entity.ProfileEntity;
-import com.nucleus.floracestore.model.entity.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -3,7 +3,6 @@ package com.nucleus.floracestore.controller;
 import com.nucleus.floracestore.hateoas.UserAssembler;
 import com.nucleus.floracestore.model.dto.UserEditDto;
 import com.nucleus.floracestore.model.service.UserServiceModel;
-import com.nucleus.floracestore.model.view.SupplierViewModel;
 import com.nucleus.floracestore.model.view.UserViewModel;
 import com.nucleus.floracestore.service.UserService;
 import org.modelmapper.ModelMapper;

@@ -2,7 +2,6 @@ package com.nucleus.floracestore.model.dto;
 
 import com.nucleus.floracestore.model.entity.AddressEntity;
 import com.nucleus.floracestore.model.entity.StorageEntity;
-import com.nucleus.floracestore.model.entity.UserEntity;
 import lombok.Data;
 
 import javax.validation.constraints.Size;

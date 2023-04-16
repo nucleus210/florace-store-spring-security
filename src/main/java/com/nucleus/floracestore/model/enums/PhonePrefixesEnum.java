@@ -218,7 +218,7 @@ public enum PhonePrefixesEnum {
     Zimbabwe("+263"),
     ;
 
-    String prefix;
+    final String prefix;
 
     PhonePrefixesEnum(String prefix) {
         this.prefix = prefix;

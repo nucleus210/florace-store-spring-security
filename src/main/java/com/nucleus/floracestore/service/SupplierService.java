@@ -2,7 +2,6 @@ package com.nucleus.floracestore.service;
 
 import com.nucleus.floracestore.model.service.SupplierServiceModel;
 
-import java.util.Collection;
 import java.util.List;
 
 public interface SupplierService {

@@ -3,7 +3,6 @@ package com.nucleus.floracestore.controller;
 import com.nucleus.floracestore.hateoas.ProfileAssembler;
 import com.nucleus.floracestore.model.dto.ProfileDto;
 import com.nucleus.floracestore.model.service.ProfileServiceModel;
-import com.nucleus.floracestore.model.view.ProductViewModel;
 import com.nucleus.floracestore.model.view.ProfileViewModel;
 import com.nucleus.floracestore.service.ProfileService;
 import com.nucleus.floracestore.service.impl.MyUserPrincipal;
@@ -17,11 +16,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 

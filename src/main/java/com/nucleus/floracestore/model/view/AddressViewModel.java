@@ -1,6 +1,5 @@
 package com.nucleus.floracestore.model.view;
 
-import com.nucleus.floracestore.model.enums.AddressTypeEnum;
 import lombok.Data;
 
 @Data

@@ -77,7 +77,6 @@ public class StorageController {
     @PostMapping("/storages/files")
     public ResponseEntity<EntityModel<SingleUploadResponseMessage>> uploadMultipleStorages(@RequestParam("files") MultipartFile[] files) {
         List<StorageViewModel> storages = new ArrayList<>();
-        System.out.println(files);
 
         try {
             Arrays.stream(files).forEach(f -> {

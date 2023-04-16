@@ -1,7 +1,6 @@
 package com.nucleus.floracestore.service.impl;
 
 import com.nucleus.floracestore.error.QueryRuntimeException;
-import com.nucleus.floracestore.model.entity.CountryEntity;
 import com.nucleus.floracestore.model.entity.PhonePrefixEntity;
 import com.nucleus.floracestore.model.service.PhonePrefixServiceModel;
 import com.nucleus.floracestore.repository.PhonePrefixRepository;

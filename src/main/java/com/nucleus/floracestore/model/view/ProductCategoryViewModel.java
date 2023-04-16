@@ -11,5 +11,6 @@ public class ProductCategoryViewModel {
     private Long productCategoryId;
     private String productCategoryName;
     private String productCategoryDescription;
+    // TODO Unable map object --> modelMapper error
     private Set<ProductSubCategoryEntity> productSubCategories;
 }

@@ -1,8 +1,5 @@
 package com.nucleus.floracestore.model.view;
 
-import com.nucleus.floracestore.model.service.AddressServiceModel;
-import com.nucleus.floracestore.model.service.StorageServiceModel;
-import com.nucleus.floracestore.model.service.UserServiceModel;
 import lombok.Data;
 
 @Data

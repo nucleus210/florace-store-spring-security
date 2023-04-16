@@ -1,8 +1,6 @@
 package com.nucleus.floracestore.hateoas;
 
 import com.nucleus.floracestore.controller.PhonePrefixController;
-import com.nucleus.floracestore.controller.PhonePrefixController;
-import com.nucleus.floracestore.model.view.PhonePrefixViewModel;
 import com.nucleus.floracestore.model.view.PhonePrefixViewModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.RepresentationModelAssembler;

@@ -13,8 +13,6 @@ import java.util.Optional;
 @Repository("order-repository")
 public interface OrderRepository extends JpaRepository<OrderEntity, Long> {
 
-    OrderEntity save(OrderEntity orderEntity);
-
     Optional<OrderEntity> findByOrderId(Long orderId);
 
     @Query("select a from OrderEntity a JOIN a.user u JOIN a.orderStatusCode c where u.username = :username and c.statusCode = :statusCode")

@@ -25,6 +25,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.Objects;
 import java.util.Set;
 
 @Component
@@ -233,8 +234,8 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
                     productStatus,
                     flowers,
                     alstroemeria,
-                    storageRepository.findById(1L).get(),
-                    userRepository.findByUsername("admin").get());
+                    storageRepository.findById(1L).orElseThrow(()->new QueryRuntimeException("Could not find storage 1")),
+                    userRepository.findByUsername("admin").orElseThrow(()->new QueryRuntimeException("Could not find user 1")));
             createProductIfNotFound("Calla Lily",
                     5,
                     23.99,
@@ -247,8 +248,8 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
                     productStatus,
                     flowers,
                     lilies,
-                    storageRepository.findById(2L).get(),
-                    userRepository.findByUsername("admin").get());
+                    storageRepository.findById(2L).orElseThrow(()->new QueryRuntimeException("Could not find storage 2")),
+                    userRepository.findByUsername("admin").orElseThrow(()->new QueryRuntimeException("Could not find user 1")));
             createProductIfNotFound("Freesias",
                     4,
                     16.99,
@@ -261,8 +262,8 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
                     productStatus,
                     flowers,
                     freesias,
-                    storageRepository.findById(3L).get(),
-                    userRepository.findByUsername("admin").get());
+                    storageRepository.findById(3L).orElseThrow(()->new QueryRuntimeException("Could not find storage 2")),
+                    userRepository.findByUsername("admin").orElseThrow(()->new QueryRuntimeException("Could not find user 1")));
             createProductIfNotFound("Lisianthus",
                     4,
                     56.99,
@@ -275,8 +276,8 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
                     productStatus,
                     flowers,
                     lisianthus,
-                    storageRepository.findById(4L).get(),
-                    userRepository.findByUsername("admin").get());
+                    storageRepository.findById(4L).orElseThrow(()->new QueryRuntimeException("Could not find storage 4")),
+                    userRepository.findByUsername("admin").orElseThrow(()->new QueryRuntimeException("Could not find user 1")));
             createProductIfNotFound("Sunflower",
                     5,
                     15.99,
@@ -289,8 +290,8 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
                     productStatus,
                     flowers,
                     sunflower,
-                    storageRepository.findById(5L).get(),
-                    userRepository.findByUsername("admin").get());
+                    storageRepository.findById(5L).orElseThrow(()->new QueryRuntimeException("Could not find storage 5")),
+                    userRepository.findByUsername("admin").orElseThrow(()->new QueryRuntimeException("Could not find user 1")));
             createProductIfNotFound("Roses",
                     2,
                     5.99,
@@ -303,8 +304,8 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
                     productStatus,
                     flowers,
                     roses,
-                    storageRepository.findById(6L).get(),
-                    userRepository.findByUsername("admin").get());
+                    storageRepository.findById(6L).orElseThrow(()->new QueryRuntimeException("Could not find storage 6")),
+                    userRepository.findByUsername("admin").orElseThrow(()->new QueryRuntimeException("Could not find user 1")));
             createProductIfNotFound("Tulips",
                     2,
                     5.99,
@@ -317,8 +318,8 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
                     productStatus,
                     flowers,
                     tulips,
-                    storageRepository.findById(7L).get(),
-                    userRepository.findByUsername("admin").get());
+                    storageRepository.findById(7L).orElseThrow(()->new QueryRuntimeException("Could not find storage 7")),
+                    userRepository.findByUsername("admin").orElseThrow(()->new QueryRuntimeException("Could not find user 1")));
 
             OrderStatusCodes[] values = OrderStatusCodes.values();
             Arrays.stream(values).forEach(orderStatusCodesService::initializeOrderStatusCodesFromEnum);
@@ -330,7 +331,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
             CountryEntity bulgaria = countryRepository.findCountryEntityByCountryName("Bulgaria").orElse(null);
             AddressTypeEntity sofiaFlowerAddressType = addressTypeRepository.findAddressTypeByAddressTypeName("BUSINESS").orElse(null);
 
-            StorageEntity sofiaFlowerLogo = null;
+            StorageEntity sofiaFlowerLogo;
             try {
                 sofiaFlowerLogo = createStorage( "classpath:/static/images/uploads/supplierLogos/sofia_flowers_logo.jpg");
             } catch (IOException e) {
@@ -359,7 +360,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
                     sofiaFlowersAddress,
                     "https://sofiaflowers.com/");
 
-            StorageEntity unionFlowerLogo = null;
+            StorageEntity unionFlowerLogo;
             try {
                 unionFlowerLogo = createStorage( "classpath:/static/images/uploads/supplierLogos/union-flowers.jpg");
             } catch (IOException e) {
@@ -461,7 +462,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         ) {
             String[] arrOfStr = r.getURL().toString().split("static", 0);
             System.out.println("File path: " + arrOfStr[1]);
-            String resourceType = r.getFilename().split("\\.", 0)[1];
+            String resourceType = Objects.requireNonNull(r.getFilename()).split("\\.", 0)[1];
             System.out.println(resourceType);
             StorageEntity storageEntity = new StorageEntity();
             storageEntity.setFileName(r.getFilename());
@@ -485,7 +486,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 
             String[] arrOfStr = r.getURL().toString().split("static", 0);
             System.out.println("File path: " + arrOfStr[1]);
-            String resourceType = r.getFilename().split("\\.", 0)[1];
+            String resourceType = Objects.requireNonNull(r.getFilename()).split("\\.", 0)[1];
             System.out.println(resourceType);
             StorageEntity storageEntity = new StorageEntity();
             storageEntity.setFileName(r.getFilename());

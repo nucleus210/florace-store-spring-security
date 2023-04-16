@@ -17,7 +17,7 @@ public class UserRegistrationServiceModel {
     private String email;
     private String password;
     private boolean setActive;
-    private Set<RoleEntity> roles = new HashSet<>();
+    private Set<RoleEntity> roles;
 
     public void setActive(boolean b) {
     }

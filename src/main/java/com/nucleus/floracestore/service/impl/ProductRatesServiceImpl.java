@@ -6,7 +6,6 @@ import com.nucleus.floracestore.model.service.ProductRatesServiceModel;
 import com.nucleus.floracestore.model.service.UserServiceModel;
 import com.nucleus.floracestore.repository.ProductRatesRepository;
 import com.nucleus.floracestore.service.ProductRatesService;
-import com.nucleus.floracestore.service.ProductService;
 import com.nucleus.floracestore.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -22,16 +21,14 @@ public class ProductRatesServiceImpl implements ProductRatesService {
 
     private final UserService userService;
     private final ModelMapper modelMapper;
-    private final ProductService productService;
     private final ProductRatesRepository productRatesRepository;
 
     @Autowired
     public ProductRatesServiceImpl(UserService userService,
                                    ModelMapper modelMapper,
-                                   ProductService productService, ProductRatesRepository productRatesRepository) {
+                                   ProductRatesRepository productRatesRepository) {
         this.userService = userService;
         this.modelMapper = modelMapper;
-        this.productService = productService;
         this.productRatesRepository = productRatesRepository;
     }
 

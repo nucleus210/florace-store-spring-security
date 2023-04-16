@@ -37,25 +37,21 @@ public class ProductController {
     private final ProductSubCategoryService productSubCategoryService;
     private final ProductStatusService productStatusService;
     private final ProductAssembler assembler;
-    private final StorageService storageService;
-    private final UserService userService;
+
     @Autowired
     public ProductController(ModelMapper modelMapper,
                              ProductService productService,
                              ProductCategoryService productCategoryService,
                              ProductSubCategoryService productSubCategoryService,
                              ProductStatusService productStatusService,
-                             ProductAssembler assembler,
-                             StorageService storageService,
-                             UserService userService) {
+                             ProductAssembler assembler) {
         this.modelMapper = modelMapper;
         this.productService = productService;
         this.productCategoryService = productCategoryService;
         this.productSubCategoryService = productSubCategoryService;
         this.productStatusService = productStatusService;
         this.assembler = assembler;
-        this.storageService = storageService;
-        this.userService = userService;
+
     }
     @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_ADMIN')")
     @PostMapping("/products")
@@ -118,8 +114,13 @@ public class ProductController {
 
     @GetMapping(value = "/products")
     public ResponseEntity<CollectionModel<EntityModel<ProductViewModel>>> getAllProducts() {
+
+        List<ProductServiceModel> productsTmp = productService.getAllProducts();
+log.info("" + productsTmp);
         List<EntityModel<ProductViewModel>> products = productService.getAllProducts().stream()
                 .map(entity -> assembler.toModel(mapToView(entity))).toList();
+
+
         return ResponseEntity.status(HttpStatus.OK)
                 .body(CollectionModel.of(products, linkTo(methodOn(ProductController.class).getAllProducts()).withSelfRel()));
     }

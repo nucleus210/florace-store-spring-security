@@ -15,8 +15,6 @@ public class FacebookClient {
 
     private final RestTemplate restTemplate;
 
-    private final String FACEBOOK_GRAPH_API_BASE = "https://graph.facebook.com";
-
     @Autowired
     public FacebookClient(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
@@ -29,6 +27,7 @@ public class FacebookClient {
         variables.put("fields", fields);
         variables.put("redirect", "false");
         variables.put("access_token", accessToken);
+        String FACEBOOK_GRAPH_API_BASE = "https://graph.facebook.com";
         return restTemplate
                 .getForObject(FACEBOOK_GRAPH_API_BASE + path, FacebookUser.class, variables);
     }

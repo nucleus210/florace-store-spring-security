@@ -5,8 +5,6 @@ import com.nucleus.floracestore.model.dto.ProductCategoryDto;
 import com.nucleus.floracestore.model.service.ProductCategoryServiceModel;
 import com.nucleus.floracestore.model.view.ProductCategoryViewModel;
 import com.nucleus.floracestore.service.ProductCategoryService;
-import com.nucleus.floracestore.service.ProductSubCategoryService;
-import com.nucleus.floracestore.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,21 +26,15 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @RestController
 public class ProductCategoriesController {
     private final ProductCategoryService productCategoryService;
-    private final ProductSubCategoryService productSubCategoryService;
-    private final UserService userService;
     private final ProductCategoryAssembler assembler;
     private final ModelMapper modelMapper;
 
     @Autowired
     public ProductCategoriesController(ProductCategoryService productCategoryService,
-                                       ProductSubCategoryService productSubCategoryService,
                                        ModelMapper modelMapper,
-                                       UserService userService,
                                        ProductCategoryAssembler assembler) {
         this.productCategoryService = productCategoryService;
-        this.productSubCategoryService = productSubCategoryService;
         this.modelMapper = modelMapper;
-        this.userService = userService;
         this.assembler = assembler;
     }
 

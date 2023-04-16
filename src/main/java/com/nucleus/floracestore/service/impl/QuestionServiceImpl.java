@@ -87,11 +87,10 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public List<QuestionServiceModel> getAllQuestionsByProductId(Long productId) {
-        List<QuestionServiceModel> questionEntities = questionRepository.findAllByProductId(productId)
+        return questionRepository.findAllByProductId(productId)
                 .stream()
                 .map(this::mapToService)
                 .collect(Collectors.toList());
-        return  questionEntities;
     }
 
     private QuestionServiceModel mapToService(QuestionEntity questionEntity) {

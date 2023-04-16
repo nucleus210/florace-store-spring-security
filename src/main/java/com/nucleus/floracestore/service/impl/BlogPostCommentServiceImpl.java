@@ -7,7 +7,6 @@ import com.nucleus.floracestore.model.entity.UserEntity;
 import com.nucleus.floracestore.model.service.BlogPostCommentServiceModel;
 import com.nucleus.floracestore.repository.BlogPostCommentRepository;
 import com.nucleus.floracestore.service.BlogPostCommentService;
-import com.nucleus.floracestore.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,13 +20,12 @@ import java.util.stream.Collectors;
 @Service
 public class BlogPostCommentServiceImpl implements BlogPostCommentService {
     private final ModelMapper modelMapper;
-    private final UserService userService;
     private final BlogPostCommentRepository blogPostCommentRepository;
 
     @Autowired
-    public BlogPostCommentServiceImpl(ModelMapper modelMapper, UserService userService, BlogPostCommentRepository blogPostCommentRepository) {
+    public BlogPostCommentServiceImpl(ModelMapper modelMapper,
+                                      BlogPostCommentRepository blogPostCommentRepository) {
         this.modelMapper = modelMapper;
-        this.userService = userService;
         this.blogPostCommentRepository = blogPostCommentRepository;
     }
 

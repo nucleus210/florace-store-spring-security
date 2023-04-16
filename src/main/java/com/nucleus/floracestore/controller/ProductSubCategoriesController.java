@@ -90,7 +90,7 @@ public class ProductSubCategoriesController {
     private ProductSubCategoryViewModel mapToView(ProductSubCategoryServiceModel productSubCategoryServiceModel) {
         return modelMapper.map(productSubCategoryServiceModel, ProductSubCategoryViewModel.class);
     }
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_ADMIN')")
     @DeleteMapping("/products-sub-categories/{id}")
     public void deleteProductSubCategory(@PathVariable Long id) {
         productSubCategoryService.deleteSubProductCategoryById(id);

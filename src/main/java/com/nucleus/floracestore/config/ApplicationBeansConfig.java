@@ -1,17 +1,13 @@
 package com.nucleus.floracestore.config;
 
 import com.nucleus.floracestore.jwt.JwtConfiguration;
-import com.nucleus.floracestore.jwt.JwtUsernameAndPasswordAuthenticationFilter;
 import com.nucleus.floracestore.model.facebook.FacebookUser;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.BeanIds;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration

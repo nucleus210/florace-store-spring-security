@@ -5,7 +5,6 @@ import com.nucleus.floracestore.model.entity.ProductCategoryEntity;
 import com.nucleus.floracestore.model.enums.UserRoleEnum;
 import com.nucleus.floracestore.model.service.ProductCategoryServiceModel;
 import com.nucleus.floracestore.repository.ProductCategoryRepository;
-import com.nucleus.floracestore.repository.ProductSubCategoryRepository;
 import com.nucleus.floracestore.service.ProductCategoryService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -21,15 +20,12 @@ import java.util.stream.Collectors;
 @Service
 public class ProductCategoryServiceImpl implements ProductCategoryService {
     private final ProductCategoryRepository productCategoryRepository;
-    private final ProductSubCategoryRepository productSubCategoryRepository;
     private final ModelMapper modelMapper;
 
     @Autowired
     public ProductCategoryServiceImpl(ProductCategoryRepository productCategoryRepository,
-                                      ProductSubCategoryRepository productSubCategoryRepository,
                                       ModelMapper modelMapper) {
         this.productCategoryRepository = productCategoryRepository;
-        this.productSubCategoryRepository = productSubCategoryRepository;
         this.modelMapper = modelMapper;
     }
 

@@ -47,7 +47,10 @@ public class OrderItemServiceImpl implements OrderItemService {
     @Override
     public OrderItemServiceModel getOrderItemById(Long id) {
         log.info("orderItem: " + id);
-        return orderItemRepository.findByOrderItemId(id).map(this::mapToService).get();
+        return orderItemRepository
+                .findByOrderItemId(id)
+                .map(this::mapToService)
+                .orElseThrow(()->new QueryRuntimeException("Could not find order item with orderItemId " + id));
     }
 
     @Override

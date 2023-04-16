@@ -5,7 +5,6 @@ import com.nucleus.floracestore.model.dto.OrderDto;
 import com.nucleus.floracestore.model.service.OrderServiceModel;
 import com.nucleus.floracestore.model.view.OrderViewModel;
 import com.nucleus.floracestore.service.OrderService;
-import com.nucleus.floracestore.service.UserService;
 import com.nucleus.floracestore.service.impl.MyUserPrincipal;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -30,16 +29,16 @@ public class OrderController {
     private final OrderService orderService;
     private final ModelMapper modelMapper;
     private final OrderModelAssembler assembler;
-    private final UserService userService;
+
 
     @Autowired
     public OrderController(OrderService orderService,
                            ModelMapper modelMapper,
-                           OrderModelAssembler assembler, UserService userService) {
+                           OrderModelAssembler assembler) {
         this.orderService = orderService;
         this.modelMapper = modelMapper;
         this.assembler = assembler;
-        this.userService = userService;
+
     }
 
     private String getCurrentLoggedUsername() {

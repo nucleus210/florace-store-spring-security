@@ -139,7 +139,7 @@ public class OrderServiceImpl implements OrderService {
         } else {
             OrderEntity order = orderEntity.get();
             return isAdmin(caller) ||
-                    order.getUser().equals(userName);
+                    order.getUser().getUsername().equals(userName);
         }
     }
 

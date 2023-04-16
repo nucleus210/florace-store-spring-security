@@ -2,7 +2,6 @@ package com.nucleus.floracestore.controller;
 
 import com.nucleus.floracestore.hateoas.SupplierAssembler;
 import com.nucleus.floracestore.model.dto.SupplierDto;
-import com.nucleus.floracestore.model.entity.UserEntity;
 import com.nucleus.floracestore.model.service.StorageServiceModel;
 import com.nucleus.floracestore.model.service.SupplierServiceModel;
 import com.nucleus.floracestore.model.service.UserServiceModel;
@@ -10,7 +9,6 @@ import com.nucleus.floracestore.model.view.SupplierViewModel;
 import com.nucleus.floracestore.service.StorageService;
 import com.nucleus.floracestore.service.SupplierService;
 import com.nucleus.floracestore.service.UserService;
-import com.nucleus.floracestore.service.impl.MyUserDetailsService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,18 +35,17 @@ public class SupplierController {
     private final SupplierAssembler assembler;
     private final StorageService storageService;
     private final UserService userService;
-    private final MyUserDetailsService userDetailsService;
     @Autowired
     public SupplierController(ModelMapper modelMapper,
                               SupplierService supplierService,
                               SupplierAssembler assembler,
-                              StorageService storageService, UserService userService, MyUserDetailsService userDetailsService) {
+                              StorageService storageService,
+                              UserService userService) {
         this.modelMapper = modelMapper;
         this.supplierService = supplierService;
         this.assembler = assembler;
         this.storageService = storageService;
         this.userService = userService;
-        this.userDetailsService = userDetailsService;
     }
 
     @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_ADMIN')")

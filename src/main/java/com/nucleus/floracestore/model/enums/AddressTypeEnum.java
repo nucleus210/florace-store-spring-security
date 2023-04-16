@@ -3,7 +3,7 @@ package com.nucleus.floracestore.model.enums;
 import java.util.HashMap;
 import java.util.Map;
 
-public enum     AddressTypeEnum {
+public enum AddressTypeEnum {
     NONE("No address type specified."),
     INVOICE("The address used on an invoice."),
     DELIVERY("A delivery address."),

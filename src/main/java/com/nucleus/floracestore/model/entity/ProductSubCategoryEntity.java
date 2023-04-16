@@ -18,7 +18,8 @@ public class ProductSubCategoryEntity {
     private String productSubCategoryName;
     @Column(name = "product_sub_category_description", columnDefinition = "TEXT", nullable = false)
     private String productSubCategoryDescription;
-    @ManyToOne(targetEntity = ProductCategoryEntity.class, fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    // TODO Unable map object --> modelMapper error
+    @ManyToOne(targetEntity = ProductCategoryEntity.class, fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name = "product_category_id")
     private ProductCategoryEntity productCategory;
 }

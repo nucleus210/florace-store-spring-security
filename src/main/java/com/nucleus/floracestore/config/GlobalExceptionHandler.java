@@ -17,10 +17,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.ValidationException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static java.util.Optional.ofNullable;
 
@@ -53,7 +50,7 @@ public class GlobalExceptionHandler {
         logger.error("handleMissingServletRequestParameterException {}\n", request.getRequestURI(), ex);
 
         return ResponseEntity.badRequest()
-                .body(new ApiCallError<>("Missing request parameter", List.of(ex.getMessage())));
+                .body(new ApiCallError<>("Missing request parameter", List.of(Objects.requireNonNull(ex.getMessage()))));
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)

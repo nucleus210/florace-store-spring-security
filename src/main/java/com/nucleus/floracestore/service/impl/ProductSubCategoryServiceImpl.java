@@ -4,7 +4,6 @@ import com.nucleus.floracestore.error.QueryRuntimeException;
 import com.nucleus.floracestore.model.entity.ProductSubCategoryEntity;
 import com.nucleus.floracestore.model.service.ProductSubCategoryServiceModel;
 import com.nucleus.floracestore.repository.ProductSubCategoryRepository;
-import com.nucleus.floracestore.service.ProductCategoryService;
 import com.nucleus.floracestore.service.ProductSubCategoryService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -19,13 +18,12 @@ import java.util.stream.Collectors;
 public class ProductSubCategoryServiceImpl implements ProductSubCategoryService {
 
     private final ModelMapper modelMapper;
-    private final ProductCategoryService productCategoryService;
     private final ProductSubCategoryRepository productSubCategoryRepository;
 
     @Autowired
-    public ProductSubCategoryServiceImpl(ModelMapper modelMapper, ProductCategoryService productCategoryService, ProductSubCategoryRepository productSubCategoryRepository) {
+    public ProductSubCategoryServiceImpl(ModelMapper modelMapper,
+                                         ProductSubCategoryRepository productSubCategoryRepository) {
         this.modelMapper = modelMapper;
-        this.productCategoryService = productCategoryService;
         this.productSubCategoryRepository = productSubCategoryRepository;
     }
 

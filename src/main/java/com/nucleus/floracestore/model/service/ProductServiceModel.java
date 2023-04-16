@@ -1,8 +1,7 @@
 package com.nucleus.floracestore.model.service;
 
 
-import com.nucleus.floracestore.model.entity.ProductReviewEntity;
-import com.nucleus.floracestore.model.entity.Supplier;
+import com.nucleus.floracestore.model.entity.ProductSubCategoryEntity;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -23,10 +22,13 @@ public class ProductServiceModel {
     private String otherProductDetails;
     private ProductStatusServiceModel productStatus;
     private ProductCategoryServiceModel productCategory;
-    private Long productSubCategoryId;
-    private Set<StorageServiceModel> storages;
-    private SupplierServiceModel supplier;
+    // TODO Unable map object --> modelMapper error
+    private ProductSubCategoryEntity productSubCategory;
     private UserServiceModel user;
-    private Set<ProductReviewEntity> productReviews;
+    private SupplierServiceModel supplier;
+    private Set<StorageServiceModel> storages;
+    private Set<ProductReviewsServiceModel> productReviews;
+    private Set<ProductRatesServiceModel> productRates;
+    private Set<QuestionServiceModel> productQuestions;
 
 }

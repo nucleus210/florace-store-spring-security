@@ -21,7 +21,7 @@ public class ProductCategoryEntity {
     private String productCategoryDescription;
     @OneToMany(targetEntity = ProductSubCategoryEntity.class,
             cascade = CascadeType.MERGE,
-            fetch = FetchType.EAGER,
+            fetch = FetchType.LAZY,
             mappedBy = "productCategory")
     private Set<ProductSubCategoryEntity> productSubCategories;
 

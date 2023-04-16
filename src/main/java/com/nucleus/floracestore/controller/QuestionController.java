@@ -31,16 +31,13 @@ public class QuestionController {
     private final QuestionService questionService;
     private final QuestionAssembler assembler;
 
-    private final QuestionRepository questionRepository;
-
     @Autowired
     public QuestionController(ModelMapper modelMapper,
                               QuestionService questionService,
-                              QuestionAssembler assembler, QuestionRepository questionRepository) {
+                              QuestionAssembler assembler) {
         this.modelMapper = modelMapper;
         this.questionService = questionService;
         this.assembler = assembler;
-        this.questionRepository = questionRepository;
     }
     @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') or hasRole('ROLE_FACEBOOK_USER')")
     @PostMapping("/questions")
