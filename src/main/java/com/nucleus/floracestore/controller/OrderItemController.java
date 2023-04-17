@@ -40,21 +40,13 @@ public class OrderItemController {
     @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') or hasRole('ROLE_FACEBOOK_USER')")
     @PostMapping("/order-items")
     public ResponseEntity<EntityModel<OrderItemViewModel>> addOrderItem(@RequestBody OrderItemsDto model) {
-        OrderItemServiceModel orderItem = orderItemService.getOrderItemByOrderIdAndProductId(model.getOrder().getOrderId(), model.getProduct().getProductId());
-        log.debug("OrderItemServiceModel: " + orderItem);
-        if (orderItem != null) {
-            int quantity = model.getOrderItemQuantity() + orderItem.getOrderItemQuantity();
-            log.debug("OrderItemServiceModel quantity: " + quantity);
-            orderItem.setOrderItemQuantity(quantity);
-            return ResponseEntity
-                    .created(linkTo(methodOn(OrderItemController.class).addOrderItem(modelMapper.map(orderItemService.updateOrderItem(orderItem), OrderItemsDto.class))).toUri())
-                    .body(assembler.toModel(mapToView(orderItem)));
-        } else {
-            orderItem = orderItemService.addOrderItem(modelMapper.map(model, OrderItemServiceModel.class));
-            return ResponseEntity
-                    .created(linkTo(methodOn(OrderItemController.class).addOrderItem(modelMapper.map(model, OrderItemsDto.class))).toUri())
-                    .body(assembler.toModel(mapToView(orderItem)));
-        }
+        log.debug("OrderItemServiceModel: addOrderItem");
+
+        OrderItemServiceModel orderItem = orderItemService.addOrderItem(modelMapper.map(model, OrderItemServiceModel.class));
+        return ResponseEntity
+                .created(linkTo(methodOn(OrderItemController.class).addOrderItem(modelMapper.map(model, OrderItemsDto.class))).toUri())
+                .body(assembler.toModel(mapToView(orderItem)));
+
     }
 
     @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') or hasRole('ROLE_FACEBOOK_USER')")
@@ -64,6 +56,15 @@ public class OrderItemController {
                 .map(entity -> assembler.toModel(mapToView(entity))).toList();
         return ResponseEntity.status(HttpStatus.OK)
                 .body(CollectionModel.of(orderItems, linkTo(methodOn(OrderItemController.class).getOrderItemsByOrderId(orderId)).withSelfRel()));
+    }
+    @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') or hasRole('ROLE_FACEBOOK_USER')")
+    @GetMapping("/order-items/search/orders/{orderId}/products/{productId}")
+    public ResponseEntity<EntityModel<OrderItemViewModel>> getOrderItemByOrderIdAndProductId(@PathVariable Long orderId, @PathVariable Long productId) {
+        OrderItemServiceModel orderItem = orderItemService.getOrderItemByOrderIdAndProductId(orderId, productId);
+
+        return ResponseEntity
+                .created(linkTo(methodOn(OrderItemController.class).getOrderItemByOrderIdAndProductId(orderId, productId)).toUri())
+                .body(assembler.toModel(mapToView(orderItem)));
     }
 
     @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') or hasRole('ROLE_FACEBOOK_USER')")
@@ -83,11 +84,6 @@ public class OrderItemController {
                 .body(count);
     }
 
-    //    @GetMapping("/orders/{orderId}/products/{productId}/items")
-//    public ResponseEntity<EntityModel<OrderItemViewModel>> getOrderItemByOrderIdAndProductId(@PathVariable Long orderId, @PathVariable Long productId) {
-//        return ResponseEntity.status(HttpStatus.OK)
-//                .body(assembler.toModel(converter(orderItemService.getOrderItemByProductId(orderId, productId))));
-//    }
     @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') or hasRole('ROLE_FACEBOOK_USER')")
     @PutMapping("/order-items/{itemId}")
     public OrderItemServiceModel updateOrderItem(@RequestBody OrderItemsDto model, @PathVariable Long itemId) {
@@ -105,5 +101,4 @@ public class OrderItemController {
         log.info("OrderItems: " + model);
         return modelMapper.map(model, OrderItemViewModel.class);
     }
-
 }

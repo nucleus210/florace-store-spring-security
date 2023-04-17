@@ -5,13 +5,10 @@ import com.nucleus.floracestore.model.entity.OrderItemEntity;
 import com.nucleus.floracestore.model.enums.ProductStatusEnum;
 import com.nucleus.floracestore.model.service.OrderItemServiceModel;
 import com.nucleus.floracestore.model.service.OrderItemsStatusCodesServiceModel;
-import com.nucleus.floracestore.model.service.OrderServiceModel;
-import com.nucleus.floracestore.model.service.ProductServiceModel;
 import com.nucleus.floracestore.repository.OrderItemRepository;
 import com.nucleus.floracestore.service.OrderItemService;
 import com.nucleus.floracestore.service.OrderItemsStatusCodesService;
 import com.nucleus.floracestore.service.OrderService;
-import com.nucleus.floracestore.service.ProductService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,28 +17,24 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
-
-@Service
 @Slf4j
+@Service
 public class OrderItemServiceImpl implements OrderItemService {
 
     private final OrderItemRepository orderItemRepository;
     private final OrderService orderService;
     private final ModelMapper modelMapper;
     private final OrderItemsStatusCodesService orderItemsStatusCodesService;
-    private final ProductService productService;
 
     @Autowired
     public OrderItemServiceImpl(OrderItemRepository orderItemRepository,
                                 OrderService orderService,
                                 ModelMapper modelMapper,
-                                OrderItemsStatusCodesService orderItemsStatusCodesService,
-                                ProductService productService) {
+                                OrderItemsStatusCodesService orderItemsStatusCodesService) {
         this.orderItemRepository = orderItemRepository;
         this.orderService = orderService;
         this.modelMapper = modelMapper;
         this.orderItemsStatusCodesService = orderItemsStatusCodesService;
-        this.productService = productService;
     }
 
     @Override
@@ -61,10 +54,7 @@ public class OrderItemServiceImpl implements OrderItemService {
     @Override
     public OrderItemServiceModel getOrderItemByOrderIdAndProductId(Long orderId, Long productId) {
      OrderItemEntity orderItem = orderItemRepository.findOrderItemsByOrderIdAndProductId(orderId, productId)
-             .orElse(null);
-     if(orderItem == null) {
-         return null;
-     }
+             .orElseThrow(()->new QueryRuntimeException("Could not find order item with orderId: "+ orderId + " and productId: " + productId));
         return mapToService(orderItem);
     }
 
