@@ -48,7 +48,9 @@ public class ProductReviewsController {
     @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') or hasRole('ROLE_FACEBOOK_USER')")
     @PostMapping("/reviews/products/{productId}")
     public ProductReviewsServiceModel writePreview(@RequestBody ProductReviewsDto model, @PathVariable Long productId) {
-        return productReviewsService.createProductReview(modelMapper.map(model, ProductReviewsServiceModel.class), productId, getCurrentLoggedUsername());
+        return productReviewsService
+                .createProductReview(modelMapper
+                        .map(model, ProductReviewsServiceModel.class), productId, getCurrentLoggedUsername());
     }
 
     @GetMapping("/reviews/{id}")
@@ -57,8 +59,9 @@ public class ProductReviewsController {
                 .body(assembler.toModel(mapView(productReviewsService.getProductReviewById(id))));
     }
 
-    @GetMapping("/reviews/products/{productId}/users/{username}")
-    public ResponseEntity<EntityModel<ProductReviewsViewModel>> getProductReviewByProductIdAndUsername(@PathVariable Long productId, @PathVariable String username) {
+    @GetMapping("/reviews/search/products/{productId}/users/{username}")
+    public ResponseEntity<EntityModel<ProductReviewsViewModel>> getProductReviewByProductIdAndUsername(@PathVariable Long productId,
+                                                                                                       @PathVariable String username) {
         ProductReviewsServiceModel model = productReviewsService.getProductReviewByProductIdAndUsername(productId, username)
                 .orElseThrow(() -> new QueryRuntimeException(
                         String.format("Could not find productReview for productId %s and username %s", productId, username)));

@@ -13,6 +13,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,6 +37,8 @@ public class BlogPostServiceImpl implements BlogPostService {
     public BlogPostServiceModel createBlogPost(BlogPostServiceModel blogPostServiceModel, String username) {
         UserServiceModel userServiceModel = userService.findByUsername(username);
         blogPostServiceModel.setUser(userServiceModel);
+        blogPostServiceModel.setCreatedAt(new Date());
+        blogPostServiceModel.setPublishedAt(new Date());
         BlogPostEntity blogPostEntity = modelMapper.map(blogPostServiceModel, BlogPostEntity.class);
         return mapToService(blogPostRepository.save(blogPostEntity));
     }
@@ -46,20 +49,8 @@ public class BlogPostServiceImpl implements BlogPostService {
                 .orElseThrow(() -> new QueryRuntimeException("Could not find blog post with id " + blogPostServiceModel.getBlogPostId()));
 
         if (blogPostEntity.getUser().getUsername().equals(username)) {
-            blogPostEntity.setTitle(blogPostServiceModel.getTitle());
-            blogPostEntity.setMetaTitle(blogPostServiceModel.getMetaTitle());
-            blogPostEntity.setSlug(blogPostServiceModel.getSlug());
-            blogPostEntity.setSummary(blogPostServiceModel.getSummary());
-            blogPostEntity.setContent(blogPostServiceModel.getContent());
-            //blogPostEntity.setUser(modelMapper.map(userServiceModel, UserEntity.class));
-            blogPostEntity.setCreatedAt(blogPostServiceModel.getCreatedAt());
-            blogPostEntity.setPublishedAt(blogPostServiceModel.getPublishedAt());
-            blogPostEntity.setUpdatedAt(blogPostServiceModel.getUpdatedAt());
-            blogPostEntity.setStorages(blogPostServiceModel
-                    .getStorages()
-                    .stream()
-                    .map(entity -> modelMapper.map(entity, StorageEntity.class))
-                    .collect(Collectors.toList()));
+            blogPostEntity = modelMapper.map(blogPostServiceModel, BlogPostEntity.class);
+
             return mapToService(blogPostRepository.save(blogPostEntity));
         } else {
             throw new QueryRuntimeException("Username have no permissions");

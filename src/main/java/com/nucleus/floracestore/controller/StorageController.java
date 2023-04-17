@@ -73,7 +73,7 @@ public class StorageController {
             Files.write(path, bytes);
         }
     }
-    @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') or hasRole('ROLE_FACEBOOK_USER')")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') or hasRole('ROLE_FACEBOOK_USER')")
     @PostMapping("/storages/files")
     public ResponseEntity<EntityModel<SingleUploadResponseMessage>> uploadMultipleStorages(@RequestParam("files") MultipartFile[] files) {
         List<StorageViewModel> storages = new ArrayList<>();
@@ -95,7 +95,7 @@ public class StorageController {
             null, files,null, storages)));
         }
     }
-    @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') or hasRole('ROLE_FACEBOOK_USER')")
+//    @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') or hasRole('ROLE_FACEBOOK_USER')")
     @PostMapping(value = "/storages/file", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<EntityModel<SingleUploadResponseMessage>> uploadFileToStorages(@RequestParam("file") MultipartFile file) {
         try {

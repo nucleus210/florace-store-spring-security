@@ -23,10 +23,7 @@ import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Component
 public class SetupDataLoader implements ApplicationListener<ContextRefreshedEvent> {
@@ -50,6 +47,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
     private final Path fileStorageLocation;
     private final OrderStatusCodesService orderStatusCodesService;
 
+    private final BlogPostRepository blogPostRepository;
     private final OrderItemsStatusCodesService orderItemsStatusCodesService;
 
     @Autowired
@@ -68,7 +66,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
                            SupplierRepository supplierRepository, ResourceLoader resourceLoader,
                            Environment environment,
                            OrderStatusCodesService orderStatusCodesService,
-                           OrderItemsStatusCodesService orderItemsStatusCodesService) throws IOException, InterruptedException {
+                           BlogPostRepository blogPostRepository, OrderItemsStatusCodesService orderItemsStatusCodesService) throws IOException, InterruptedException {
         this.addressRepository = addressRepository;
         this.addressTypeRepository = addressTypeRepository;
         this.countryRepository = countryRepository;
@@ -86,6 +84,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         this.resourceLoader = resourceLoader;
         this.fileStorageLocation = Paths.get(environment.getProperty("app.file.upload-dir", "./src/main/resources/static/images/uploads"));
         this.orderStatusCodesService = orderStatusCodesService;
+        this.blogPostRepository = blogPostRepository;
         this.orderItemsStatusCodesService = orderItemsStatusCodesService;
     }
 
@@ -97,10 +96,14 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
             if (alreadySetup)
                 return;
             try {
-                initializeStorage();
                 createStorage( "classpath:/static/images/uploads/blank/blank_company_logo.jpg");
                 createStorage( "classpath:/static/images/uploads/blank/blank_profile_picture.jpg");
                 createStorage( "classpath:/static/images/uploads/blank/blank_product.jpg");
+                createStorage( "classpath:/static/images/blogpost/blog01.jpg");
+                createStorage( "classpath:/static/images/blogpost/blog02.jpg");
+                createStorage( "classpath:/static/images/blogpost/blog03.jpg");
+                initializeStorage();
+
             } catch (IOException | InterruptedException e) {
                 throw new RuntimeException(e);
             }
@@ -188,8 +191,25 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
                 addressTypeEntity.setAddressTypeDescription(status.getAddressTypeDescription());
                 addressTypeRepository.save(addressTypeEntity);
             });
+            StorageEntity storage01 =  storageRepository.findById(4L).orElse(null);
+            StorageEntity storage02 =  storageRepository.findById(5L).orElse(null);
+
+                createBlogIfNotFound("What is Lorem Ipsum?",
+                        "There is no one who loves pain itself",
+                        "Generated 5 paragraphs",
+                        "Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...",
+                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut varius nec quam ut placerat. Sed placerat tellus magna, sit amet fermentum enim laoreet non. Vestibulum eu justo sed magna ullamcorper facilisis id sed tortor. Etiam varius congue cursus. In pellentesque ut purus accumsan euismod. In eget malesuada massa. Sed lobortis, eros ut consequat consectetur, diam orci aliquet nulla, nec rhoncus turpis ante quis est.",
+                        userRepository.findByUsername("admin").orElseThrow(null),
+                        storageRepository.findById(4L).orElseThrow(()->new QueryRuntimeException("Could not find storage 7")));
 
 
+                createBlogIfNotFound("Where can I get some?",
+                        "Here are many variations of passages of Lorem Ipsum available",
+                        "Generated 5 paragraphs",
+                        "The standard chunk of Lorem Ipsum used since the 1500s...",
+                        "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. ",
+                        userRepository.findByUsername("admin").orElseThrow(null),
+                        storageRepository.findById(5L).orElseThrow(()->new QueryRuntimeException("Could not find storage 7")));
 
 
 
@@ -234,7 +254,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
                     productStatus,
                     flowers,
                     alstroemeria,
-                    storageRepository.findById(1L).orElseThrow(()->new QueryRuntimeException("Could not find storage 1")),
+                    storageRepository.findById(7L).orElseThrow(()->new QueryRuntimeException("Could not find storage 1")),
                     userRepository.findByUsername("admin").orElseThrow(()->new QueryRuntimeException("Could not find user 1")));
             createProductIfNotFound("Calla Lily",
                     5,
@@ -248,7 +268,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
                     productStatus,
                     flowers,
                     lilies,
-                    storageRepository.findById(2L).orElseThrow(()->new QueryRuntimeException("Could not find storage 2")),
+                    storageRepository.findById(8L).orElseThrow(()->new QueryRuntimeException("Could not find storage 2")),
                     userRepository.findByUsername("admin").orElseThrow(()->new QueryRuntimeException("Could not find user 1")));
             createProductIfNotFound("Freesias",
                     4,
@@ -262,7 +282,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
                     productStatus,
                     flowers,
                     freesias,
-                    storageRepository.findById(3L).orElseThrow(()->new QueryRuntimeException("Could not find storage 2")),
+                    storageRepository.findById(9L).orElseThrow(()->new QueryRuntimeException("Could not find storage 2")),
                     userRepository.findByUsername("admin").orElseThrow(()->new QueryRuntimeException("Could not find user 1")));
             createProductIfNotFound("Lisianthus",
                     4,
@@ -276,7 +296,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
                     productStatus,
                     flowers,
                     lisianthus,
-                    storageRepository.findById(4L).orElseThrow(()->new QueryRuntimeException("Could not find storage 4")),
+                    storageRepository.findById(10L).orElseThrow(()->new QueryRuntimeException("Could not find storage 4")),
                     userRepository.findByUsername("admin").orElseThrow(()->new QueryRuntimeException("Could not find user 1")));
             createProductIfNotFound("Sunflower",
                     5,
@@ -290,7 +310,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
                     productStatus,
                     flowers,
                     sunflower,
-                    storageRepository.findById(5L).orElseThrow(()->new QueryRuntimeException("Could not find storage 5")),
+                    storageRepository.findById(11L).orElseThrow(()->new QueryRuntimeException("Could not find storage 5")),
                     userRepository.findByUsername("admin").orElseThrow(()->new QueryRuntimeException("Could not find user 1")));
             createProductIfNotFound("Roses",
                     2,
@@ -304,7 +324,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
                     productStatus,
                     flowers,
                     roses,
-                    storageRepository.findById(6L).orElseThrow(()->new QueryRuntimeException("Could not find storage 6")),
+                    storageRepository.findById(12L).orElseThrow(()->new QueryRuntimeException("Could not find storage 6")),
                     userRepository.findByUsername("admin").orElseThrow(()->new QueryRuntimeException("Could not find user 1")));
             createProductIfNotFound("Tulips",
                     2,
@@ -318,7 +338,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
                     productStatus,
                     flowers,
                     tulips,
-                    storageRepository.findById(7L).orElseThrow(()->new QueryRuntimeException("Could not find storage 7")),
+                    storageRepository.findById(13L).orElseThrow(()->new QueryRuntimeException("Could not find storage 7")),
                     userRepository.findByUsername("admin").orElseThrow(()->new QueryRuntimeException("Could not find user 1")));
 
             OrderStatusCodes[] values = OrderStatusCodes.values();
@@ -484,20 +504,20 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         Resource r = ResourcePatternUtils.getResourcePatternResolver(resourceLoader).getResource(path);
         System.out.println("File path: " + r.getURL());
 
-            String[] arrOfStr = r.getURL().toString().split("static", 0);
-            System.out.println("File path: " + arrOfStr[1]);
-            String resourceType = Objects.requireNonNull(r.getFilename()).split("\\.", 0)[1];
-            System.out.println(resourceType);
-            StorageEntity storageEntity = new StorageEntity();
-            storageEntity.setFileName(r.getFilename());
+        String[] arrOfStr = r.getURL().toString().split("static", 0);
+        System.out.println("File path: " + arrOfStr[1]);
+        String resourceType = Objects.requireNonNull(r.getFilename()).split("\\.", 0)[1];
+        System.out.println(resourceType);
+        StorageEntity storageEntity = new StorageEntity();
+        storageEntity.setFileName(r.getFilename());
 //            storageEntity.setFileUrl(arrOfStr[1]);
-            storageEntity.setFileUrl("http://localhost:8080" + arrOfStr[1]);
-            if (r.getURI().getPath().contains("/C:")) {
-                String resultPath = r.getURI().getPath().replace("/C:", "");
-                storageEntity.setSize(Files.size(Path.of(resultPath)));
-            } else {
-                storageEntity.setSize(Files.size(Path.of(r.getURI().getPath())));
-            }
+        storageEntity.setFileUrl("http://localhost:8080" + arrOfStr[1]);
+        if (r.getURI().getPath().contains("/C:")) {
+            String resultPath = r.getURI().getPath().replace("/C:", "");
+            storageEntity.setSize(Files.size(Path.of(resultPath)));
+        } else {
+            storageEntity.setSize(Files.size(Path.of(r.getURI().getPath())));
+        }
         return storageRepository.save(storageEntity);
 
 
@@ -509,38 +529,38 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 
     @Transactional
     private AddressEntity createAddressIfNotFound(String streetAddress,
-                                              String streetAddressSec,
-                                              String city,
-                                              String stateProvinceRegion,
-                                              String zipPostCode,
-                                              CountryEntity country,
-                                              String otherAddressDetails,
-                                              AddressTypeEntity addressType) {
+                                                  String streetAddressSec,
+                                                  String city,
+                                                  String stateProvinceRegion,
+                                                  String zipPostCode,
+                                                  CountryEntity country,
+                                                  String otherAddressDetails,
+                                                  AddressTypeEntity addressType) {
         AddressEntity address = new AddressEntity();
-            address = new AddressEntity();
-            address.setStreetAddress(streetAddress);
-            address.setStreetAddressSec(streetAddressSec);
-            address.setCity(city);
-            address.setStateProvinceRegion(stateProvinceRegion);
-            address.setZipPostCode(zipPostCode);
-            address.setCountry(country);
-            address.setOtherAddressDetails(otherAddressDetails);
-            address.setAddressType(addressType);
+        address = new AddressEntity();
+        address.setStreetAddress(streetAddress);
+        address.setStreetAddressSec(streetAddressSec);
+        address.setCity(city);
+        address.setStateProvinceRegion(stateProvinceRegion);
+        address.setZipPostCode(zipPostCode);
+        address.setCountry(country);
+        address.setOtherAddressDetails(otherAddressDetails);
+        address.setAddressType(addressType);
 
         return addressRepository.save(address);
     }
     @Transactional
     private Supplier createSupplierIfNotFound(String companyName,
-                                                           String contactName,
-                                                           String contactJobTitle,
-                                                           String emailAddress,
-                                                           String companyPhoneNumber,
-                                                           String contactPhoneNumber,
-                                                           String notes,
-                                                           StorageEntity companyLogo,
-                                                           UserEntity user,
-                                                           AddressEntity address,
-                                                           String webSite) {
+                                              String contactName,
+                                              String contactJobTitle,
+                                              String emailAddress,
+                                              String companyPhoneNumber,
+                                              String contactPhoneNumber,
+                                              String notes,
+                                              StorageEntity companyLogo,
+                                              UserEntity user,
+                                              AddressEntity address,
+                                              String webSite) {
         Supplier supplier = supplierRepository.findSupplierByCompanyName(companyName).orElse(null);
         if(supplier == null) {
             supplier = new Supplier();
@@ -589,5 +609,30 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         }
         return subCategoryEntity;
     }
+
+    @Transactional
+    private BlogPostEntity createBlogIfNotFound(String title,
+                                                String metaTitle,
+                                                String slug,
+                                                String summary,
+                                                String content,
+                                                UserEntity user,
+                                                StorageEntity storages) {
+        BlogPostEntity blogPostEntity = new BlogPostEntity();
+        blogPostEntity = new BlogPostEntity();
+        blogPostEntity.setTitle(title);
+        blogPostEntity.setMetaTitle(metaTitle);
+        blogPostEntity.setSlug(slug);
+        blogPostEntity.setSummary(summary);
+        blogPostEntity.setContent(content);
+        blogPostEntity.setCreatedAt(new Date());
+        blogPostEntity.setPublishedAt(new Date());
+        blogPostEntity.setUser(user);
+        blogPostEntity.setStorages(Set.of(storages));
+
+
+        return blogPostRepository.save(blogPostEntity);
+    }
+
 }
 

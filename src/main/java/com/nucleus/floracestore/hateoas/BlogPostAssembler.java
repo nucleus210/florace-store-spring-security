@@ -14,14 +14,10 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @Component
 public class BlogPostAssembler implements RepresentationModelAssembler<BlogPostViewModel, EntityModel<BlogPostViewModel>> {
 
-    private ModelMapper modelMapper;
-
     @Override
     public EntityModel<BlogPostViewModel> toModel(BlogPostViewModel blogPostViewModel) {
 
         return EntityModel.of(blogPostViewModel,
-                linkTo(methodOn(BlogPostController.class).createBlogPost(modelMapper.map(blogPostViewModel, BlogPostDto.class))).withRel("createBlogPost"),
-                linkTo(methodOn(BlogPostController.class).updateBlogPost(modelMapper.map(blogPostViewModel, BlogPostDto.class))).withRel("updateBlogPost"),
                 linkTo(methodOn(BlogPostController.class).deleteBlogPost(blogPostViewModel.getBlogPostId())).withRel("deleteBlogPost"),
                 linkTo(methodOn(BlogPostController.class).getAllBlogPosts()).withRel("getAllBlogPosts"));
     }

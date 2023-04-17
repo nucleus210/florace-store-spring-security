@@ -7,6 +7,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -23,9 +24,9 @@ public class BlogPostEntity {
     private String metaTitle;
     @Column(name = "slug", nullable = false)
     private String slug;
-    @Column(name = "summary", nullable = false)
+    @Column(name = "summary", columnDefinition = "TEXT", nullable = false)
     private String summary;
-    @Column(name = "content", nullable = false)
+    @Column(name = "content", columnDefinition = "TEXT", nullable = false)
     private String content;
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name = "userId", referencedColumnName = "user_id")
@@ -39,6 +40,6 @@ public class BlogPostEntity {
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     @Column(name = "published_at")
     private Date publishedAt;
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private List<StorageEntity> storages;
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    private Set<StorageEntity> storages;
 }

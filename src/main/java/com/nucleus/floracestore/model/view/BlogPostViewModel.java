@@ -4,7 +4,7 @@ import com.nucleus.floracestore.model.service.StorageServiceModel;
 import lombok.Data;
 
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 
 @Data
 public class BlogPostViewModel {
@@ -18,5 +18,5 @@ public class BlogPostViewModel {
     private Date createdAt;
     private Date updatedAt;
     private Date publishedAt;
-    private List<StorageServiceModel> storages;
+    private Set<StorageServiceModel> storages;
 }

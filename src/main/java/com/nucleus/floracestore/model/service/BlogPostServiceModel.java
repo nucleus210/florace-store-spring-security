@@ -3,7 +3,7 @@ package com.nucleus.floracestore.model.service;
 import lombok.Data;
 
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 
 @Data
 public class BlogPostServiceModel {
@@ -17,5 +17,5 @@ public class BlogPostServiceModel {
     private Date createdAt;
     private Date updatedAt;
     private Date publishedAt;
-    private List<StorageServiceModel> storages;
+    private Set<StorageServiceModel> storages;
 }
