@@ -1,5 +1,6 @@
 package com.nucleus.floracestore.controller;
 
+import com.nucleus.floracestore.aop.LogUsername;
 import com.nucleus.floracestore.hateoas.ProductAssembler;
 import com.nucleus.floracestore.model.dto.ProductDto;
 import com.nucleus.floracestore.model.service.ProductCategoryServiceModel;
@@ -111,7 +112,6 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(assembler.toModel(mapToView(productService.getProductById(id))));
     }
-
     @GetMapping(value = "/products")
     public ResponseEntity<CollectionModel<EntityModel<ProductViewModel>>> getAllProducts() {
 
