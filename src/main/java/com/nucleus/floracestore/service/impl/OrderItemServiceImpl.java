@@ -68,13 +68,6 @@ public class OrderItemServiceImpl implements OrderItemService {
         return mapToService(orderItem);
     }
 
-//    @Override
-//    public OrderItemServiceModel getOrderItemByProductId(Long orderId, Long productId) {
-//        OrderItemEntity orderItemEntity = orderItemRepository.findByOrderIdAndProductId(orderId, productId)
-//                .orElseThrow(()->new QueryRuntimeException("Could not find order item with productId " + productId));
-//        return mapToService(orderItemEntity);
-//    }
-
     @Override
     public List<OrderItemServiceModel> getAllOrderItems() {
         return this.orderItemRepository.findAll()
@@ -89,10 +82,8 @@ public class OrderItemServiceImpl implements OrderItemService {
 
     @Override
     public int getOrderItemsCount(Long orderId) {
-
         return orderItemRepository.findOrderItemsCountByOrderId(orderId);
     }
-
 
     @Transactional
     @Override
@@ -102,22 +93,6 @@ public class OrderItemServiceImpl implements OrderItemService {
         orderItemServiceModel.setOrderItemStatusCode(orderItemsStatusCodesServiceModel);
         OrderItemEntity orderItemEntity = orderItemRepository.save(modelMapper.map(orderItemServiceModel, OrderItemEntity.class));
         return modelMapper.map(orderItemEntity, OrderItemServiceModel.class);
-    }
-
-    //TODO
-    @Override
-    public OrderItemServiceModel createOrderItem(OrderItemServiceModel orderItemServiceModel, Long orderId, Long productId) {
-        OrderServiceModel orderServiceModel = orderService.getOrderById(orderId);
-        ProductServiceModel productEntity = productService.getProductById(productId);
-        OrderItemsStatusCodesServiceModel orderItemsStatusCodesServiceModel = orderItemsStatusCodesService
-                .getByProductStatus(ProductStatusEnum.IN_STOCK.getLevelName());
-//        orderItemServiceModel.setOrder(orderEntity);
-//        orderItemServiceModel.setProduct(productEntity);
-        orderItemServiceModel.setOrderItemStatusCode(orderItemsStatusCodesServiceModel);
-        orderItemServiceModel.setOrderItemPrice(productEntity.getUnitSellPrice());
-        OrderItemEntity orderItemEntity = modelMapper.map(orderItemServiceModel, OrderItemEntity.class);
-        orderItemRepository.save(orderItemEntity);
-        return orderItemServiceModel;
     }
 
     @Override
@@ -148,5 +123,4 @@ public class OrderItemServiceImpl implements OrderItemService {
     private OrderItemServiceModel mapToService(OrderItemEntity orderItem) {
         return this.modelMapper.map(orderItem, OrderItemServiceModel.class);
     }
-
 }
