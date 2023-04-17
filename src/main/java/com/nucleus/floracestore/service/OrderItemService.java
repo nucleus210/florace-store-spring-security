@@ -10,8 +10,7 @@ public interface OrderItemService {
     OrderItemServiceModel getOrderItemById(Long id);
 
     OrderItemServiceModel getOrderItemByUserId(Long id);
-
-    //    OrderItemServiceModel getOrderItemByProductId(Long orderId,Long productId);
+    OrderItemServiceModel getOrderItemByOrderIdAndProductId(Long orderId,Long productId);
     List<OrderItemServiceModel> getAllOrderItems();
 
     List<OrderItemServiceModel> getAllOrderItemsByOrderId(Long orderId);
@@ -19,6 +18,7 @@ public interface OrderItemService {
     OrderItemServiceModel addOrderItem(OrderItemServiceModel orderItemServiceModel);
 
     OrderItemServiceModel createOrderItem(OrderItemServiceModel orderItemServiceModel, Long orderId, Long productId);
+    OrderItemServiceModel updateOrderItem(OrderItemServiceModel orderItemServiceModel);
 
     OrderItemServiceModel updateOrderItemQuantity(OrderItemServiceModel orderItemServiceModel, Long productId);
 

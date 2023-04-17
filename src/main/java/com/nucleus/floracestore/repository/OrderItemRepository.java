@@ -17,4 +17,7 @@ public interface OrderItemRepository extends JpaRepository<OrderItemEntity, Long
 
     @Query("select count(o) from OrderItemEntity o JOIN o.order a where a.orderId = :orderId")
     int findOrderItemsCountByOrderId(Long orderId);
+
+    @Query("select i from OrderItemEntity i JOIN i.order o JOIN i.product p where o.orderId = :orderId and p.productId = :productId")
+    Optional<OrderItemEntity> findOrderItemsByOrderIdAndProductId(Long orderId, Long productId);
 }

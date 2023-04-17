@@ -58,6 +58,16 @@ public class OrderItemServiceImpl implements OrderItemService {
         return null;
     }
 
+    @Override
+    public OrderItemServiceModel getOrderItemByOrderIdAndProductId(Long orderId, Long productId) {
+     OrderItemEntity orderItem = orderItemRepository.findOrderItemsByOrderIdAndProductId(orderId, productId)
+             .orElse(null);
+     if(orderItem == null) {
+         return null;
+     }
+        return mapToService(orderItem);
+    }
+
 //    @Override
 //    public OrderItemServiceModel getOrderItemByProductId(Long orderId, Long productId) {
 //        OrderItemEntity orderItemEntity = orderItemRepository.findByOrderIdAndProductId(orderId, productId)
@@ -108,6 +118,15 @@ public class OrderItemServiceImpl implements OrderItemService {
         OrderItemEntity orderItemEntity = modelMapper.map(orderItemServiceModel, OrderItemEntity.class);
         orderItemRepository.save(orderItemEntity);
         return orderItemServiceModel;
+    }
+
+    @Override
+    public OrderItemServiceModel updateOrderItem(OrderItemServiceModel orderItemServiceModel) {
+        OrderItemEntity orderItemEntity = orderItemRepository.findById(orderItemServiceModel.getOrderItemId()).
+                orElseThrow(() -> new QueryRuntimeException("Could not find order item with id " + orderItemServiceModel.getOrderItemId()));
+        orderItemEntity.setOrderItemQuantity(orderItemServiceModel.getOrderItemQuantity());
+        orderItemRepository.saveAndFlush(orderItemEntity);
+        return mapToService(orderItemRepository.saveAndFlush(orderItemEntity));
     }
 
     @Override

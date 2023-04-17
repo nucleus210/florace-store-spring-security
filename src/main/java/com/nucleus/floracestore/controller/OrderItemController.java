@@ -42,17 +42,37 @@ public class OrderItemController {
     OrderItemServiceModel createOrderItem(@RequestBody OrderItemsDto model,
                                           @PathVariable Long orderId,
                                           @PathVariable Long productId) {
-        return orderItemService.createOrderItem(modelMapper.map(model, OrderItemServiceModel.class), orderId, productId);
+        OrderItemServiceModel orderItem = orderItemService.getOrderItemByOrderIdAndProductId(orderId, productId);
+        log.debug("OrderItemServiceModel: " + orderItem);
+        if (orderItem != null) {
+            int quantity = model.getOrderItemQuantity() + orderItem.getOrderItemQuantity();
+            log.debug("OrderItemServiceModel quantity: " + quantity);
+            orderItem.setOrderItemQuantity(quantity);
+            return orderItemService.updateOrderItem(orderItem);
+        } else {
+            return orderItemService.createOrderItem(modelMapper.map(model, OrderItemServiceModel.class), orderId, productId);
+
+        }
     }
 
     @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') or hasRole('ROLE_FACEBOOK_USER')")
     @PostMapping("/order-items")
     public ResponseEntity<EntityModel<OrderItemViewModel>> addOrderItem(@RequestBody OrderItemsDto model) {
-        OrderItemServiceModel orderItemModel = orderItemService.addOrderItem(modelMapper.map(model, OrderItemServiceModel.class));
-        log.info("order problem: " + orderItemModel);
-        return ResponseEntity
-                .created(linkTo(methodOn(OrderItemController.class).addOrderItem(modelMapper.map(orderItemModel, OrderItemsDto.class))).toUri())
-                .body(assembler.toModel(mapToView(orderItemModel)));
+        OrderItemServiceModel orderItem = orderItemService.getOrderItemByOrderIdAndProductId(model.getOrder().getOrderId(), model.getProduct().getProductId());
+        log.debug("OrderItemServiceModel: " + orderItem);
+        if (orderItem != null) {
+            int quantity = model.getOrderItemQuantity() + orderItem.getOrderItemQuantity();
+            log.debug("OrderItemServiceModel quantity: " + quantity);
+            orderItem.setOrderItemQuantity(quantity);
+            return ResponseEntity
+                    .created(linkTo(methodOn(OrderItemController.class).addOrderItem(modelMapper.map(orderItemService.updateOrderItem(orderItem), OrderItemsDto.class))).toUri())
+                    .body(assembler.toModel(mapToView(orderItem)));
+        } else {
+            orderItem = orderItemService.addOrderItem(modelMapper.map(model, OrderItemServiceModel.class));
+            return ResponseEntity
+                    .created(linkTo(methodOn(OrderItemController.class).addOrderItem(modelMapper.map(model, OrderItemsDto.class))).toUri())
+                    .body(assembler.toModel(mapToView(orderItem)));
+        }
     }
 
     @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') or hasRole('ROLE_FACEBOOK_USER')")
