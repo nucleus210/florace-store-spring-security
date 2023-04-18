@@ -65,6 +65,7 @@ public class SecurityConfiguration {
                             try {
                                 authz
                                         .antMatchers(HttpMethod.GET, "/addresses/address-types").permitAll()
+                                        .antMatchers(HttpMethod.GET, "/blog-posts").permitAll()
                                         .antMatchers(HttpMethod.GET, "/countries").permitAll()
                                         .antMatchers(HttpMethod.POST, "/contacts").permitAll()
                                         .antMatchers(HttpMethod.GET, "/phone-prefixes").permitAll()

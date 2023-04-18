@@ -7,7 +7,10 @@ application:
     tokenPrefix: Bearer
 
 spring:
-
+  web:
+    resources:
+      static-locations[0]: "file:src/main/resources/static/"
+      static-locations[1]: "classpath:/static/"
   main:
     allow-bean-definition-overriding: true
 
