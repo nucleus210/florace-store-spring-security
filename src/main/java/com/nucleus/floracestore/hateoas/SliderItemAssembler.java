@@ -20,8 +20,6 @@ public class SliderItemAssembler implements RepresentationModelAssembler<SliderI
     public EntityModel<SliderItemViewModel> toModel(SliderItemViewModel sliderItemViewModel) {
 
         return EntityModel.of(sliderItemViewModel,
-                linkTo(methodOn(SliderItemController.class).createSlide(modelMapper.map(sliderItemViewModel, SliderItemDto.class))).withRel("createSliderItem"),
-                linkTo(methodOn(SliderItemController.class).updateSlide(modelMapper.map(sliderItemViewModel, SliderItemDto.class))).withRel("updateSliderItem"),
                 linkTo(methodOn(SliderItemController.class).deleteSlide(sliderItemViewModel.getSlideItemId())).withRel("deleteSliderItem"),
                 linkTo(methodOn(SliderItemController.class).getAllSliderItems()).withRel("getAllSliderItems"));
     }

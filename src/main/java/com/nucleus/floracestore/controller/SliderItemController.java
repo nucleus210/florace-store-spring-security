@@ -44,10 +44,10 @@ public class SliderItemController {
         SliderItemServiceModel sliderItemServiceModel =
                 sliderService.createSlide(modelMapper.map(model, SliderItemServiceModel.class), getCurrentLoggedUsername());
         log.info("SliderController: created slide with id: " + sliderItemServiceModel.getSlideItemId());
-        return ResponseEntity
+
+        return  ResponseEntity
                 .created(linkTo(methodOn(SliderItemController.class).createSlide(model)).toUri())
                 .body(assembler.toModel(mapToView(sliderItemServiceModel)));
-
     }
     @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_ADMIN')")
     @PutMapping("/slider/{id}")

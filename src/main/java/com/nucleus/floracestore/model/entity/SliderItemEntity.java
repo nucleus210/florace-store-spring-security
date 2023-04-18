@@ -14,7 +14,7 @@ public class SliderItemEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "slider_item_Id", nullable = false)
     private Long sliderItemId;
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(name = "resources__id", referencedColumnName = "resources_id")
     private StorageEntity storage;
     @ManyToOne(fetch = FetchType.EAGER)
