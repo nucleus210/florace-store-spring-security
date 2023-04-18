@@ -46,7 +46,6 @@ public class OrderItemController {
         return ResponseEntity
                 .created(linkTo(methodOn(OrderItemController.class).addOrderItem(modelMapper.map(model, OrderItemsDto.class))).toUri())
                 .body(assembler.toModel(mapToView(orderItem)));
-
     }
 
     @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') or hasRole('ROLE_FACEBOOK_USER')")

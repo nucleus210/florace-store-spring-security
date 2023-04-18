@@ -12,6 +12,9 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.core.io.UrlResource;
 import org.springframework.core.io.support.ResourcePatternUtils;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -23,9 +26,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
-
 @Service
 public class StorageServiceImpl implements StorageService {
     private final Path fileStorageLocation;
@@ -53,7 +56,6 @@ public class StorageServiceImpl implements StorageService {
                     "Could not create the directory where the uploaded files will be stored.", ex);
         }
     }
-
     @Override
     public void save(StorageServiceModel storageServiceModel) {
         storageRepository.save(modelMapper.map(storageServiceModel, StorageEntity.class));
@@ -116,9 +118,11 @@ public class StorageServiceImpl implements StorageService {
 //                String suffix,
 //                File director);
         // Normalize file name
-        String fileName = randomString + "." + getFileExtension(file.getOriginalFilename());
-//                new SimpleDateFormat("yyyy-MM-dd'_'hh-mm-ss-SSS")
-//                        .format(new Date()) + "-file." + getFileExtension(file.getOriginalFilename());
+//        String fileName = randomString + "." + getFileExtension(file.getOriginalFilename());
+//        String fileName = randomString + "." + getFileExtension(file.getOriginalFilename());
+
+        String fileName = new SimpleDateFormat("yyyy-MM-dd'_'hh-mm-ss-SSS")
+                .format(new Date()) + "-file." + getFileExtension(file.getOriginalFilename());
         try {
             // Check if the filename contains invalid characters
             if (fileName.contains("..")) {
