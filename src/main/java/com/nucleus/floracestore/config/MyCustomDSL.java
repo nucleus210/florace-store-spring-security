@@ -19,7 +19,7 @@ public class MyCustomDSL extends AbstractHttpConfigurer<MyCustomDSL, HttpSecurit
     @Autowired
     public MyCustomDSL(JwtConfiguration jwtConfiguration, SecretKey secretKey) {
         this.jwtConfiguration = jwtConfiguration;
-        this.secretKey =secretKey;
+        this.secretKey = secretKey;
     }
 
     @Override

@@ -2,6 +2,8 @@ package com.nucleus.floracestore.model.view;
 
 
 import com.nucleus.floracestore.model.entity.ProductSubCategoryEntity;
+import com.nucleus.floracestore.model.entity.StorageEntity;
+import com.nucleus.floracestore.model.service.StorageServiceModel;
 import lombok.Data;
 
 import java.util.Set;
@@ -13,4 +15,5 @@ public class ProductCategoryViewModel {
     private String productCategoryDescription;
     // TODO Unable map object --> modelMapper error
     private Set<ProductSubCategoryEntity> productSubCategories;
+    private StorageViewModel storage;
 }

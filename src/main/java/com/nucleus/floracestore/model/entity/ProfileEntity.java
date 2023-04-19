@@ -48,11 +48,11 @@ public class ProfileEntity {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "profile_photo_id",
-            referencedColumnName = "resources_id")
+            referencedColumnName = "resource_id")
     private StorageEntity profilePhotoUrl;
 
     @ManyToOne(optional = false)
-    @JoinColumn(referencedColumnName = "user_id", name = "user__id")
+    @JoinColumn(referencedColumnName = "user_id", name = "user_id")
     private UserEntity user;
 
     @ManyToOne(optional = false)

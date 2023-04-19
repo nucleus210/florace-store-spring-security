@@ -2,6 +2,7 @@ package com.nucleus.floracestore.config;
 
 import com.nucleus.floracestore.jwt.JwtConfiguration;
 import com.nucleus.floracestore.model.facebook.FacebookUser;
+import com.nucleus.floracestore.utils.ImageUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,6 +10,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import javax.imageio.ImageIO;
 
 @Configuration
 public class ApplicationBeansConfig implements WebMvcConfigurer {
@@ -36,7 +39,9 @@ public class ApplicationBeansConfig implements WebMvcConfigurer {
     public JwtConfiguration jwtConfiguration() {
         return new JwtConfiguration();
     }
-
-
+    @Bean
+    public ImageUtils imageUtils() {
+        return new ImageUtils();
+    }
 
 }

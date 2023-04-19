@@ -37,11 +37,11 @@ public class Supplier {
     private String notes;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "company_logo_id", referencedColumnName = "resources_id")
+    @JoinColumn(name = "company_logo_id", referencedColumnName = "resource_id")
     private StorageEntity companyLogo;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "user__id", referencedColumnName = "user_id")
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     private UserEntity user;
 
     @ManyToOne(optional = false)

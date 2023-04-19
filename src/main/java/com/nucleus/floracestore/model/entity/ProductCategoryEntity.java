@@ -25,4 +25,7 @@ public class ProductCategoryEntity {
             mappedBy = "productCategory")
     private Set<ProductSubCategoryEntity> productSubCategories;
 
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @JoinColumn(name = "_resource_id", referencedColumnName = "resource_id")
+    private StorageEntity storage;
 }

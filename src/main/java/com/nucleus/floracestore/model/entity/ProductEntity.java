@@ -46,7 +46,7 @@ public class ProductEntity {
     @JoinColumn(name = "sub_category_id", referencedColumnName = "product_sub_category_id")
     private ProductSubCategoryEntity productSubCategory;
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
-    @JoinColumn(name = "user__id", referencedColumnName = "user_id")
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     private UserEntity user;
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(name = "supplier__id", referencedColumnName = "supplier_id")

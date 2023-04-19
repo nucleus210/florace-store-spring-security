@@ -22,7 +22,7 @@ public class BlogPostCommentEntity {
     @JoinColumn(name = "blog_post__id", referencedColumnName = "blog_post_id")
     private BlogPostEntity blogPost;
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
-    @JoinColumn(name = "user__id", referencedColumnName = "user_id")
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     private UserEntity user;
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     @Column(name = "created_at", nullable = false)

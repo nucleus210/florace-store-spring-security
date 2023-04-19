@@ -21,7 +21,7 @@ public class ProductReviewEntity {
     private ProductEntity product;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
-    @JoinColumn(name = "user__id", referencedColumnName = "user_id")
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     private UserEntity user;
 
     @Column(name = "title", nullable = false)

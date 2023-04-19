@@ -47,6 +47,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
     private final Path fileStorageLocation;
     private final OrderStatusCodesService orderStatusCodesService;
 
+    private final SliderItemRepository sliderItemRepository;
     private final BlogPostRepository blogPostRepository;
     private final OrderItemsStatusCodesService orderItemsStatusCodesService;
 
@@ -66,7 +67,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
                            SupplierRepository supplierRepository, ResourceLoader resourceLoader,
                            Environment environment,
                            OrderStatusCodesService orderStatusCodesService,
-                           BlogPostRepository blogPostRepository, OrderItemsStatusCodesService orderItemsStatusCodesService) throws IOException, InterruptedException {
+                           SliderItemRepository sliderItemRepository, BlogPostRepository blogPostRepository, OrderItemsStatusCodesService orderItemsStatusCodesService) throws IOException, InterruptedException {
         this.addressRepository = addressRepository;
         this.addressTypeRepository = addressTypeRepository;
         this.countryRepository = countryRepository;
@@ -84,6 +85,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         this.resourceLoader = resourceLoader;
         this.fileStorageLocation = Paths.get(environment.getProperty("app.file.upload-dir", "./src/main/resources/static/images/uploads"));
         this.orderStatusCodesService = orderStatusCodesService;
+        this.sliderItemRepository = sliderItemRepository;
         this.blogPostRepository = blogPostRepository;
         this.orderItemsStatusCodesService = orderItemsStatusCodesService;
     }
@@ -96,12 +98,25 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
             if (alreadySetup)
                 return;
             try {
-                createStorage( "classpath:/static/images/uploads/blank/blank_company_logo.jpg");
-                createStorage( "classpath:/static/images/uploads/blank/blank_profile_picture.jpg");
-                createStorage( "classpath:/static/images/uploads/blank/blank_product.jpg");
+                createStorage( "classpath:/static/images/blank/blank_company_logo.jpg");
+                createStorage( "classpath:/static/images/blank/blank_profile_picture.jpg");
+                createStorage( "classpath:/static/images/blank/blank_product.jpg");
                 createStorage( "classpath:/static/images/blogpost/blog01.jpg");
                 createStorage( "classpath:/static/images/blogpost/blog02.jpg");
                 createStorage( "classpath:/static/images/blogpost/blog03.jpg");
+                createStorage( "classpath:/static/images/slides/slide01.jpg");
+                createStorage( "classpath:/static/images/slides/slide02.jpg");
+                createStorage( "classpath:/static/images/slides/slide03.jpg");
+                createStorage( "classpath:/static/images/slides/slide04.jpg");
+                createStorage( "classpath:/static/images/categories/flowers.jpg");
+                createStorage( "classpath:/static/images/categories/gifts.jpg");
+                createStorage( "classpath:/static/images/categories/plants.jpg");
+                createStorage( "classpath:/static/images/categories/printing.jpg");
+                createStorage( "classpath:/static/images/categories/writing.jpg");
+                createStorage( "classpath:/static/images/categories/decoration.jpg");
+                createStorage( "classpath:/static/images/categories/special.jpg");
+                createStorage( "classpath:/static/images/categories/decoration.jpg");
+
                 initializeStorage();
 
             } catch (IOException | InterruptedException e) {
@@ -191,34 +206,76 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
                 addressTypeEntity.setAddressTypeDescription(status.getAddressTypeDescription());
                 addressTypeRepository.save(addressTypeEntity);
             });
-            StorageEntity storage01 =  storageRepository.findById(4L).orElse(null);
-            StorageEntity storage02 =  storageRepository.findById(5L).orElse(null);
 
-                createBlogIfNotFound("What is Lorem Ipsum?",
-                        "There is no one who loves pain itself",
-                        "Generated 5 paragraphs",
-                        "Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...",
-                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut varius nec quam ut placerat. Sed placerat tellus magna, sit amet fermentum enim laoreet non. Vestibulum eu justo sed magna ullamcorper facilisis id sed tortor. Etiam varius congue cursus. In pellentesque ut purus accumsan euismod. In eget malesuada massa. Sed lobortis, eros ut consequat consectetur, diam orci aliquet nulla, nec rhoncus turpis ante quis est.",
-                        userRepository.findByUsername("admin").orElseThrow(null),
-                        storageRepository.findById(4L).orElseThrow(()->new QueryRuntimeException("Could not find storage 7")));
+            createBlogIfNotFound("What is Lorem Ipsum?",
+                    "There is no one who loves pain itself",
+                    "Generated 5 paragraphs",
+                    "Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...",
+                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut varius nec quam ut placerat. Sed placerat tellus magna, sit amet fermentum enim laoreet non. Vestibulum eu justo sed magna ullamcorper facilisis id sed tortor. Etiam varius congue cursus. In pellentesque ut purus accumsan euismod. In eget malesuada massa. Sed lobortis, eros ut consequat consectetur, diam orci aliquet nulla, nec rhoncus turpis ante quis est.",
+                    userRepository.findByUsername("admin").orElseThrow(null),
+                    storageRepository.findById(4L).orElseThrow(()->new QueryRuntimeException("Could not find storage 4")));
 
 
-                createBlogIfNotFound("Where can I get some?",
-                        "Here are many variations of passages of Lorem Ipsum available",
-                        "Generated 5 paragraphs",
-                        "The standard chunk of Lorem Ipsum used since the 1500s...",
-                        "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. ",
-                        userRepository.findByUsername("admin").orElseThrow(null),
-                        storageRepository.findById(5L).orElseThrow(()->new QueryRuntimeException("Could not find storage 7")));
+            createBlogIfNotFound("Where can I get some?",
+                    "Here are many variations of passages of Lorem Ipsum available",
+                    "Generated 5 paragraphs",
+                    "The standard chunk of Lorem Ipsum used since the 1500s...",
+                    "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. ",
+                    userRepository.findByUsername("admin").orElseThrow(null),
+                    storageRepository.findById(5L).orElseThrow(()->new QueryRuntimeException("Could not find storage 5")));
+
+            createSliderItemIfNotFound(
+                    storageRepository.findById(7L).orElseThrow(()->new QueryRuntimeException("Could not find storage 7")),
+                    userRepository.findByUsername("admin").orElseThrow(null),
+                    "",
+                    "Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...");
+            createSliderItemIfNotFound(
+                    storageRepository.findById(8L).orElseThrow(()->new QueryRuntimeException("Could not find storage 8")),
+                    userRepository.findByUsername("admin").orElseThrow(null),
+                    "Curabitur sapien augue, euismod at.",
+                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras lobortis diam id augue imperdiet tempor. Donec posuere lobortis metus, in tempus ipsum elementum ut.");
+            createSliderItemIfNotFound(
+                    storageRepository.findById(9L).orElseThrow(()->new QueryRuntimeException("Could not find storage 9")),
+                    userRepository.findByUsername("admin").orElseThrow(null),
+                    "Donec nec porta neque. Phasellus.",
+                    "There is no one who loves pain itself, who seeks after it and wants to have it, simply because it is pain...");
+            createSliderItemIfNotFound(
+                    storageRepository.findById(10L).orElseThrow(()->new QueryRuntimeException("Could not find storage 10")),
+                    userRepository.findByUsername("admin").orElseThrow(null),
+                    "Integer sit amet nibh ac.",
+                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis luctus nec mi non placerat.");
 
 
 
-            ProductCategoryEntity flowers = createProductCategoryIfNotFound("Flowers", "Different types of flowers arranged as bouquets, in a box, in pots.");
-            ProductCategoryEntity Plants = createProductCategoryIfNotFound("Plants", "Different types of plants for the home and garden.");
-            ProductCategoryEntity gifts = createProductCategoryIfNotFound("Gifts", "Creative gift solutions made by hand according to customer specific requirements.");
-            ProductCategoryEntity special = createProductCategoryIfNotFound("Special", "Boutique products suitable for special occasions.");
-            ProductCategoryEntity prints = createProductCategoryIfNotFound("Prints", "Printing on various surfaces.");
-            ProductCategoryEntity promotions = createProductCategoryIfNotFound("Promotions", "Special offers at a super price.");
+            ProductCategoryEntity flowers = createProductCategoryIfNotFound("Flowers",
+                    "Different types of flowers arranged as bouquets, in a box, in pots.",
+                    storageRepository.findById(11L).orElseThrow(()->new QueryRuntimeException("Could not find storage 10")));
+
+            createProductCategoryIfNotFound("Gifts",
+                    "Creative gift solutions made by hand according to customer specific requirements.",
+                    storageRepository.findById(12L).orElseThrow(()->new QueryRuntimeException("Could not find storage 10")));
+
+            createProductCategoryIfNotFound("Plants",
+                    "Different types of plants for the home and garden.",
+                    storageRepository.findById(13L).orElseThrow(()->new QueryRuntimeException("Could not find storage 10")));
+
+            createProductCategoryIfNotFound("Prints", "Printing on various surfaces.",
+                    storageRepository.findById(14L).orElseThrow(()->new QueryRuntimeException("Could not find storage 10")));
+
+            createProductCategoryIfNotFound("Gift Tags & Labels",
+                    "We label your gifts.",
+                    storageRepository.findById(15L).orElseThrow(()->new QueryRuntimeException("Could not find storage 10")));
+
+             createProductCategoryIfNotFound("Decoration",
+                    "We can decorate anything.",
+                    storageRepository.findById(16L).orElseThrow(()->new QueryRuntimeException("Could not find storage 10")));
+             createProductCategoryIfNotFound("Special",
+                    "Boutique products suitable for special occasions.",
+                    storageRepository.findById(17L).orElseThrow(()->new QueryRuntimeException("Could not find storage 10")));
+
+            createProductCategoryIfNotFound("Promotions",
+                    "Special offers at a super price.",
+                    storageRepository.findById(18L).orElseThrow(()->new QueryRuntimeException("Could not find storage 10")));
 
             ProductSubCategoryEntity alstroemeria = createProductSubCategoryIfNotFound("Alstroemeria"
                     , "Also known as Peruvian lily, alstroemeria is a favorite perennial for both the garden and as a cut flower with a very long life in the vase. It blooms profusely and continuously. One of the few varieties of Alstroemeria that can overwinter in the garden in our climate. Good mulching is recommended in autumn. Very beautiful large flowers in tangerine orange. A perennial that will brighten your summer garden with color. Vis. 100 cm. Not much care and requires growing in any soil."
@@ -254,7 +311,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
                     productStatus,
                     flowers,
                     alstroemeria,
-                    storageRepository.findById(7L).orElseThrow(()->new QueryRuntimeException("Could not find storage 1")),
+                    storageRepository.findById(19L).orElseThrow(()->new QueryRuntimeException("Could not find storage 11")),
                     userRepository.findByUsername("admin").orElseThrow(()->new QueryRuntimeException("Could not find user 1")));
             createProductIfNotFound("Calla Lily",
                     5,
@@ -268,7 +325,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
                     productStatus,
                     flowers,
                     lilies,
-                    storageRepository.findById(8L).orElseThrow(()->new QueryRuntimeException("Could not find storage 2")),
+                    storageRepository.findById(20L).orElseThrow(()->new QueryRuntimeException("Could not find storage 12")),
                     userRepository.findByUsername("admin").orElseThrow(()->new QueryRuntimeException("Could not find user 1")));
             createProductIfNotFound("Freesias",
                     4,
@@ -282,7 +339,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
                     productStatus,
                     flowers,
                     freesias,
-                    storageRepository.findById(9L).orElseThrow(()->new QueryRuntimeException("Could not find storage 2")),
+                    storageRepository.findById(21L).orElseThrow(()->new QueryRuntimeException("Could not find storage 13")),
                     userRepository.findByUsername("admin").orElseThrow(()->new QueryRuntimeException("Could not find user 1")));
             createProductIfNotFound("Lisianthus",
                     4,
@@ -296,7 +353,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
                     productStatus,
                     flowers,
                     lisianthus,
-                    storageRepository.findById(10L).orElseThrow(()->new QueryRuntimeException("Could not find storage 4")),
+                    storageRepository.findById(22L).orElseThrow(()->new QueryRuntimeException("Could not find storage 14")),
                     userRepository.findByUsername("admin").orElseThrow(()->new QueryRuntimeException("Could not find user 1")));
             createProductIfNotFound("Sunflower",
                     5,
@@ -310,7 +367,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
                     productStatus,
                     flowers,
                     sunflower,
-                    storageRepository.findById(11L).orElseThrow(()->new QueryRuntimeException("Could not find storage 5")),
+                    storageRepository.findById(23L).orElseThrow(()->new QueryRuntimeException("Could not find storage 15")),
                     userRepository.findByUsername("admin").orElseThrow(()->new QueryRuntimeException("Could not find user 1")));
             createProductIfNotFound("Roses",
                     2,
@@ -324,7 +381,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
                     productStatus,
                     flowers,
                     roses,
-                    storageRepository.findById(12L).orElseThrow(()->new QueryRuntimeException("Could not find storage 6")),
+                    storageRepository.findById(24L).orElseThrow(()->new QueryRuntimeException("Could not find storage 16")),
                     userRepository.findByUsername("admin").orElseThrow(()->new QueryRuntimeException("Could not find user 1")));
             createProductIfNotFound("Tulips",
                     2,
@@ -338,7 +395,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
                     productStatus,
                     flowers,
                     tulips,
-                    storageRepository.findById(13L).orElseThrow(()->new QueryRuntimeException("Could not find storage 7")),
+                    storageRepository.findById(25L).orElseThrow(()->new QueryRuntimeException("Could not find storage 17")),
                     userRepository.findByUsername("admin").orElseThrow(()->new QueryRuntimeException("Could not find user 1")));
 
             OrderStatusCodes[] values = OrderStatusCodes.values();
@@ -353,7 +410,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 
             StorageEntity sofiaFlowerLogo;
             try {
-                sofiaFlowerLogo = createStorage( "classpath:/static/images/uploads/supplierLogos/sofia_flowers_logo.jpg");
+                sofiaFlowerLogo = createStorage( "classpath:/static/images/supplierLogos/sofia_flowers_logo.jpg");
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -382,7 +439,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 
             StorageEntity unionFlowerLogo;
             try {
-                unionFlowerLogo = createStorage( "classpath:/static/images/uploads/supplierLogos/union-flowers.jpg");
+                unionFlowerLogo = createStorage( "classpath:/static/images/supplierLogos/union-flowers.jpg");
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -477,7 +534,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 
     @Transactional
     public void initializeStorage() throws IOException, InterruptedException {
-        Resource[] resources = loadResources("classpath*:/static/images/uploads/*.jpg");
+        Resource[] resources = loadResources("classpath*:/static/images/products/*.jpg");
         for (Resource r : resources
         ) {
             String[] arrOfStr = r.getURL().toString().split("static", 0);
@@ -525,7 +582,18 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
     public Resource[] loadResources(String pattern) throws IOException {
         return ResourcePatternUtils.getResourcePatternResolver(resourceLoader).getResources(pattern);
     }
-
+    @Transactional
+    private SliderItemEntity createSliderItemIfNotFound(StorageEntity storage,
+                                                        UserEntity user,
+                                                        String sliderItemTitle,
+                                                        String sliderItemContent) {
+        SliderItemEntity sliderItem = new SliderItemEntity();
+        sliderItem.setStorage(storage);
+        sliderItem.setUser(user);
+        sliderItem.setSliderItemTitle(sliderItemTitle);
+        sliderItem.setSliderItemContent(sliderItemContent);
+        return sliderItemRepository.save(sliderItem);
+    }
 
     @Transactional
     private AddressEntity createAddressIfNotFound(String streetAddress,
@@ -584,12 +652,14 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
     }
     @Transactional
     private ProductCategoryEntity createProductCategoryIfNotFound(String categoryName,
-                                                                  String categoryDescription) {
+                                                                  String categoryDescription,
+                                                                  StorageEntity storage) {
         ProductCategoryEntity categoryEntity = productCategoryRepository.findByProductCategoryName(categoryName).orElse(null);
         if (categoryEntity == null) {
             categoryEntity = new ProductCategoryEntity();
             categoryEntity.setProductCategoryName(categoryName);
             categoryEntity.setProductCategoryDescription(categoryDescription);
+            categoryEntity.setStorage(storage);
             productCategoryRepository.save(categoryEntity);
         }
         return categoryEntity;

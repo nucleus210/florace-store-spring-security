@@ -5,6 +5,7 @@ import com.nucleus.floracestore.model.entity.StorageEntity;
 import com.nucleus.floracestore.model.service.StorageServiceModel;
 import com.nucleus.floracestore.repository.StorageRepository;
 import com.nucleus.floracestore.service.StorageService;
+import com.nucleus.floracestore.utils.ImageUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -12,16 +13,16 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.core.io.UrlResource;
 import org.springframework.core.io.support.ResourcePatternUtils;
-import org.springframework.security.access.prepost.PostAuthorize;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -31,20 +32,26 @@ import java.util.*;
 import java.util.stream.Collectors;
 @Service
 public class StorageServiceImpl implements StorageService {
+    private static final  String DOMAIN_URL = "http://localhost:8080";
+    private static final  int PRODUCT_WIDTH = 960;
+    private static final  int PRODUCT_HEIGHT = 997;
+
     private final Path fileStorageLocation;
     private final StorageRepository storageRepository;
     private final ResourceLoader resourceLoader;
     private final ModelMapper modelMapper;
+    private final ImageUtils imageUtils;
 
     @Autowired
     public StorageServiceImpl(Environment environment,
                               StorageRepository storageRepository,
                               ResourceLoader resourceLoader,
-                              ModelMapper modelMapper) {
+                              ModelMapper modelMapper, ImageUtils imageUtils) {
         this.fileStorageLocation = Paths.get(environment.getProperty("app.file.upload-dir", "./src/main/resources/static/images/uploads"));
         this.storageRepository = storageRepository;
         this.resourceLoader = resourceLoader;
         this.modelMapper = modelMapper;
+        this.imageUtils = imageUtils;
         this.init();
     }
 
@@ -95,13 +102,27 @@ public class StorageServiceImpl implements StorageService {
             System.out.println("File path: " + arrOfStr[1]);
 
             Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
+
+            // create storage entity and populate file information
             StorageEntity entity = new StorageEntity();
             entity.setFileName(fileName);
-            entity.setFileUrl("http://localhost:8080" + arrOfStr[1]);
+            entity.setFileUrl(DOMAIN_URL + arrOfStr[1]);
             entity.setSize(Files.size(targetLocation));
             storageRepository.save(entity);
+
+            URL domain = new URL(DOMAIN_URL);
+           System.out.println("Path" + DOMAIN_URL);
+            System.out.println("Path" + filePath);
+            System.out.println("Path" +  fileStorageLocation + targetLocation);
+
+//            Path targetLocation2 = this.fileStorageLocation.resolve("test01.png");
+//            BufferedImage originalImage = ImageUtils.cropImg(PRODUCT_WIDTH,PRODUCT_HEIGHT, file.getInputStream());
+//            File outputfile = new File(targetLocation2.toUri());
+//            ImageIO.write(originalImage, "png", outputfile);
+
             StorageEntity storageEntity = storageRepository.findByFileName(fileName)
                     .orElseThrow(() -> new QueryRuntimeException("Could not find storage with filename " + fileName));
+
             return mapToService(storageEntity);
         } catch (IOException ex) {
             throw new RuntimeException("Could not store file " + fileName + ". Please try again!", ex);

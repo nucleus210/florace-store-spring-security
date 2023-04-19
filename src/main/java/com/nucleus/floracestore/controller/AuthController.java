@@ -79,9 +79,9 @@ public class AuthController {
                 .build();
         UserServiceModel newUser = userService.registerUser(user);
 
-        String token = userService.loginUser(newUser.getUsername(), newUser.getPassword());
+//        String token = userService.loginUser(newUser.getUsername(), newUser.getPassword());
 
-        return ResponseEntity.ok(new JwtAuthenticationResponse(token));
+        return ResponseEntity.ok("{Success}");
     }
 
     @PostMapping(value = "/facebook/register", produces = MediaType.APPLICATION_JSON_VALUE)

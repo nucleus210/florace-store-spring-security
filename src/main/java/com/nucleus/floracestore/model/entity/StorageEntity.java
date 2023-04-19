@@ -13,7 +13,7 @@ public class StorageEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "resources_id", nullable = false)
+    @Column(name = "resource_id", nullable = false)
     private Long resourceId;
 
     @Column(name = "file_name", nullable = false)

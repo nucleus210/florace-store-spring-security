@@ -70,6 +70,7 @@ public class SliderItemController {
                 .body(assembler.toModel(mapToView(sliderItemServiceModel)));
     }
 
+    @GetMapping("/slider")
     public ResponseEntity<CollectionModel<EntityModel<SliderItemViewModel>>> getAllSliderItems() {
         List<EntityModel<SliderItemViewModel>> sliderItems = sliderService.getAllSlides().stream()
                 .map(entity -> assembler.toModel(mapToView(entity))).toList();

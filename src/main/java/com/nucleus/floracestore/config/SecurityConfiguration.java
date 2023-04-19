@@ -82,6 +82,7 @@ public class SecurityConfiguration {
                                         .antMatchers(HttpMethod.POST, "/storages/uploads").permitAll()
                                         .antMatchers(HttpMethod.POST, "/storages/files").permitAll()
                                         .antMatchers(HttpMethod.POST, "/storages/file").permitAll()
+                                        .antMatchers(HttpMethod.GET, "/slider").permitAll()
 
                                         .antMatchers(HttpMethod.POST, "/profile/**").permitAll()
                                         .antMatchers(HttpMethod.GET, "/profiles").permitAll()

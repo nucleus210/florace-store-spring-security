@@ -12,5 +12,6 @@ public class ProductCategoryServiceModel {
     private String productCategoryDescription;
     // TODO Unable map object --> modelMapper error
     private Set<ProductSubCategoryEntity> productSubCategories;
+    private StorageServiceModel storage;
 
 }

@@ -39,9 +39,9 @@ public class UserEntity {
     @JoinTable(
             name = "users_roles",
             joinColumns = @JoinColumn(
-                    name = "user__id", referencedColumnName = "user_id"),
+                    name = "user_id", referencedColumnName = "user_id"),
             inverseJoinColumns = @JoinColumn(
-                    name = "role__id", referencedColumnName = "role_id"))
+                    name = "_role_id", referencedColumnName = "role_id"))
     private Set<RoleEntity> roles = new HashSet<>();
 
     public void setActive(boolean b) {

@@ -52,6 +52,8 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public String loginUser(String username, String password) {
+
+        log.info("Login user / UserService" );
         Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(username, password));
         return tokenProvider.generateToken(authentication);
