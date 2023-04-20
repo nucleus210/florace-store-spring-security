@@ -11,11 +11,6 @@ import java.net.URL;
 
 public class ImageUtils {
 
-
-
-
-
-
     public static BufferedImage cropImg(int targetWidth, int targetHeight, InputStream in) throws IOException {
         BufferedImage originalImage = ImageIO.read(in);
         int height = originalImage.getHeight();
@@ -38,9 +33,6 @@ public class ImageUtils {
 
 public static void storedImageFile(BufferedImage bufferedImageResult, URI location) throws IOException {
     File outputFile = new File(location);
-
-//    Graphics2D g2d = bufferedImageResult.createGraphics();
-
 
     String formatName = location.toString().substring(
             location.toString().lastIndexOf(".") + 1

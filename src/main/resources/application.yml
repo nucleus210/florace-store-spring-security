@@ -1,12 +1,16 @@
 application:
+  name: "Florance Ecommerce"
+
   jwt:
     uri: /auth/**
     header: Authorization
-    secretKey: dDO6zbc):(@A*RjPwNXYZ_Jj4s)G=~UYzjjs(u2yF).!TW`u={IyyCBBJlAYt)D
+    secretKey: ):(@dDO6zbcA*RjPwNXYZ_Jj4s)G=~UYzjjs(u2yF).!TW`u={IyyCBBJlAYt)D
     tokenExpirationAfterDays: 14
     tokenPrefix: Bearer
 
 spring:
+  application:
+    name: "Florance Ecommerce"
   web:
     resources:
       static-locations[0]: "file:src/main/resources/static/"
@@ -101,3 +105,9 @@ stripe:
   public:
     key: pk_test_
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+#      base-path: "/admin/stats"

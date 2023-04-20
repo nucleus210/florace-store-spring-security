@@ -1,7 +1,7 @@
 package com.nucleus.floracestore.controller;
 
 import com.google.gson.Gson;
-import com.nucleus.floracestore.model.entity.CheckoutPayment;
+import com.nucleus.floracestore.model.payment.CheckoutPayment;
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
 import com.stripe.model.checkout.Session;
@@ -56,6 +56,6 @@ public class StripeController {
     }
 
     private static void init() {
-        Stripe.apiKey = "Your_secret_key";
+        Stripe.apiKey = "pk_test_Cd1A1xC1AkE6tg6mPX0QgWri";
     }
 }

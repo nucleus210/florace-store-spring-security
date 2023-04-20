@@ -97,6 +97,10 @@ public class SecurityConfiguration {
                                         .antMatchers( "/users/search").permitAll()
                                         .antMatchers(HttpMethod.POST, "/users/search").permitAll()
                                         .antMatchers(HttpMethod.POST, "/login").permitAll()
+                                        .antMatchers(HttpMethod.GET, "/error").permitAll()
+                                        .antMatchers(HttpMethod.GET, "/actuator").permitAll()
+                                        .antMatchers(HttpMethod.GET, "/actuator/**").permitAll()
+
                                         .antMatchers(HttpMethod.POST, "/register").permitAll()
                                         .antMatchers(HttpMethod.POST, "/facebook/signin").permitAll()
                                         .antMatchers("/orders/**").hasAnyRole(UserRoleEnum.USER.name(), UserRoleEnum.ADMIN.name())
