@@ -50,19 +50,19 @@ public class BlogPostController {
 
     }
     @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_ADMIN')")
-    @PutMapping("/blog-posts/{id}")
-    public ResponseEntity<EntityModel<BlogPostViewModel>> updateBlogPost(@RequestBody BlogPostDto model) {
+    @PutMapping("/blog-posts/{blogPostId}")
+    public ResponseEntity<EntityModel<BlogPostViewModel>> updateBlogPost(@RequestBody BlogPostDto model, @PathVariable Long blogPostId) {
         BlogPostServiceModel blogPostServiceModel = blogPostService.updateBlogPostById(model.getBlogPostId(),
                 modelMapper.map(model, BlogPostServiceModel.class),
                 getCurrentLoggedUsername());
         log.info("BlogPostController: update blog post with id: " + blogPostServiceModel.getBlogPostId());
         return ResponseEntity
-                .created(linkTo(methodOn(BlogPostController.class).updateBlogPost(model)).toUri())
+                .created(linkTo(methodOn(BlogPostController.class).updateBlogPost(model, blogPostId)).toUri())
                 .body(assembler.toModel(mapToView(blogPostServiceModel)));
     }
 
     @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_ADMIN')")
-    @DeleteMapping("/blog-posts/{id}")
+    @DeleteMapping("/blog-posts/{blogPostId}")
     public ResponseEntity<EntityModel<BlogPostViewModel>> deleteBlogPost(@PathVariable Long blogPostId) {
         BlogPostServiceModel blogPostServiceModel = blogPostService.deleteBlogPostById(blogPostId, getCurrentLoggedUsername());
         return ResponseEntity

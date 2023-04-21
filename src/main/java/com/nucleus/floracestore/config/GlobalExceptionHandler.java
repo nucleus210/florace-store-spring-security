@@ -1,11 +1,11 @@
 package com.nucleus.floracestore.config;
 
-import javassist.NotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
@@ -26,9 +26,9 @@ public class GlobalExceptionHandler {
 
     private final Logger logger = LogManager.getLogger();
 
-    @ExceptionHandler(NotFoundException.class)
+    @ExceptionHandler(ChangeSetPersister.NotFoundException.class)
     public ResponseEntity<ApiCallError<String>> handleNotFoundException(
-            HttpServletRequest request, NotFoundException ex) {
+            HttpServletRequest request, ChangeSetPersister.NotFoundException ex) {
         logger.error("NotFoundException {}\n", request.getRequestURI(), ex);
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND)

@@ -106,6 +106,9 @@ stripe:
     key: pk_test_
 
 management:
+  trace:
+    http:
+      enabled: true
   endpoints:
     web:
       exposure:
