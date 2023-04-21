@@ -2,9 +2,10 @@ package com.nucleus.floracestore.model.entity;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.GenericGenerator;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.Date;
 
 @Getter
@@ -13,7 +14,13 @@ import java.util.Date;
 @Table(name = "product_reviews")
 public class ProductReviewEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO,
+            generator="native"
+    )
+    @GenericGenerator(
+            name = "native",
+            strategy = "native"
+    )
     @Column(name = "product_review_id")
     private Long productReviewId;
     @ManyToOne(targetEntity = ProductEntity.class, fetch = FetchType.LAZY)

@@ -5,7 +5,9 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
+import org.hibernate.annotations.GenericGenerator;
+
 import java.util.Set;
 
 @Getter
@@ -16,7 +18,13 @@ public class OrderItemsStatusCodesEntity {
 
     @Id
     @Column(name = "order_item_status_code_id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO,
+            generator="native"
+    )
+    @GenericGenerator(
+            name = "native",
+            strategy = "native"
+    )
     private Long orderItemStatusCodeId;
 
     @Column(name = "order_item_status_code", nullable = false)

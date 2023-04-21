@@ -4,7 +4,9 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
+import org.hibernate.annotations.GenericGenerator;
+
 import java.util.Set;
 
 @Getter
@@ -13,7 +15,13 @@ import java.util.Set;
 @Table(name = "order_status_code")
 public class OrderStatusCodesEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO,
+            generator="native"
+    )
+    @GenericGenerator(
+            name = "native",
+            strategy = "native"
+    )
     @Column(name = "order_status_code_id")
     private Long orderStatusCodeId;
     @Column(name = "order_status_code", nullable = false)

@@ -106,11 +106,12 @@ stripe:
     key: pk_test_
 
 management:
-  trace:
-    http:
+  httpexchanges:
+    recording:
       enabled: true
+
   endpoints:
     web:
       exposure:
-        include: "*"
+        include: "httpexchanges, *"
 #      base-path: "/admin/stats"

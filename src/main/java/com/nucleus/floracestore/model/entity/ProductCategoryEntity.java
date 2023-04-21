@@ -3,7 +3,9 @@ package com.nucleus.floracestore.model.entity;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
+import org.hibernate.annotations.GenericGenerator;
+
 import java.util.Set;
 
 @Getter
@@ -12,7 +14,13 @@ import java.util.Set;
 @Table(name = "product_categories")
 public class ProductCategoryEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO,
+            generator="native"
+    )
+    @GenericGenerator(
+            name = "native",
+            strategy = "native"
+    )
     @Column(name = "product_category_id")
     private Long productCategoryId;
     @Column(name = "product_category_name", nullable = false, unique = true)

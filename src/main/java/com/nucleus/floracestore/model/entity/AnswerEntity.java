@@ -3,7 +3,8 @@ package com.nucleus.floracestore.model.entity;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
+import org.hibernate.annotations.GenericGenerator;
 
 @Getter
 @Setter
@@ -11,7 +12,13 @@ import javax.persistence.*;
 @Table(name = "answers")
 public class AnswerEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO,
+            generator="native"
+    )
+    @GenericGenerator(
+            name = "native",
+            strategy = "native"
+    )
     @Column(name = "answer_id")
     private Long answerId;
 

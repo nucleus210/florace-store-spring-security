@@ -2,9 +2,10 @@ package com.nucleus.floracestore.model.entity;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.GenericGenerator;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.Date;
 
 @Getter
@@ -13,7 +14,13 @@ import java.util.Date;
 @Table(name = "inventories")
 public class InventoryEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO,
+            generator="native"
+    )
+    @GenericGenerator(
+            name = "native",
+            strategy = "native"
+    )
     @Column(name = "inventory_id")
     private Long inventoryId;
     @ManyToOne(optional = false, fetch = FetchType.LAZY, cascade = CascadeType.ALL)

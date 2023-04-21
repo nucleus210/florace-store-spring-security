@@ -2,9 +2,10 @@ package com.nucleus.floracestore.model.entity;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.GenericGenerator;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.Date;
 
 @Getter
@@ -13,7 +14,13 @@ import java.util.Date;
 @Table(name = "blog_post_comments")
 public class BlogPostCommentEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO,
+            generator="native"
+    )
+    @GenericGenerator(
+            name = "native",
+            strategy = "native"
+    )
     @Column(name = "blog_posts_comment_id")
     private Long blogPostCommentId;
     @Column(name = "blog_post_comment_content")

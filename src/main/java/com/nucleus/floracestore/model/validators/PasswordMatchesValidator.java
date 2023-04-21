@@ -2,8 +2,8 @@ package com.nucleus.floracestore.model.validators;
 
 import com.nucleus.floracestore.model.dto.UserRegistrationDto;
 
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 
 public class PasswordMatchesValidator implements ConstraintValidator<IPasswordMatches, Object> {
 

@@ -2,9 +2,10 @@ package com.nucleus.floracestore.model.entity;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.GenericGenerator;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -15,7 +16,13 @@ import java.util.Set;
 @Table(name = "blog_posts")
 public class BlogPostEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO,
+            generator="native"
+    )
+    @GenericGenerator(
+            name = "native",
+            strategy = "native"
+    )
     @Column(name = "blog_post_id")
     private Long blogPostId;
     @Column(name = "title", nullable = false, unique = true)
@@ -40,6 +47,8 @@ public class BlogPostEntity {
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     @Column(name = "published_at")
     private Date publishedAt;
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @OneToMany(targetEntity = StorageEntity.class,
+            cascade = CascadeType.MERGE,
+            fetch = FetchType.EAGER)
     private Set<StorageEntity> storages;
 }

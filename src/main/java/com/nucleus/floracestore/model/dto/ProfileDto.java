@@ -4,7 +4,7 @@ import com.nucleus.floracestore.model.entity.AddressEntity;
 import com.nucleus.floracestore.model.entity.StorageEntity;
 import lombok.Data;
 
-import javax.validation.constraints.Size;
+import jakarta.validation.constraints.Size;
 import java.util.Date;
 
 @Data

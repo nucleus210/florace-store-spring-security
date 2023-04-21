@@ -3,7 +3,9 @@ package com.nucleus.floracestore.model.entity;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
+import org.hibernate.annotations.GenericGenerator;
+
 import java.math.BigDecimal;
 import java.util.Set;
 
@@ -13,7 +15,13 @@ import java.util.Set;
 @Table(name = "products")
 public class ProductEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO,
+            generator="native"
+    )
+    @GenericGenerator(
+            name = "native",
+            strategy = "native"
+    )
     @Column(name = "product_id")
     private Long productId;
     @Column(name = "product_name", nullable = false, unique = true)

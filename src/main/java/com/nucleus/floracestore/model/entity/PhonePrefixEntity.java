@@ -3,7 +3,8 @@ package com.nucleus.floracestore.model.entity;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
+import org.hibernate.annotations.GenericGenerator;
 
 @Getter
 @Setter
@@ -12,7 +13,13 @@ import javax.persistence.*;
 public class PhonePrefixEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO,
+            generator="native"
+    )
+    @GenericGenerator(
+            name = "native",
+            strategy = "native"
+    )
     @Column(name = "phone_prefix_id")
     private Long phonePrefixId;
     @Column(name = "country_name")

@@ -49,7 +49,7 @@ public class ProductStatusController {
 
     }
 
-    @PutMapping("/products-statuses/{id}")
+    @PutMapping("/products-statuses/{productStatusId}")
     public ResponseEntity<EntityModel<ProductStatusViewModel>> updateProductStatus(@RequestBody ProductStatusDto model) {
         ProductStatusServiceModel productStatusServiceModel = productStatusService.updateProductStatusById(model.getProductStatusId(),
                 modelMapper.map(model, ProductStatusServiceModel.class),
@@ -61,7 +61,7 @@ public class ProductStatusController {
     }
 
     @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_ADMIN')")
-    @DeleteMapping("/products-statuses/{id}")
+    @DeleteMapping("/products-statuses/{productStatusId}")
     public ResponseEntity<EntityModel<ProductStatusViewModel>> deleteProductStatus(@PathVariable Long productStatusId) {
         ProductStatusServiceModel productStatusServiceModel = productStatusService.deleteProductStatusById(productStatusId, getCurrentLoggedUsername());
         return ResponseEntity
