@@ -1,5 +1,6 @@
 package com.nucleus.floracestore.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -27,6 +28,7 @@ public class ProductCategoryEntity {
     private String productCategoryName;
     @Column(name = "product_category_description", columnDefinition = "TEXT", nullable = false)
     private String productCategoryDescription;
+    @JsonIgnore
     @OneToMany(targetEntity = ProductSubCategoryEntity.class,
             cascade = CascadeType.MERGE,
             fetch = FetchType.LAZY,

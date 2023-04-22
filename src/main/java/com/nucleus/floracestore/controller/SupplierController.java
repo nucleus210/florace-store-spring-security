@@ -72,23 +72,23 @@ public class SupplierController {
 
     @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') or hasRole('ROLE_FACEBOOK_USER')")
     @GetMapping("/suppliers/{supplierId}")
-    public ResponseEntity<EntityModel<SupplierViewModel>> getSupplierById(@PathVariable Long SupplierId) {
+    public ResponseEntity<EntityModel<SupplierViewModel>> getSupplierById(@PathVariable Long supplierId) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(assembler.toModel(mapToView(supplierService.getSupplierById(SupplierId))));
+                .body(assembler.toModel(mapToView(supplierService.getSupplierById(supplierId))));
     }
     @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_ADMIN')")
     @PutMapping("/suppliers/{supplierId}")
-    public ResponseEntity<EntityModel<SupplierViewModel>> updateSupplierById(@RequestBody SupplierDto model, @PathVariable Long SupplierId) {
+    public ResponseEntity<EntityModel<SupplierViewModel>> updateSupplierById(@RequestBody SupplierDto model, @PathVariable Long supplierId) {
 
-        SupplierServiceModel supplierServiceModel = supplierService.updateSupplier(mapToService(model), SupplierId);
+        SupplierServiceModel supplierServiceModel = supplierService.updateSupplier(mapToService(model), supplierId);
         return ResponseEntity
-                .created(linkTo(methodOn(SupplierController.class).updateSupplierById(model, SupplierId)).toUri())
+                .created(linkTo(methodOn(SupplierController.class).updateSupplierById(model, supplierId)).toUri())
                 .body(assembler.toModel(mapToView(supplierServiceModel)));
     }
     @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_ADMIN')")
     @DeleteMapping("/suppliers/{supplierId}")
-    public ResponseEntity<EntityModel<SupplierViewModel>> deleteSupplierById(@PathVariable Long SupplierId) {
-        EntityModel<SupplierViewModel> SupplierViewModel = assembler.toModel(mapToView(supplierService.deleteSupplierById(SupplierId)));
+    public ResponseEntity<EntityModel<SupplierViewModel>> deleteSupplierById(@PathVariable Long supplierId) {
+        EntityModel<SupplierViewModel> SupplierViewModel = assembler.toModel(mapToView(supplierService.deleteSupplierById(supplierId)));
         return ResponseEntity.status(HttpStatus.OK).body(SupplierViewModel);
     }
     @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') or hasRole('ROLE_FACEBOOK_USER')")

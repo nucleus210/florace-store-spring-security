@@ -46,10 +46,15 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
     private final ResourceLoader resourceLoader;
     private final Path fileStorageLocation;
     private final OrderStatusCodesService orderStatusCodesService;
+    private final OrderStatusCodesRepository orderStatusCodesRepository;
 
     private final SliderItemRepository sliderItemRepository;
     private final BlogPostRepository blogPostRepository;
     private final OrderItemsStatusCodesService orderItemsStatusCodesService;
+    private final OrderItemsStatusCodesRepository orderItemsStatusCodesRepository;
+    private final OrderRepository orderRepository;
+
+    private final OrderItemRepository orderItemsRepository;
 
     @Autowired
     public SetupDataLoader(AddressRepository addressRepository, AddressTypeRepository addressTypeRepository,
@@ -67,7 +72,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
                            SupplierRepository supplierRepository, ResourceLoader resourceLoader,
                            Environment environment,
                            OrderStatusCodesService orderStatusCodesService,
-                           SliderItemRepository sliderItemRepository, BlogPostRepository blogPostRepository, OrderItemsStatusCodesService orderItemsStatusCodesService) throws IOException, InterruptedException {
+                           OrderStatusCodesRepository orderStatusCodesRepository, SliderItemRepository sliderItemRepository, BlogPostRepository blogPostRepository, OrderItemsStatusCodesService orderItemsStatusCodesService, OrderItemsStatusCodesRepository orderItemsStatusCodesRepository, OrderRepository orderRepository, OrderItemRepository orderItemsRepository) throws IOException, InterruptedException {
         this.addressRepository = addressRepository;
         this.addressTypeRepository = addressTypeRepository;
         this.countryRepository = countryRepository;
@@ -85,9 +90,13 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         this.resourceLoader = resourceLoader;
         this.fileStorageLocation = Paths.get(environment.getProperty("app.file.upload-dir", "./src/main/resources/static/images/uploads"));
         this.orderStatusCodesService = orderStatusCodesService;
+        this.orderStatusCodesRepository = orderStatusCodesRepository;
         this.sliderItemRepository = sliderItemRepository;
         this.blogPostRepository = blogPostRepository;
         this.orderItemsStatusCodesService = orderItemsStatusCodesService;
+        this.orderItemsStatusCodesRepository = orderItemsStatusCodesRepository;
+        this.orderRepository = orderRepository;
+        this.orderItemsRepository = orderItemsRepository;
     }
 
 
@@ -176,6 +185,21 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
             user.setRoles(Set.of(userRole));
             userRepository.save(user);
 
+            UserEntity userSec = new UserEntity();
+            userSec.setUsername("test");
+            userSec.setEmail("test3ee21@test.com");
+            userSec.setPassword(passwordEncoder.encode("user123"));
+            userSec.setAccountCreatedDate(new Date(System.currentTimeMillis()));
+            userSec.setRoles(Set.of(userRole));
+            userRepository.save(userSec);
+
+            UserEntity user03 = new UserEntity();
+            user03.setUsername("stefan");
+            user03.setEmail("testd3ee21@test.com");
+            user03.setPassword(passwordEncoder.encode("user123"));
+            user03.setAccountCreatedDate(new Date(System.currentTimeMillis()));
+            user03.setRoles(Set.of(userRole));
+            userRepository.save(user03);
             CountryEnum[] countryCodes = CountryEnum.values();
             Arrays.stream(countryCodes).forEach(country -> {
                 CountryEntity countryEntity = new CountryEntity();
@@ -266,10 +290,10 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
                     "We label your gifts.",
                     storageRepository.findById(15L).orElseThrow(()->new QueryRuntimeException("Could not find storage 10")));
 
-             createProductCategoryIfNotFound("Decoration",
+            createProductCategoryIfNotFound("Decoration",
                     "We can decorate anything.",
                     storageRepository.findById(16L).orElseThrow(()->new QueryRuntimeException("Could not find storage 10")));
-             createProductCategoryIfNotFound("Special",
+            createProductCategoryIfNotFound("Special",
                     "Boutique products suitable for special occasions.",
                     storageRepository.findById(17L).orElseThrow(()->new QueryRuntimeException("Could not find storage 10")));
 
@@ -402,8 +426,107 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
             Arrays.stream(values).forEach(orderStatusCodesService::initializeOrderStatusCodesFromEnum);
             ProductStatusEnum[] orderStatusCodes = ProductStatusEnum.values();
             Arrays.stream(orderStatusCodes).forEach(orderItemsStatusCodesService::createOrderItemStatus);
+            // TODO
+            OrderEntity order01 = createOrderIfNotFound(userRepository.findByUsername("lorenzo").orElse(null),
+                    orderStatusCodesRepository.findByStatusCode("Pending approval").orElse(null),
+                    new Date(2023 - 1900,Calendar.NOVEMBER,11),
+                    "");
+
+            OrderEntity order02 = createOrderIfNotFound(userRepository.findByUsername("user").orElse(null),
+                    orderStatusCodesRepository.findByStatusCode("Pending approval").orElse(null),
+                    new Date(2023 - 1900,Calendar.FEBRUARY,10),
+                    "");
+
+            OrderEntity order03 = createOrderIfNotFound(userRepository.findByUsername("admin").orElse(null),
+                    orderStatusCodesRepository.findByStatusCode("Pending approval").orElse(null),
+                    new Date(2023 - 1900,Calendar.MARCH,12),
+                    "");
+
+            OrderEntity order04 = createOrderIfNotFound(userRepository.findByUsername("test").orElse(null),
+                    orderStatusCodesRepository.findByStatusCode("Pending approval").orElse(null),
+                    new Date(2023 - 1900,Calendar.JANUARY,15),
+                    "");
+
+            OrderEntity order05 = createOrderIfNotFound(userRepository.findByUsername("stefan").orElse(null),
+                    orderStatusCodesRepository.findByStatusCode("Pending approval").orElse(null),
+                    new Date(2023 - 1900,Calendar.FEBRUARY,10),
+                    "");
+
+            createOrderItemIfNotFound(order01,
+                    productRepository.findByProductId(1L).orElse(null),
+                    orderItemsStatusCodesRepository.findByProductStatus("In stock").orElse(null),
+                    5,
+                    new BigDecimal(33),
+                    "1",
+                    null,
+                    null,
+                    null);
+
+            createOrderItemIfNotFound(order02,
+                    productRepository.findByProductId(2L).orElse(null),
+                    orderItemsStatusCodesRepository.findByProductStatus("In stock").orElse(null),
+                    14,
+                    new BigDecimal(333),
+                    "1",
+                    null,
+                    null,
+                    null);
 
 
+            createOrderItemIfNotFound(order03,
+                    productRepository.findByProductId(5L).orElse(null),
+                    orderItemsStatusCodesRepository.findByProductStatus("In stock").orElse(null),
+                    19,
+                    new BigDecimal(222),
+                    "1",
+                    null,
+                    null,
+                    null);
+            createOrderItemIfNotFound(order04,
+                    productRepository.findByProductId(5L).orElse(null),
+                    orderItemsStatusCodesRepository.findByProductStatus("In stock").orElse(null),
+                    19,
+                    new BigDecimal(33),
+                    "1",
+                    null,
+                    null,
+                    null);
+            createOrderItemIfNotFound(order04,
+                    productRepository.findByProductId(7L).orElse(null),
+                    orderItemsStatusCodesRepository.findByProductStatus("In stock").orElse(null),
+                    19,
+                    new BigDecimal(555),
+                    "1",
+                    null,
+                    null,
+                    null);
+            createOrderItemIfNotFound(order05,
+                    productRepository.findByProductId(1L).orElse(null),
+                    orderItemsStatusCodesRepository.findByProductStatus("In stock").orElse(null),
+                    19,
+                    new BigDecimal(22),
+                    "1",
+                    null,
+                    null,
+                    null);
+            createOrderItemIfNotFound(order03,
+                    productRepository.findByProductId(5L).orElse(null),
+                    orderItemsStatusCodesRepository.findByProductStatus("In stock").orElse(null),
+                    19,
+                    new BigDecimal(555),
+                    "1",
+                    null,
+                    null,
+                    null);
+            createOrderItemIfNotFound(order05,
+                    productRepository.findByProductId(7L).orElse(null),
+                    orderItemsStatusCodesRepository.findByProductStatus("In stock").orElse(null),
+                    19,
+                    new BigDecimal(555),
+                    "1",
+                    null,
+                    null,
+                    null);
 
             CountryEntity bulgaria = countryRepository.findCountryEntityByCountryName("Bulgaria").orElse(null);
             AddressTypeEntity sofiaFlowerAddressType = addressTypeRepository.findAddressTypeByAddressTypeName("BUSINESS").orElse(null);
@@ -465,11 +588,6 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
                     userRepository.findByUsername("admin").orElse(null),
                     unionFlower,
                     "https://union-flower.com/");
-
-
-
-
-
             alreadySetup = true;
         }
     }
@@ -681,13 +799,13 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
     }
 
     @Transactional
-    private BlogPostEntity createBlogIfNotFound(String title,
-                                                String metaTitle,
-                                                String slug,
-                                                String summary,
-                                                String content,
-                                                UserEntity user,
-                                                StorageEntity storages) {
+    private void createBlogIfNotFound(String title,
+                                      String metaTitle,
+                                      String slug,
+                                      String summary,
+                                      String content,
+                                      UserEntity user,
+                                      StorageEntity storages) {
         BlogPostEntity blogPostEntity = new BlogPostEntity();
         blogPostEntity = new BlogPostEntity();
         blogPostEntity.setTitle(title);
@@ -699,10 +817,46 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         blogPostEntity.setPublishedAt(new Date());
         blogPostEntity.setUser(user);
         blogPostEntity.setStorages(Set.of(storages));
-
-
-        return blogPostRepository.save(blogPostEntity);
+        blogPostRepository.save(blogPostEntity);
     }
 
+    @Transactional
+    private OrderEntity createOrderIfNotFound(
+            UserEntity user,
+            OrderStatusCodesEntity orderStatusCode,
+            Date dateOrderPlaced,
+            String orderDetails) {
+        OrderEntity order = new OrderEntity();
+        order.setUser(user);
+        order.setOrderStatusCode(orderStatusCode);
+        order.setDateOrderPlaced(dateOrderPlaced);
+        order.setOrderDetails(orderDetails);
+        return orderRepository.save(order);
+    }
+
+
+    @Transactional
+    private OrderItemEntity createOrderItemIfNotFound(
+            OrderEntity order,
+            ProductEntity product,
+            OrderItemsStatusCodesEntity orderItemStatusCode,
+            Integer orderItemQuantity,
+            BigDecimal orderItemPrice,
+            String rmaNumber,
+            Date rmaIssuedBy,
+            Date rmaIssuedData,
+            String orderItemDetails) {
+        OrderItemEntity orderItem = new OrderItemEntity();
+        orderItem.setOrder(order);
+        orderItem.setProduct(product);
+        orderItem.setOrderItemStatusCode(orderItemStatusCode);
+        orderItem.setOrderItemQuantity(orderItemQuantity);
+        orderItem.setOrderItemPrice(orderItemPrice);
+        orderItem.setRmaNumber(rmaNumber);
+        orderItem.setRmaIssuedBy(rmaIssuedBy);
+        orderItem.setRmaIssuedData(rmaIssuedData);
+        orderItem.setOrderItemDetails(orderItemDetails);
+        return orderItemsRepository.save(orderItem);
+    }
 }
 

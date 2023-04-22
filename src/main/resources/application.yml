@@ -61,9 +61,10 @@ spring:
     open-in-view: true
     properties:
       hibernate:
-        format_sql: true
-    defer-datasource-initialization: true
-    show-sql: true
+      format_sql: true
+      defer-datasource-initialization: true
+      show-sql: true
+
   #  mail:
   #    default-encoding: UTF-8
   #    host: smtp.gmail.com
