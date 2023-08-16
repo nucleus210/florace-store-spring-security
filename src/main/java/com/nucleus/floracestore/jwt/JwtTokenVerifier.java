@@ -1,10 +1,12 @@
 package com.nucleus.floracestore.jwt;
 
 import com.google.common.base.Strings;
+import com.nucleus.floracestore.config.JwtConfig;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -26,28 +28,28 @@ import java.util.stream.Collectors;
 public class JwtTokenVerifier extends OncePerRequestFilter {
 
     private final SecretKey secretKey;
-    private final JwtConfiguration jwtConfiguration;
+    private final JwtConfig jwtConfiguration;
 
     @Autowired
-    public JwtTokenVerifier(SecretKey secretKey, JwtConfiguration jwtConfiguration) {
+    public JwtTokenVerifier(SecretKey secretKey, JwtConfig jwtConfiguration) {
         this.secretKey = secretKey;
         this.jwtConfiguration = jwtConfiguration;
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request,
-                                    HttpServletResponse response,
-                                    FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(@NotNull HttpServletRequest request,
+                                   @NotNull HttpServletResponse response,
+                                    @NotNull FilterChain filterChain) throws ServletException, IOException {
 
         String authorizationHeader = request.getHeader("Authorization");
 
-        if (Strings.isNullOrEmpty(authorizationHeader) || !authorizationHeader.startsWith(jwtConfiguration.getTokenPrefix())) {
+        if (Strings.isNullOrEmpty(authorizationHeader) || !authorizationHeader.startsWith(jwtConfiguration.getPrefix())) {
             filterChain.doFilter(request, response);
             return;
         }
 
         Jws<Claims> jws;
-        String token = authorizationHeader.replace(jwtConfiguration.getTokenPrefix(), "");
+        String token = authorizationHeader.replace(jwtConfiguration.getPrefix(), "");
 
         try {
 

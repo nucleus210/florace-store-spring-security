@@ -67,7 +67,7 @@ public class OrderServiceImpl implements OrderService {
     public OrderServiceModel getActiveOrderByUsername(String username) {
         OrderEntity orderEntity = orderRepository
                 .findOrderByUsernameAndOrderStatusCode(username, "DRAFT")
-                .orElseThrow(() -> new QueryRuntimeException("Could not find active order for user " + username));
+                .orElseThrow(() ->  new QueryRuntimeException("Could not find active order for user " + username));
         return mapToService(orderEntity);
     }
 

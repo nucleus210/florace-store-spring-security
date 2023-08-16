@@ -44,7 +44,7 @@ public class ProfileController {
         return new ProfileDto();
     }
     @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') or hasRole('ROLE_FACEBOOK_USER')")
-    @RequestMapping(value = "/profile",  method = POST)
+    @GetMapping("/users/{username}/profile")
     public ResponseEntity<EntityModel<ProfileViewModel>> addProfileConfirm(
             @Valid ProfileDto profileModel,
             @AuthenticationPrincipal MyUserPrincipal principal) {
@@ -58,7 +58,7 @@ public class ProfileController {
 
     }
     @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') or hasRole('ROLE_FACEBOOK_USER')")
-    @RequestMapping(value = "/profiles",  method = POST)
+    @PostMapping("/users/{username}/profile")
     public ResponseEntity<EntityModel<ProfileViewModel>> addProfileConfirmSec(
             @Valid ProfileDto profileModel) {
         log.info("Posting profile");
@@ -73,20 +73,20 @@ public class ProfileController {
 
 
     @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') or hasRole('ROLE_FACEBOOK_USER')")
-    @GetMapping("/profile/{id}")
+    @GetMapping("/users/{username}/profile/{id}")
     public ResponseEntity<EntityModel<ProfileViewModel>> getProfileById(@PathVariable Long id) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(assembler.toModel(mapToView(profileService.getProfileById(id))));
     }
     @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') or hasRole('ROLE_FACEBOOK_USER')")
-    @GetMapping("/{username}/profile")
+    @GetMapping("/users/{username}/profile")
     public ResponseEntity<EntityModel<ProfileViewModel>> getProfileByUsername(@PathVariable String username) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(assembler.toModel(mapToView(profileService.getProfileByUsername(username))));
     }
     @PreAuthorize("@profileServiceImpl.isOwner(#principal.username, #id)")
-    @DeleteMapping("/profile/{id}")
-    public ResponseEntity<?> deleteProfile(@PathVariable Long id) {
+    @DeleteMapping("/users/{username}/profile/{id}")
+    public ResponseEntity<?> deleteProfile(@PathVariable String username, @PathVariable Long id) {
         profileService.deleteProfile(id);
         return ResponseEntity.status(HttpStatus.OK).body(assembler.toModel(mapToView(profileService.getProfileById(id))));
     }

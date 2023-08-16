@@ -6,7 +6,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 @Component
-@ConfigurationProperties(prefix = "application.jwt")
+@ConfigurationProperties(prefix = "application.secret.jwt")
 public class JwtConfiguration {
 
     private String uri;

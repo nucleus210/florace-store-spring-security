@@ -27,15 +27,15 @@ public class MyUserDetailsService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserEntity loadUserByUsername(String username) throws UsernameNotFoundException {
         UserEntity user = userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException(username));
 
 //        if (userOptional.isEmpty()) {
 //            log.error("User with name " + username + " not found!");
 //            throw new UsernameNotFoundException("User with name " + username + " not found!");
 //        }
-//        log.info("Found user with name " + userOptional.get().getUsername());
-        return new MyUserPrincipal(modelMapper.map(user, UserServiceModel.class));
+//        log.info("Found user with name " + user.getUsername());
+        return user;
     }
 
 }

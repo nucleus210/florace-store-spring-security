@@ -18,7 +18,7 @@ public class ProfileAssembler implements RepresentationModelAssembler<ProfileVie
         return EntityModel.of(profileModel,
                 linkTo(methodOn(ProfileController.class).getProfileById(profileModel.getProfileId())).withSelfRel(),
                 linkTo(methodOn(ProfileController.class).getProfileByUsername(profileModel.getUsername())).withSelfRel(),
-                linkTo(methodOn(ProfileController.class).deleteProfile(profileModel.getProfileId())).withSelfRel());
+                linkTo(methodOn(ProfileController.class).deleteProfile(profileModel.getUsername(), profileModel.getProfileId())).withSelfRel());
 
     }
 }

@@ -47,7 +47,7 @@ public class OrderController {
         return authentication.getName();
     }
 
-    @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') or hasRole('ROLE_FACEBOOK_USER')")
+    @PreAuthorize("hasRole('STAFF') or hasRole('ADMIN') or hasRole('USER') or hasRole('FACEBOOK_USER')")
     @PostMapping("/orders")
     public ResponseEntity<EntityModel<OrderViewModel>> createOrder(@RequestBody OrderViewModel model) {
         OrderServiceModel orderServiceModel =
@@ -58,7 +58,7 @@ public class OrderController {
                 .body(assembler.toModel(mapToView(orderServiceModel)));
     }
 
-    @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') or hasRole('ROLE_FACEBOOK_USER')")
+    @PreAuthorize("hasRole('STAFF') or hasRole('ADMIN') or hasRole('USER') or hasRole('FACEBOOK_USER')")
     @GetMapping("/orders/{id}")
     public ResponseEntity<EntityModel<OrderViewModel>> getOrderById(@PathVariable Long id) {
         OrderServiceModel orderServiceModel = orderService.getOrderById(id);
@@ -68,7 +68,6 @@ public class OrderController {
                 .body(assembler.toModel(mapToView(orderServiceModel)));
     }
 
-    @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') or hasRole('ROLE_FACEBOOK_USER')")
     @GetMapping("/orders/active/users/{username}")
     public ResponseEntity<EntityModel<OrderViewModel>> getActiveOrderByUsername(@PathVariable String username) {
 
@@ -79,7 +78,7 @@ public class OrderController {
                 .body(assembler.toModel(mapToView(orderServiceModel)));
     }
 
-    @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') or hasRole('ROLE_FACEBOOK_USER')")
+    @PreAuthorize("hasRole('STAFF') or hasRole('ADMIN') or hasRole('USER') or hasRole('FACEBOOK_USER')")
     @GetMapping("/orders/search/users/{username}")
     public ResponseEntity<CollectionModel<EntityModel<OrderViewModel>>> getAllOrdersByUsername(@PathVariable String username) {
         List<EntityModel<OrderViewModel>> order = orderService.getAllOrderByUsername(username).stream() //
@@ -88,7 +87,7 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(CollectionModel.of(order, linkTo(methodOn(OrderController.class).getAllOrdersByUsername(username)).withSelfRel()));
     }
-    @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') or hasRole('ROLE_FACEBOOK_USER')")
+    @PreAuthorize("hasRole('STAFF') or hasRole('ADMIN') or hasRole('USER') or hasRole('FACEBOOK_USER')")
     @GetMapping(value = "/orders")
     public ResponseEntity<CollectionModel<EntityModel<OrderViewModel>>> getAllOrders() {
         List<EntityModel<OrderViewModel>> order = orderService.getAllOrders().stream() //
@@ -98,7 +97,7 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(CollectionModel.of(order, linkTo(methodOn(OrderController.class).getAllOrders()).withSelfRel()));
     }
-    @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') or hasRole('ROLE_FACEBOOK_USER')")
+    @PreAuthorize("hasRole('STAFF') or hasRole('ADMIN') or hasRole('USER') or hasRole('FACEBOOK_USER')")
     @GetMapping(value = "/orders/dates")
     public ResponseEntity<CollectionModel<EntityModel<OrderViewModel>>> getAllOrdersByDates(String startDate, String endDate) {
         List<EntityModel<OrderViewModel>> order = orderService.getAllOrdersByDatePeriod(startDate, endDate).stream() //
@@ -108,7 +107,7 @@ public class OrderController {
                 .body(CollectionModel.of(order, linkTo(methodOn(OrderController.class).getAllOrdersByDates(startDate, endDate)).withSelfRel()));
 
     }
-    @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') or hasRole('ROLE_FACEBOOK_USER')")
+    @PreAuthorize("hasRole('STAFF') or hasRole('ADMIN') or hasRole('USER') or hasRole('FACEBOOK_USER')")
     @PutMapping("/orders/{id}")
     public ResponseEntity<EntityModel<OrderViewModel>> updateOrder(@RequestBody OrderDto model) {
         OrderServiceModel orderServiceModel = orderService.getOrderById(model.getOrderId());
@@ -118,7 +117,7 @@ public class OrderController {
                 .body(assembler.toModel(mapToView(orderServiceModel)));
     }
 
-    @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') or hasRole('ROLE_FACEBOOK_USER')")
+    @PreAuthorize("hasRole('STAFF') or hasRole('ADMIN') or hasRole('USER') or hasRole('FACEBOOK_USER')")
     @DeleteMapping("/orders/{id}")
     public String deleteProduct(@PathVariable Long id, MyUserPrincipal principal) {
         orderService.deleteOrder(id, principal.getUsername());

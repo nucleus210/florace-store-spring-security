@@ -19,7 +19,7 @@ import java.util.List;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
-
+//@CrossOrigin(origins= {"*"}, maxAge = 4800, allowCredentials = "false" )
 @Slf4j
 @RestController
 public class OrderItemController {
@@ -37,7 +37,7 @@ public class OrderItemController {
         this.assembler = assembler;
     }
 
-    @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') or hasRole('ROLE_FACEBOOK_USER')")
+    @PreAuthorize("hasRole('STAFF') or hasRole('ADMIN') or hasRole('USER') or hasRole('FACEBOOK_USER')")
     @PostMapping("/order-items")
     public ResponseEntity<EntityModel<OrderItemViewModel>> addOrderItem(@RequestBody OrderItemsDto model) {
         log.debug("OrderItemServiceModel: addOrderItem");
@@ -48,7 +48,7 @@ public class OrderItemController {
                 .body(assembler.toModel(mapToView(orderItem)));
     }
 
-    @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') or hasRole('ROLE_FACEBOOK_USER')")
+    @PreAuthorize("hasRole('STAFF') or hasRole('ADMIN') or hasRole('USER') or hasRole('FACEBOOK_USER')")
     @GetMapping("/order-items/search/orders/{orderId}")
     public ResponseEntity<CollectionModel<EntityModel<OrderItemViewModel>>> getOrderItemsByOrderId(@PathVariable Long orderId) {
         List<EntityModel<OrderItemViewModel>> orderItems = orderItemService.getAllOrderItemsByOrderId(orderId).stream()
@@ -56,17 +56,17 @@ public class OrderItemController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(CollectionModel.of(orderItems, linkTo(methodOn(OrderItemController.class).getOrderItemsByOrderId(orderId)).withSelfRel()));
     }
-    @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') or hasRole('ROLE_FACEBOOK_USER')")
+    @PreAuthorize("hasRole('STAFF') or hasRole('ADMIN') or hasRole('USER') or hasRole('FACEBOOK_USER')")
     @GetMapping("/order-items/search/orders/{orderId}/products/{productId}")
     public ResponseEntity<EntityModel<OrderItemViewModel>> getOrderItemByOrderIdAndProductId(@PathVariable Long orderId, @PathVariable Long productId) {
-        OrderItemServiceModel orderItem = orderItemService.getOrderItemByOrderIdAndProductId(orderId, productId);
+        OrderItemViewModel orderItem = mapToView(orderItemService.getOrderItemByOrderIdAndProductId(orderId, productId));
 
         return ResponseEntity
                 .created(linkTo(methodOn(OrderItemController.class).getOrderItemByOrderIdAndProductId(orderId, productId)).toUri())
-                .body(assembler.toModel(mapToView(orderItem)));
+                .body(assembler.toModel(orderItem));
     }
 
-    @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') or hasRole('ROLE_FACEBOOK_USER')")
+    @PreAuthorize("hasRole('STAFF') or hasRole('ADMIN') or hasRole('USER') or hasRole('FACEBOOK_USER')")
     @GetMapping(value = "/order-items")
     public ResponseEntity<CollectionModel<EntityModel<OrderItemViewModel>>> getAllOrderItems() {
         List<EntityModel<OrderItemViewModel>> order = orderItemService.getAllOrderItems().stream() //
@@ -75,7 +75,7 @@ public class OrderItemController {
                 .body(CollectionModel.of(order, linkTo(methodOn(OrderItemController.class).getAllOrderItems()).withSelfRel()));
     }
 
-    @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') or hasRole('ROLE_FACEBOOK_USER')")
+    @PreAuthorize("hasRole('STAFF') or hasRole('ADMIN') or hasRole('USER') or hasRole('FACEBOOK_USER')")
     @GetMapping(value = "/order-items/count/orders/{orderId}")
     public ResponseEntity<Integer> getCountOrderItems(@PathVariable Long orderId) {
         int count = orderItemService.getOrderItemsCount(orderId);
@@ -83,13 +83,13 @@ public class OrderItemController {
                 .body(count);
     }
 
-    @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') or hasRole('ROLE_FACEBOOK_USER')")
+    @PreAuthorize("hasRole('STAFF') or hasRole('ADMIN') or hasRole('USER') or hasRole('FACEBOOK_USER')")
     @PutMapping("/order-items/{itemId}")
     public OrderItemServiceModel updateOrderItem(@RequestBody OrderItemsDto model, @PathVariable Long itemId) {
         return orderItemService.updateOrderItemQuantity(modelMapper.map(model, OrderItemServiceModel.class), itemId);
     }
 
-    @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') or hasRole('ROLE_FACEBOOK_USER')")
+    @PreAuthorize("hasRole('STAFF') or hasRole('ADMIN') or hasRole('USER') or hasRole('FACEBOOK_USER')")
     @DeleteMapping("/order-items/{itemId}")
     public ResponseEntity<EntityModel<OrderItemViewModel>> deleteOrderItem(@PathVariable Long itemId) {
         EntityModel<OrderItemViewModel> orderItemViewModel = assembler.toModel(mapToView(orderItemService.deleteOrderItem(itemId)));

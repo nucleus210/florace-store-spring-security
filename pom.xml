@@ -17,6 +17,7 @@
         <java.version>18</java.version>
         <maven.compiler.source>18</maven.compiler.source>
         <jjwt.version>0.11.0</jjwt.version>
+
     </properties>
     <dependencies>
         <dependency>
@@ -26,6 +27,8 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
+
+
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -151,6 +154,7 @@
     </dependencies>
 
     <build>
+
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

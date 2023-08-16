@@ -1,5 +1,6 @@
 package com.nucleus.floracestore.jwt;
 
+import com.nucleus.floracestore.config.JwtConfig;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -10,10 +11,10 @@ import javax.crypto.SecretKey;
 @Configuration
 public class JwtSecretKey {
 
-    private final JwtConfiguration jwtConfiguration;
+    private final JwtConfig jwtConfiguration;
 
     @Autowired
-    public JwtSecretKey(JwtConfiguration jwtConfiguration) {
+    public JwtSecretKey(JwtConfig jwtConfiguration) {
         this.jwtConfiguration = jwtConfiguration;
     }
 

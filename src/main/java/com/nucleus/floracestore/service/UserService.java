@@ -1,5 +1,6 @@
 package com.nucleus.floracestore.service;
 
+import com.nucleus.floracestore.model.payloads.AuthenticationResponse;
 import com.nucleus.floracestore.model.service.UserRegistrationServiceModel;
 import com.nucleus.floracestore.model.service.UserServiceModel;
 
@@ -9,7 +10,8 @@ import java.util.Optional;
 public interface UserService {
 
 
-    String loginUser(String username, String password);
+    AuthenticationResponse loginUser(String username, String password);
+
     UserServiceModel registerUser(UserRegistrationServiceModel user);
     UserServiceModel registerFacebookUser(UserRegistrationServiceModel user);
     void updateUser(UserServiceModel serviceModel, String username);

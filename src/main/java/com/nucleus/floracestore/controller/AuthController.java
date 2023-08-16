@@ -12,6 +12,8 @@ import com.nucleus.floracestore.model.service.UserServiceModel;
 import com.nucleus.floracestore.service.RoleService;
 import com.nucleus.floracestore.service.impl.FacebookService;
 import com.nucleus.floracestore.service.impl.UserServiceImpl;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -23,6 +25,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import jakarta.validation.Valid;
+
+import java.io.IOException;
 import java.net.URI;
 import java.util.Set;
 
@@ -44,13 +48,12 @@ public class AuthController {
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody AuthenticationRequest loginRequest) {
+    public ResponseEntity<AuthenticationResponse> authenticateUser(@Valid @RequestBody AuthenticationRequest authenticationRequest) {
         try {
-            String token = userService.loginUser(loginRequest.getUsername(), loginRequest.getPassword());
-            log.info("Regular user login {}", loginRequest);
+            log.info("Regular user login {}", authenticationRequest);
             return ResponseEntity.ok()
                     .header(HttpHeaders.AUTHORIZATION)
-                    .body(new JwtAuthenticationResponse(token));
+                    .body(userService.loginUser(authenticationRequest.getUsername(), authenticationRequest.getPassword()));
         } catch (
                 BadCredentialsException ex) {
             log.info("UNAUTHORIZED login {}", ex);
@@ -59,12 +62,22 @@ public class AuthController {
         }
 
     }
+    @PostMapping("/refresh-token")
+    public ResponseEntity<AuthenticationResponse> refreshToken(
+            HttpServletRequest request,
+            HttpServletResponse response
+    ) throws IOException {
 
+        return ResponseEntity.ok()
+                .header(HttpHeaders.AUTHORIZATION)
+                .body( userService.refreshToken(request, response));
+
+    }
     @PostMapping("/facebook/signin")
     public ResponseEntity<?> facebookAuth(@Valid @RequestBody FacebookLoginRequest facebookLoginRequest) {
         log.info("facebook login {}", facebookLoginRequest);
         String token = facebookService.loginUser(facebookLoginRequest.getAccessToken());
-        return ResponseEntity.ok(new JwtAuthenticationResponse(token));
+        return ResponseEntity.ok(new AuthenticationResponse(token));
     }
     @PostMapping("/register")
     public ResponseEntity<?> register(@Valid @RequestBody UserRegistrationDto userRegistrationDto) {
@@ -113,4 +126,5 @@ public class AuthController {
                 .created(location)
                 .body(new ApiResponse(true, "User registered successfully"));
     }
+
 }

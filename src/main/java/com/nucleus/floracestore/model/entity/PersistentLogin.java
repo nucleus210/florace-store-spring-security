@@ -19,7 +19,7 @@ public class PersistentLogin {
     private String series;
     @Column(name = "username", nullable = false)
     private String username;
-    @Column(name = "token", nullable = false)
+    @Column(name = "com/nucleus/floracestore/token", nullable = false)
     private String token;
     @Column(name = "last_used", nullable = false)
     private Timestamp lastUsed;

@@ -1,16 +1,27 @@
-application:
-  name: "Florance Ecommerce"
+#application:
+#  name: "Florance Ecommerce"
+#  jwt:
+#    uri: /auth/**
+#    header: Authorization
+#    secretKey: ):(@dDO6zbcA*RjPwNXYZ_Jj4s)G=~UYzjjs(u2yF).!TW`u={IyyCBBJlAYt)D
+#    tokenExpirationAfterDays: 14
+#    tokenPrefix: Bearer
 
-  jwt:
-    uri: /auth/**
-    header: Authorization
-    secretKey: ):(@dDO6zbcA*RjPwNXYZ_Jj4s)G=~UYzjjs(u2yF).!TW`u={IyyCBBJlAYt)D
-    tokenExpirationAfterDays: 14
-    tokenPrefix: Bearer
+
+application:
+  security:
+    jwt:
+      uri: /auth/**
+      header: Authorization
+      secretKey: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
+      expiration: 604800 # 86400000 # a day
+      tokenPrefix: Bearer
+      refreshTokenExpiration: 604800 # 7 days
 
 spring:
   application:
     name: "Florance Ecommerce"
+
   web:
     resources:
       static-locations[0]: "file:src/main/resources/static/"
@@ -18,10 +29,6 @@ spring:
   main:
     allow-bean-definition-overriding: true
 
-  security:
-
-    basic:
-      enable: false
 
   profiles:
     active: development

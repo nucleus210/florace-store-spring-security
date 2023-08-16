@@ -17,22 +17,22 @@ public class LogInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
-        LOG.info("preHandle method called....{}:{}"  + request.getRequestURI(), request.getMethod() );
+//        LOG.info("preHandle method called....{}:{}"  + request.getRequestURI(), request.getMethod() );
         return true;
     }
 
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
-        LOG.info("postHandle method called....{}:{}"  + request.getRequestURI(), request.getMethod() );
+//        LOG.info("postHandle method called....{}:{}"  + request.getRequestURI(), request.getMethod() );
     }
 
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
-        if(ex!=null) {
-            LOG.error("Exception inside afterCompletion " + ex.getMessage());
-        }
-
-        LOG.info("afterCompletion method called....{}:{}"  + request.getRequestURI(), request.getMethod() );
+//        if(ex!=null) {
+//            LOG.error("Exception inside afterCompletion " + ex.getMessage());
+//        }
+//
+//        LOG.info("afterCompletion method called....{}:{}"  + request.getRequestURI(), request.getMethod() );
 
     }
 }
