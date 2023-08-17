@@ -5,7 +5,7 @@ import java.util.Map;
 
 public enum OrderStatusCodes {
     DRAFT("Draft", "Indicates that the Order has just been created but no approval has been requested yet.", 0),
-    PENDING_APPROVAL("Pending approval", "Indicates that a request for approval for the Order has been made.", 1),
+    PENDING_APPROVAL("Pending-approval", "Indicates that a request for approval for the Order has been made.", 1),
     APPROVED("Approved", "Indicates that the Order has been approved and is ready to serve.", 2),
     DISAPPROVED("Disapproved", "Indicates that the Order has been disapproved and is not eligible to serve.", 3),
     PAUSED("Paused", "This is a legacy state. Paused status should be checked on LineItems within the order.", 4),

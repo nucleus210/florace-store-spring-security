@@ -14,8 +14,6 @@ import org.springframework.web.client.RestTemplate;
 @Configuration
 public class ApplicationBeansConfig  {
 
-
-
     @Bean
     public ModelMapper modelMapper() {
        return new ModelMapper();
@@ -36,21 +34,13 @@ public class ApplicationBeansConfig  {
         return new FacebookUser();
     }
 
-//    @Bean
-//    public JwtConfiguration jwtConfiguration() {
-//        return new JwtConfiguration();
-//    }
     @Bean
     public ImageUtils imageUtils() {
         return new ImageUtils();
     }
 
-
-
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
-
-
 }

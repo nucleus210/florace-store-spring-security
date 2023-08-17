@@ -1,6 +1,7 @@
 package com.nucleus.floracestore.model.service;
 
 
+import com.nucleus.floracestore.model.entity.ProductRateEntity;
 import com.nucleus.floracestore.model.entity.ProductReviewEntity;
 import com.nucleus.floracestore.model.entity.ProductSubCategoryEntity;
 import lombok.Data;
@@ -29,7 +30,7 @@ public class ProductServiceModel {
     private SupplierServiceModel supplier;
     private Set<StorageServiceModel> storages;
     private Set<ProductReviewEntity> productReviews;
-    private Set<ProductRatesServiceModel> productRates;
+    private Set<ProductRateEntity> productRates;
     private Set<QuestionServiceModel> productQuestions;
 
 }

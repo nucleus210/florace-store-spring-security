@@ -28,6 +28,8 @@ import jakarta.validation.Valid;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 @Slf4j
@@ -60,18 +62,6 @@ public class AuthController {
 
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-
-    }
-    @PostMapping("/refresh-token")
-    public ResponseEntity<AuthenticationResponse> refreshToken(
-            HttpServletRequest request,
-            HttpServletResponse response
-    ) throws IOException {
-
-        return ResponseEntity.ok()
-                .header(HttpHeaders.AUTHORIZATION)
-                .body( userService.refreshToken(request, response));
-
     }
     @PostMapping("/facebook/signin")
     public ResponseEntity<?> facebookAuth(@Valid @RequestBody FacebookLoginRequest facebookLoginRequest) {
@@ -81,7 +71,7 @@ public class AuthController {
     }
     @PostMapping("/register")
     public ResponseEntity<?> register(@Valid @RequestBody UserRegistrationDto userRegistrationDto) {
-        log.info("facebook login {}", userRegistrationDto);
+        log.info("user registration: {}", userRegistrationDto);
         UserRegistrationServiceModel user = UserRegistrationServiceModel
                 .builder()
                 .username(userRegistrationDto.getUsername())
@@ -91,10 +81,14 @@ public class AuthController {
                 .setActive(true)
                 .build();
         UserServiceModel newUser = userService.registerUser(user);
-
-//        String token = userService.loginUser(newUser.getUsername(), newUser.getPassword());
-
-        return ResponseEntity.ok("{Success}");
+        log.info("login registered user {}", newUser.getUsername() + "\n" + newUser.getPassword());
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentContextPath().path("/users/{username}")
+                .buildAndExpand(user.getUsername()).toUri();//
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("details", "User registered successfully");
+        map.put("message", HttpStatus.OK);
+        return new ResponseEntity<Object>(map, HttpStatus.OK);
     }
 
     @PostMapping(value = "/facebook/register", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -126,5 +120,15 @@ public class AuthController {
                 .created(location)
                 .body(new ApiResponse(true, "User registered successfully"));
     }
+    @PostMapping("/refresh-token")
+    public ResponseEntity<AuthenticationResponse> refreshToken(
+            HttpServletRequest request,
+            HttpServletResponse response
+    ) throws IOException {
 
+        return ResponseEntity.ok()
+                .header(HttpHeaders.AUTHORIZATION)
+                .body( userService.refreshToken(request, response));
+
+    }
 }

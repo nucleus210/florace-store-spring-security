@@ -1,5 +1,6 @@
 package com.nucleus.floracestore.model.view;
 
+import com.nucleus.floracestore.model.entity.ProductRateEntity;
 import com.nucleus.floracestore.model.entity.ProductReviewEntity;
 import com.nucleus.floracestore.model.entity.ProductSubCategoryEntity;
 import lombok.Data;
@@ -26,7 +27,7 @@ public class ProductViewModel {
     private ProductSubCategoryEntity productSubCategory;
     private Set<StorageViewModel> storages;
     private Set<ProductReviewEntity> productReviews;
-    private Set<ProductRatesViewModel> productRates;
+    private Set<ProductRateEntity> productRates;
     private Set<QuestionViewModel> productQuestions;
     //    private UserEntity user;
     private boolean canDelete;

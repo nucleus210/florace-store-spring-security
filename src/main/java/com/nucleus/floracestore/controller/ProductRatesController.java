@@ -69,7 +69,7 @@ public class ProductRatesController {
                 .body(assembler.toModel(mapView(productRatesService.getProductRateById(productRateId))));
     }
 
-    @GetMapping(value = "/rates/products/{productId}")
+    @GetMapping(value = "/rates/search/products/{productId}")
     public ResponseEntity<CollectionModel<EntityModel<ProductRatesViewModel>>> getAllProductRatesByProductId(@PathVariable Long productId) {
         List<EntityModel<ProductRatesViewModel>> productRates = productRatesService.getAllProductRatesByProductId(productId).stream()
                 .map(entity -> assembler.toModel(mapView(entity))).toList();

@@ -12,6 +12,7 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,7 +36,7 @@ public class OrderStatusCodesController {
         this.orderStatusCodesService = orderStatusCodesService;
         this.assembler = assembler;
     }
-
+    @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') or hasRole('ROLE_FACEBOOK_USER')")
     @PostMapping("/order-status-codes")
     public ResponseEntity<EntityModel<OrderStatusCodesViewModel>> createOrderStatusCodes(@RequestBody OrderStatusCodesDto model) {
         OrderStatusCodesServiceModel orderStatusCodesServiceModel = modelMapper.map(model, OrderStatusCodesServiceModel.class);
@@ -45,7 +46,7 @@ public class OrderStatusCodesController {
                 .created(linkTo(methodOn(OrderStatusCodesController.class).createOrderStatusCodes(model)).toUri())
                 .body(assembler.toModel(mapToView(orderStatusCodesServiceModel)));
     }
-
+    @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') or hasRole('ROLE_FACEBOOK_USER')")
     @GetMapping("/order-status-codes/{orderStatusCodeId}")
     public ResponseEntity<EntityModel<OrderStatusCodesViewModel>> getOrderStatusCodeById(@PathVariable Long orderStatusCodeId) {
         OrderStatusCodesServiceModel orderStatusCodesServiceModel =
@@ -55,17 +56,17 @@ public class OrderStatusCodesController {
                 .created(linkTo(methodOn(OrderStatusCodesController.class).getOrderStatusCodeById(orderStatusCodeId)).toUri())
                 .body(assembler.toModel(mapToView(orderStatusCodesServiceModel)));
     }
-
-    @GetMapping("/order-status-codes/status-code/{codeName}")
-    public ResponseEntity<EntityModel<OrderStatusCodesViewModel>> getOrderStatusCodeByCodeName(@PathVariable String codeName) {
+    @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') or hasRole('ROLE_FACEBOOK_USER')")
+    @GetMapping("/order-status-codes/status-code/{statusCode}")
+    public ResponseEntity<EntityModel<OrderStatusCodesViewModel>> getOrderStatusCodeByCodeName(@PathVariable String statusCode) {
         OrderStatusCodesServiceModel orderStatusCodesServiceModel =
-                orderStatusCodesService.getOrderStatusCodeByCodeName(codeName);
-        log.info("OrderStatusCodeController: get orderStatusCode by code name " + codeName);
+                orderStatusCodesService.getOrderStatusCodeByCodeName(statusCode);
+        log.info("OrderStatusCodeController: get orderStatusCode by code name " + statusCode);
         return ResponseEntity
-                .created(linkTo(methodOn(OrderStatusCodesController.class).getOrderStatusCodeByCodeName(codeName)).toUri())
+                .created(linkTo(methodOn(OrderStatusCodesController.class).getOrderStatusCodeByCodeName(statusCode)).toUri())
                 .body(assembler.toModel(mapToView(orderStatusCodesServiceModel)));
     }
-
+    @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') or hasRole('ROLE_FACEBOOK_USER')")
     @GetMapping("/order-status-codes")
     public ResponseEntity<CollectionModel<EntityModel<OrderStatusCodesViewModel>>> getAllOrderStatusCodes() {
         List<EntityModel<OrderStatusCodesViewModel>> orderStatusCodes = orderStatusCodesService.getAllOrderStatusCodes().stream()

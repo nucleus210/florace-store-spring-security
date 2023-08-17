@@ -8,7 +8,7 @@ import java.util.Date;
 @Data
 public class OrderDto {
     private Long orderId;
-    private OrderStatusCodesServiceModel orderStatusCodesEntity;
+    private OrderStatusCodesServiceModel orderStatusCode;
     private Date dateOrderPlaced;
     private String orderDetails;
 }

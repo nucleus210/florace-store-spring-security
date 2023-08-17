@@ -125,8 +125,9 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
                 createStorage( "classpath:/static/images/categories/decoration.jpg");
                 createStorage( "classpath:/static/images/categories/special.jpg");
                 createStorage( "classpath:/static/images/categories/decoration.jpg");
-
-                initializeStorage();
+                initializeStorage("classpath*:/static/images/products/*.jpg");
+                initializeStorage("classpath*:/static/images/products/gifts/*.jpg");
+                initializeStorage("classpath*:/static/images/products/prints/*.jpg");
 
             } catch (IOException | InterruptedException e) {
                 throw new RuntimeException(e);
@@ -275,7 +276,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
                     "Different types of flowers arranged as bouquets, in a box, in pots.",
                     storageRepository.findById(11L).orElseThrow(()->new QueryRuntimeException("Could not find storage 10")));
 
-            createProductCategoryIfNotFound("Gifts",
+            ProductCategoryEntity gifts = createProductCategoryIfNotFound("Gifts",
                     "Creative gift solutions made by hand according to customer specific requirements.",
                     storageRepository.findById(12L).orElseThrow(()->new QueryRuntimeException("Could not find storage 10")));
 
@@ -283,7 +284,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
                     "Different types of plants for the home and garden.",
                     storageRepository.findById(13L).orElseThrow(()->new QueryRuntimeException("Could not find storage 10")));
 
-            createProductCategoryIfNotFound("Prints", "Printing on various surfaces.",
+            ProductCategoryEntity prints = createProductCategoryIfNotFound("Prints", "Printing on various surfaces.",
                     storageRepository.findById(14L).orElseThrow(()->new QueryRuntimeException("Could not find storage 10")));
 
             createProductCategoryIfNotFound("Gift Tags & Labels",
@@ -421,7 +422,146 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
                     tulips,
                     storageRepository.findById(25L).orElseThrow(()->new QueryRuntimeException("Could not find storage 17")),
                     userRepository.findByUsername("admin").orElseThrow(()->new QueryRuntimeException("Could not find user 1")));
-
+            createProductIfNotFound("Gift from Eli 01",
+                    11,
+                    55.99,
+                    1.99,
+                    3,
+                    "Brown",
+                    "5,6,14",
+                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque consectetur ligula eu magna interdum feugiat.",
+                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In tempor nisl et fringilla faucibus. Duis et erat lacus. Ut sed.",
+                    productStatus,
+                    gifts,
+                    null,
+                    storageRepository.findById(28L).orElseThrow(()->new QueryRuntimeException("Could not find storage 17")),
+                    userRepository.findByUsername("admin").orElseThrow(()->new QueryRuntimeException("Could not find user 1")));
+            createProductIfNotFound("Gift wrapping from Eli 01",
+                    11,
+                    20.99,
+                    1.99,
+                    3,
+                    "Brown",
+                    "5,6,14",
+                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque consectetur ligula eu magna interdum feugiat.",
+                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In tempor nisl et fringilla faucibus. Duis et erat lacus. Ut sed.",
+                    productStatus,
+                    gifts,
+                    null,
+                    storageRepository.findById(27L).orElseThrow(()->new QueryRuntimeException("Could not find storage 17")),
+                    userRepository.findByUsername("admin").orElseThrow(()->new QueryRuntimeException("Could not find user 1")));
+            createProductIfNotFound("Gift wrapping from Eli 02",
+                    11,
+                    120.99,
+                    1.99,
+                    3,
+                    "Brown",
+                    "5,6,14",
+                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque consectetur ligula eu magna interdum feugiat.",
+                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In tempor nisl et fringilla faucibus. Duis et erat lacus. Ut sed.",
+                    productStatus,
+                    gifts,
+                    null,
+                    storageRepository.findById(29L).orElseThrow(()->new QueryRuntimeException("Could not find storage 17")),
+                    userRepository.findByUsername("admin").orElseThrow(()->new QueryRuntimeException("Could not find user 1")));
+            createProductIfNotFound("Gift wrapping from Eli 03",
+                    11,
+                    18.99,
+                    1.99,
+                    3,
+                    "Brown",
+                    "5,6,14",
+                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque consectetur ligula eu magna interdum feugiat.",
+                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In tempor nisl et fringilla faucibus. Duis et erat lacus. Ut sed.",
+                    productStatus,
+                    gifts,
+                    null,
+                    storageRepository.findById(30L).orElseThrow(()->new QueryRuntimeException("Could not find storage 17")),
+                    userRepository.findByUsername("admin").orElseThrow(()->new QueryRuntimeException("Could not find user 1")));
+            createProductIfNotFound("Gift wrapping from Eli 04",
+                    11,
+                    33.99,
+                    1.99,
+                    3,
+                    "Brown",
+                    "5,6,14",
+                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque consectetur ligula eu magna interdum feugiat.",
+                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In tempor nisl et fringilla faucibus. Duis et erat lacus. Ut sed.",
+                    productStatus,
+                    gifts,
+                    null,
+                    storageRepository.findById(31L).orElseThrow(()->new QueryRuntimeException("Could not find storage 17")),
+                    userRepository.findByUsername("admin").orElseThrow(()->new QueryRuntimeException("Could not find user 1")));
+            createProductIfNotFound("Gift wrapping from Eli 05",
+                    11,
+                    40.99,
+                    1.99,
+                    3,
+                    "Brown",
+                    "5,6,14",
+                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque consectetur ligula eu magna interdum feugiat.",
+                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In tempor nisl et fringilla faucibus. Duis et erat lacus. Ut sed.",
+                    productStatus,
+                    gifts,
+                    null,
+                    storageRepository.findById(32L).orElseThrow(()->new QueryRuntimeException("Could not find storage 17")),
+                    userRepository.findByUsername("admin").orElseThrow(()->new QueryRuntimeException("Could not find user 1")));
+            createProductIfNotFound("Prints from Eli 01",
+                    11,
+                    155.99,
+                    1.99,
+                    3,
+                    "white, black",
+                    "5,6,14",
+                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque consectetur ligula eu magna interdum feugiat.",
+                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In tempor nisl et fringilla faucibus. Duis et erat lacus. Ut sed.",
+                    productStatus,
+                    prints,
+                    null,
+                    storageRepository.findById(33L).orElseThrow(()->new QueryRuntimeException("Could not find storage 17")),
+                    userRepository.findByUsername("admin").orElseThrow(()->new QueryRuntimeException("Could not find user 1")));
+            createProductIfNotFound("Prints from Eli 02",
+                    11,
+                    135.99,
+                    1.99,
+                    3,
+                    "white, black",
+                    "5,6,14",
+                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque consectetur ligula eu magna interdum feugiat.",
+                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In tempor nisl et fringilla faucibus. Duis et erat lacus. Ut sed.",
+                    productStatus,
+                    prints,
+                    null,
+                    storageRepository.findById(34L).orElseThrow(()->new QueryRuntimeException("Could not find storage 17")),
+                    userRepository.findByUsername("admin").orElseThrow(()->new QueryRuntimeException("Could not find user 1")));
+            createProductIfNotFound("Prints from Eli 03",
+                    11,
+                    235.99,
+                    1.99,
+                    3,
+                    "white, black",
+                    "5,6,14",
+                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque consectetur ligula eu magna interdum feugiat.",
+                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In tempor nisl et fringilla faucibus. Duis et erat lacus. Ut sed.",
+                    productStatus,
+                    prints,
+                    null,
+                    storageRepository.findById(35L).orElseThrow(()->new QueryRuntimeException("Could not find storage 17")),
+                    userRepository.findByUsername("admin").orElseThrow(()->new QueryRuntimeException("Could not find user 1")));
+            createProductIfNotFound("Prints from Eli 04",
+                    11,
+                    235.99,
+                    1.99,
+                    3,
+                    "white, black",
+                    "5,6,14",
+                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque consectetur ligula eu magna interdum feugiat.",
+                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In tempor nisl et fringilla faucibus. Duis et erat lacus. Ut sed.",
+                    productStatus,
+                    prints,
+                    null,
+                    storageRepository.findById(36L).orElseThrow(()->new QueryRuntimeException("Could not find storage 17")),
+                    userRepository.findByUsername("admin").orElseThrow(()->new QueryRuntimeException("Could not find user 1")));
             OrderStatusCodes[] values = OrderStatusCodes.values();
             Arrays.stream(values).forEach(orderStatusCodesService::initializeOrderStatusCodesFromEnum);
             ProductStatusEnum[] orderStatusCodes = ProductStatusEnum.values();
@@ -651,8 +791,8 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
     }
 
     @Transactional
-    public void initializeStorage() throws IOException, InterruptedException {
-        Resource[] resources = loadResources("classpath*:/static/images/products/*.jpg");
+    public void initializeStorage(String pathToResources) throws IOException, InterruptedException {
+        Resource[] resources = loadResources(pathToResources);
         for (Resource r : resources
         ) {
             String[] arrOfStr = r.getURL().toString().split("static", 0);
