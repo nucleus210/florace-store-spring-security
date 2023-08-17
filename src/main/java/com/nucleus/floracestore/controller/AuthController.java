@@ -129,6 +129,5 @@ public class AuthController {
         return ResponseEntity.ok()
                 .header(HttpHeaders.AUTHORIZATION)
                 .body( userService.refreshToken(request, response));
-
     }
 }

@@ -1,6 +1,6 @@
 package com.nucleus.floracestore.service.impl;
 
-import com.nucleus.floracestore.config.JwtConfig;
+import com.nucleus.floracestore.jwt.JwtConfig;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;

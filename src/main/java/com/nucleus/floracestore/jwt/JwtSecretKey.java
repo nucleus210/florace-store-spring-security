@@ -1,6 +1,5 @@
 package com.nucleus.floracestore.jwt;
 
-import com.nucleus.floracestore.config.JwtConfig;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

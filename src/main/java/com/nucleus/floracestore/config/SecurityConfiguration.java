@@ -1,6 +1,7 @@
 package com.nucleus.floracestore.config;
 
 import com.nucleus.floracestore.interceptors.LogInterceptor;
+import com.nucleus.floracestore.jwt.JwtAuthenticationFilter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

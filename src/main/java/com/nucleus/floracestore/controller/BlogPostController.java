@@ -37,7 +37,6 @@ public class BlogPostController {
         this.blogPostService = blogPostService;
         this.assembler = assembler;
     }
-
     @PreAuthorize("hasRole('ROLE_STAFF') or hasRole('ROLE_ADMIN')")
     @PostMapping("/blog-posts")
     public ResponseEntity<EntityModel<BlogPostViewModel>> createBlogPost(@RequestBody BlogPostDto model) {

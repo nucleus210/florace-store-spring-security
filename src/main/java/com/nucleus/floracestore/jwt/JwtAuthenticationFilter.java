@@ -1,4 +1,4 @@
-package com.nucleus.floracestore.config;
+package com.nucleus.floracestore.jwt;
 
 
 import com.nucleus.floracestore.repository.TokenRepository;

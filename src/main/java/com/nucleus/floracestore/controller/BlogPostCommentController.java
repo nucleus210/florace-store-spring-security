@@ -28,7 +28,6 @@ public class  BlogPostCommentController {
     private final ModelMapper modelMapper;
     private final BlogPostCommentService blogPostCommentService;
     private final BlogPostCommentAssembler assembler;
-
     @Autowired
     public BlogPostCommentController(ModelMapper modelMapper,
                                      BlogPostCommentService blogPostCommentService,
