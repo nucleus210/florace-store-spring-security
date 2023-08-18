@@ -64,6 +64,14 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public List<ProductServiceModel> getAllProductsByLowerAndUpperPrice(Long lowerPrice, Long upperPrice) {
+        return productRepository.findAllProductsByLowerAndUpperPrice(lowerPrice,upperPrice)
+                .stream()
+                .map(this::mapToService)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public ProductServiceModel saveProduct(ProductServiceModel productServiceModel, String owner) {
         UserServiceModel userServiceModel = userService.findByUsername(owner);
         productServiceModel.setUser(userServiceModel);

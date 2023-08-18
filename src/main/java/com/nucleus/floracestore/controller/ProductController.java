@@ -107,6 +107,14 @@ public class ProductController {
                 .body(CollectionModel.of(products, linkTo(methodOn(ProductController.class)
                         .getAllProductsByCategoryName(categoryName)).withSelfRel()));
     }
+    @GetMapping("/products/search/lower-price/{lowerPrice}/upper-price/{upperPrice}")
+    public ResponseEntity<CollectionModel<EntityModel<ProductViewModel>>> getAllProductsByCategoryName(@PathVariable Long lowerPrice, @PathVariable Long upperPrice) {
+        List<EntityModel<ProductViewModel>> products = productService.getAllProductsByLowerAndUpperPrice(lowerPrice, upperPrice).stream()
+                .map(entity -> assembler.toModel(mapToView(entity))).toList();
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(CollectionModel.of(products, linkTo(methodOn(ProductController.class)
+                        .getAllProductsByCategoryName(lowerPrice, upperPrice)).withSelfRel()));
+    }
     @GetMapping("/products/{id}")
     public ResponseEntity<EntityModel<ProductViewModel>> getProductById(@PathVariable Long id) {
         return ResponseEntity.status(HttpStatus.OK)

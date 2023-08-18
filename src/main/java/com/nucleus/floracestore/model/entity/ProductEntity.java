@@ -48,11 +48,9 @@ public class ProductEntity {
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(name = "productStatusId", referencedColumnName = "product_status_id")
     private ProductStatusEntity productStatus;
-    @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(name = "category_id", referencedColumnName = "product_category_id")
     private ProductCategoryEntity productCategory;
-    @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(name = "sub_category_id", referencedColumnName = "product_sub_category_id")
     private ProductSubCategoryEntity productSubCategory;

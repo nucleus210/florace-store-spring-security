@@ -23,4 +23,7 @@ public interface ProductService {
     ProductViewModel getById(Long id);
 
     List<ProductServiceModel> getAllProductByCategoryName(String categoryName);
+
+    List<ProductServiceModel> getAllProductsByLowerAndUpperPrice(Long lowerPrice, Long upperPrice);
+
 }
